@@ -1,13 +1,13 @@
 # sleeping_king_studios-tasks.gemfile
 
-$: << './lib'
+$LOAD_PATH << './lib'
 
 require 'sleeping_king_studios/tasks/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'sleeping_king_studios-tasks'
   gem.version     = SleepingKingStudios::Tasks::VERSION
-  gem.date        = Time.now.utc.strftime "%Y-%m-%d"
+  gem.date        = Time.now.utc.strftime '%Y-%m-%d'
   gem.summary     = 'A tasks toolkit for rapid development.'
 
   description = <<-DESCRIPTION
@@ -21,13 +21,14 @@ Gem::Specification.new do |gem|
   gem.license     = 'MIT'
 
   gem.require_path = 'lib'
-  gem.files        = Dir["lib/**/*.rb", "LICENSE", "*.md"]
+  gem.files        = Dir['lib/**/*.rb', 'LICENSE', '*.md']
 
   gem.add_runtime_dependency 'rake', '~> 12.0'
-  gem.add_runtime_dependency 'thor', '~> 0.19',  '>= 0.19.4'
+  gem.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.4'
 
-  gem.add_development_dependency 'byebug', '~> 9.0',  '>= 9.0.6'
-  gem.add_development_dependency 'rspec',  '~> 3.5'
+  gem.add_development_dependency 'byebug',  '~> 9.0', '>= 9.0.6'
+  gem.add_development_dependency 'rspec',   '~> 3.5'
   gem.add_development_dependency 'rspec-sleeping_king_studios',
     '~> 2.2', '>= 2.2.2'
+  gem.add_development_dependency 'rubocop', '~> 0.48.0'
 end # gemspec
