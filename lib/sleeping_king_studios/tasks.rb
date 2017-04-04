@@ -4,5 +4,7 @@
 module SleepingKingStudios
   # Toolkit providing an encapsulation layer around the Thor CLI library, with
   # predefined tasks for development and continuous integration.
-  module Tasks; end
+  module Tasks
+    autoload :Task, 'sleeping_king_studios/tasks/task'
+  end # module
 end # module
