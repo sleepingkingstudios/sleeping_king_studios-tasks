@@ -4,6 +4,8 @@
 language: ruby
 rvm:
 - 2.4.1
+before_script:
+- cp .rspec.example .rspec
 script:
 - 'bundle exec rspec && bundle exec rubocop'
 
