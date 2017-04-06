@@ -17,9 +17,9 @@ module Spec::Common
       $stdout = prior
     end # method capture_stdout
 
-    shared_examples 'should define task' do |definition, options = {}|
-      short_name = options.fetch(:as, definition.task_name)
-      task_name  = "#{options.fetch(:namespace)}:#{short_name}"
+    shared_examples 'should define task' do |definition, config = {}|
+      short_name = config.fetch(:as, definition.task_name)
+      task_name  = "#{config.fetch(:namespace)}:#{short_name}"
 
       describe "should define task #{task_name.inspect}" do
         let(:basename)      { defined?(super()) ? super() : 'rspec' }
@@ -27,6 +27,17 @@ module Spec::Common
         let(:options)       { defined?(super()) ? super() : {} }
         let(:task_name)     { task_name }
         let(:task_instance) { definition.new(options) }
+        let(:expected_options) do
+          expected = {}
+
+          definition.options.each do |key, opts|
+            next unless opts.key?(:default)
+
+            expected[key.to_s] = opts[:default]
+          end # each
+
+          expected.merge(options)
+        end # let
 
         # rubocop:disable Style/GlobalVars
         def run_thor_command command, *args
@@ -71,7 +82,7 @@ module Spec::Common
         it 'should call an instance of the task class' do
           expect(definition).
             to receive(:new).
-            with(options).
+            with(expected_options).
             and_return(task_instance)
 
           expect(task_instance).

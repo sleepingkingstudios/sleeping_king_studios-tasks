@@ -36,18 +36,6 @@ RSpec.describe SleepingKingStudios::Tasks::TaskGroup do
   let(:described_class) { Class.new(super()) }
   let(:instance)        { described_class.new }
 
-  def capture_stdout
-    buffer  = StringIO.new
-    prior   = $stdout
-    $stdout = buffer
-
-    yield
-
-    buffer.string
-  ensure
-    $stdout = prior
-  end # method capture_stdout
-
   it { expect(described_class).to be < ::Thor }
 
   describe '::task' do
