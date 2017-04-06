@@ -86,6 +86,8 @@ module SleepingKingStudios::Tasks::File
     def create_spec_file
       return unless spec?
 
+      return if spec_file?
+
       create_directories 'spec', *relative_path
 
       File.write spec_path, rendered_spec unless dry_run?
@@ -122,11 +124,13 @@ module SleepingKingStudios::Tasks::File
     def preview_files
       max = spec? ? [file_path.length, spec_path.length].max : file_path.length
 
-      preview_file file_path, :max => max, :template => 'ruby.erb' do
+      template = spec_file? ? 'rspec.erb' : 'ruby.erb'
+
+      preview_file file_path, :max => max, :template => template do
         tools.string.indent(rendered_source, 4)
       end # preview_file
 
-      return unless spec?
+      return unless spec? && !spec_file?
 
       preview_file spec_path, :max => max, :template => 'rspec.erb' do
         tools.string.indent(rendered_spec, 4)
@@ -157,9 +161,11 @@ module SleepingKingStudios::Tasks::File
     end # method render_template
 
     def rendered_source
+      template = spec_file? ? 'rspec.erb' : 'ruby.erb'
+
       @rendered_source ||=
         render_template(
-          'ruby.erb',
+          template,
           :file_path     => file_path,
           :file_name     => file_name,
           :relative_path => relative_path
@@ -175,6 +181,10 @@ module SleepingKingStudios::Tasks::File
           :relative_path => relative_path
         ) # end render template
     end # method rendered_spec
+
+    def spec_file?
+      directory == 'spec' && file_name.end_with?('_spec')
+    end # method spec_file?
 
     def split_file_path file_path
       @file_path     = file_path

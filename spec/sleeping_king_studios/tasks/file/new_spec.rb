@@ -150,6 +150,31 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
       end # describe
     end # context
 
+    describe 'with a /spec file path' do
+      let(:file_path) { 'spec/greeter_spec.rb' }
+      let(:spec_path) { 'spec/greeter_spec_spec.rb' }
+      let(:source_locals) do
+        {
+          :file_path     => file_path,
+          :file_name     => 'greeter_spec',
+          :relative_path => []
+        } # end source locals
+      end # let
+
+      it 'should render the source file' do
+        expect(instance).
+          to receive(:render_template).
+          with('rspec.erb', source_locals).
+          and_return(rendered_spec)
+
+        instance.call file_path
+
+        expect(File).to have_received(:write).with(file_path, rendered_spec)
+      end # it
+
+      include_examples 'should not render the spec file'
+    end # describe
+
     describe 'with --dry-run' do
       let(:options) { super().merge 'dry-run' => true }
 
