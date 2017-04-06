@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sleeping_king_studios-tools',
     '>= 0.7.0.alpha.0'
 
+  gem.add_development_dependency 'erubis',  '~> 2.7.0'
   gem.add_development_dependency 'byebug',  '~> 9.0', '>= 9.0.6'
   gem.add_development_dependency 'rspec',   '~> 3.5'
   gem.add_development_dependency 'rspec-sleeping_king_studios',
