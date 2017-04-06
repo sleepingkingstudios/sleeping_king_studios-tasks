@@ -1,5 +1,7 @@
 # lib/sleeping_king_studios/tasks.rb
 
+require 'sleeping_king_studios/tools'
+
 # Hic iacet Arthurus, rex quondam, rexque futurus.
 module SleepingKingStudios
   # Toolkit providing an encapsulation layer around the Thor CLI library, with
