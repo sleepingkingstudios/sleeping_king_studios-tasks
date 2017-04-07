@@ -21,10 +21,15 @@ module SleepingKingStudios::Tasks::Ci
     # @return [Array] Options to pass to RSpec.
     attr_reader :default_options
 
-    def call env: {}, options: [], report: true
+    def call env: {}, files: [], options: [], report: true
       report  = 'tmp/ci/rspec.json' if report && !report.is_a?(String)
       command =
-        build_command(:env => env, :options => options, :report => report)
+        build_command(
+          :env     => env,
+          :files   => files,
+          :options => options,
+          :report  => report
+        ) # end build_command
 
       stream_process(command)
 
@@ -33,14 +38,21 @@ module SleepingKingStudios::Tasks::Ci
 
     private
 
-    def build_command env:, options:, report:
+    def build_command env:, files:, options:, report:
       env     = default_env.merge env
       env     = env.map { |k, v| "#{tools.string.underscore(k).upcase}=#{v}" }
-      options = default_options + options
-      options << '--format=json' << "--out=#{report}" if report
+      options =
+        build_options :files => files, :options => options, :report => report
 
       "#{env.join ' '} bundle exec rspec #{options.join ' '}".strip
     end # method build_command
+
+    def build_options files:, options:, report:
+      options = Array(files) + default_options + options
+      options << '--format=json' << "--out=#{report}" if report
+
+      options
+    end # method build_options
 
     def load_report report:
       raw  = File.read report

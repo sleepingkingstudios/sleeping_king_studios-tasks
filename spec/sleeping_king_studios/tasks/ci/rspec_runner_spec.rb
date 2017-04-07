@@ -28,10 +28,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
       } # end report
     end # let
     let(:report_file)      { 'tmp/ci/rspec.json' }
+    let(:expected_files)   { [] }
     let(:expected_env)     { {} }
     let(:expected_options) { ['--format=json', "--out=#{report_file}"] }
     let(:expected_command) do
-      opts = default_opts + expected_options
+      opts = expected_files + default_opts + expected_options
       env  = default_env.merge expected_env
       env  = env.map { |k, v| "#{tools.string.underscore(k).upcase}=#{v}" }
 
@@ -52,7 +53,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
       expect(instance).
         to respond_to(:call).
         with(0).arguments.
-        and_keywords(:env, :options, :report)
+        and_keywords(:env, :files, :options, :report)
     end # it
 
     it 'should call an rspec process' do
@@ -78,6 +79,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
         expect(instance).to receive(:stream_process).with(expected_command)
 
         instance.call :env => env
+      end # it
+    end # describe
+
+    describe 'with :files => file list' do
+      let(:expected_files) do
+        ['spec/foo', 'spec/bar', 'spec/wibble/wobble_spec.rb']
+      end # let
+
+      it 'should call an rspec process' do
+        expect(instance).to receive(:stream_process).with(expected_command)
+
+        instance.call :files => expected_files
       end # it
     end # describe
 
