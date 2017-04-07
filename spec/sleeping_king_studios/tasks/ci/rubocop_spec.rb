@@ -1,13 +1,13 @@
-# spec/sleeping_king_studios/tasks/ci/rspec_spec.rb
+# spec/sleeping_king_studios/tasks/ci/rubocop_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rspec'
+require 'sleeping_king_studios/tasks/ci/rubocop'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
+RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 
   describe '::description' do
-    let(:expected) { 'Runs the RSpec test suite.' }
+    let(:expected) { 'Runs the RuboCop linter.' }
 
     it 'should define the class reader' do
       expect(described_class).to have_reader(:description).with_value expected
@@ -16,14 +16,14 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value :rspec
+      expect(described_class).to have_reader(:task_name).with_value :rubocop
     end # it
   end # describe
 
   describe '#call' do
-    shared_examples 'should call an RSpec runner' do
-      it 'should call an RSpec runner' do
-        allow(SleepingKingStudios::Tasks::Ci::RSpecRunner).
+    shared_examples 'should call a RuboCop runner' do
+      it 'should call a RuboCop runner' do
+        allow(SleepingKingStudios::Tasks::Ci::RuboCopRunner).
           to receive(:new).
           with(:options => expected_options).
           and_return(runner)
@@ -38,37 +38,35 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     end # shared_examples
 
     let(:expected_files)   { [] }
-    let(:expected_options) { ['--color', '--tty', '--format=documentation'] }
+    let(:expected_options) { ['--color', '--format=progress'] }
     let(:results) do
       {
-        'duration'       => 1.0,
-        'examples_count' => 6,
-        'failure_count'  => 1,
-        'pending_count'  => 2
+        'inspected_file_count' => 1.0,
+        'offense_count'        => 3
       } # end results
     end # let
     let(:runner) do
-      SleepingKingStudios::Tasks::Ci::RSpecRunner.
+      SleepingKingStudios::Tasks::Ci::RuboCopRunner.
         new(:options => expected_options)
     end # let
 
     it { expect(instance).to respond_to(:call).with_unlimited_arguments }
 
-    include_examples 'should call an RSpec runner'
+    include_examples 'should call a RuboCop runner'
 
     describe 'with files' do
       let(:expected_files) do
         ['spec/foo', 'spec/bar', 'spec/wibble/wobble_spec.rb']
       end # let
 
-      include_examples 'should call an RSpec runner'
+      include_examples 'should call a RuboCop runner'
     end # describe
 
     describe 'with --quiet=true' do
       let(:options)          { { 'quiet' => true } }
-      let(:expected_options) { ['--color', '--tty'] }
+      let(:expected_options) { ['--color'] }
 
-      include_examples 'should call an RSpec runner'
+      include_examples 'should call a RuboCop runner'
     end # describe
   end # describe
 end # describe

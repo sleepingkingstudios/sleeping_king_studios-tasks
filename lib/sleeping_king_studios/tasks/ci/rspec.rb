@@ -17,7 +17,8 @@ module SleepingKingStudios::Tasks::Ci
     option :quiet,
       :aliases => '-q',
       :type    => :boolean,
-      :default => false
+      :default => false,
+      :desc    => 'Do not write spec results to STDOUT.'
 
     def call *files
       rspec_runner.call(:files => files)
