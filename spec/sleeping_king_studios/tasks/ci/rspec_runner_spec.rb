@@ -72,8 +72,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
     end # it
 
     describe 'with :env => environment variables' do
-      let(:env)          { { :bundle_gemfile => 'path/to/Gemfile' } }
-      let(:expected_env) { super().merge env }
+      let(:env) { { :bundle_gemfile => 'path/to/Gemfile' } }
+      let(:expected_env) do
+        super().merge :bundle_gemfile => '"path/to/Gemfile"'
+      end # let
 
       it 'should call an rspec process' do
         expect(instance).to receive(:stream_process).with(expected_command)
@@ -133,47 +135,5 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
         expect(instance.call :report => report_file).to be == report
       end # it
     end # describe
-  end # describe
-
-  describe '#default_env' do
-    include_examples 'should have reader', :default_env, ->() { default_env }
-  end # describe
-
-  describe '#default_options' do
-    include_examples 'should have reader',
-      :default_options,
-      ->() { default_opts }
-  end # describe
-
-  describe '#stream_process' do
-    let(:io_stream) do
-      StringIO.new(
-        'What lies beyond the furthest reaches of the sky?'\
-        "\n"\
-        'That which will lead the lost child back to her mothers arms. Exile.'\
-        "\n"
-      ) # end stream
-    end # let
-    let(:command) { 'mysteria' }
-
-    it 'should define the private method' do
-      expect(instance).not_to respond_to(:stream_process)
-
-      expect(instance).to respond_to(:stream_process, true).with(1).argument
-    end # it
-
-    it 'should stream the output of the process' do
-      buffer = ''
-
-      allow(instance).to receive(:print) { |str| buffer << str }
-
-      expect(IO).
-        to receive(:popen).
-          with(command) { |_, &block| block.call(io_stream) }
-
-      instance.send :stream_process, command
-
-      expect(buffer).to be == io_stream.string
-    end # it
   end # describe
 end # describe

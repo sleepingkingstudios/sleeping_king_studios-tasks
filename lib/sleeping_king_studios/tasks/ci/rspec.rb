@@ -12,7 +12,7 @@ module SleepingKingStudios::Tasks::Ci
 
     def self.task_name
       :rspec
-    end # clas method task_name
+    end # class method task_name
 
     option :quiet,
       :aliases => '-q',
