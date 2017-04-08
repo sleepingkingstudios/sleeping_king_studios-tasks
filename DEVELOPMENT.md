@@ -12,6 +12,10 @@
 
   Checks for configuration file and runs CI steps, concatenating the results.
 
+- task ci:rspec: |
+
+  Add --gemfile option (prepare for per-application reports!)
+
 ### Files
 
 - task new [filename]: |

@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tasks/ci/rspec.rb
 
 require 'sleeping_king_studios/tasks/ci'
+require 'sleeping_king_studios/tasks/ci/rspec_results'
 require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Ci
@@ -19,9 +20,16 @@ module SleepingKingStudios::Tasks::Ci
       :type    => :boolean,
       :default => false,
       :desc    => 'Do not write spec results to STDOUT.'
+    option :raw,
+      :aliases => '-r',
+      :type    => :boolean,
+      :default => false,
+      :desc    => 'Return a Hash instead of a results object.'
 
     def call *files
-      rspec_runner.call(:files => files)
+      results = rspec_runner.call(:files => files)
+
+      raw? ? results : RSpecResults.new(results)
     end # method call
 
     private

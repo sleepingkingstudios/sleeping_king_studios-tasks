@@ -31,21 +31,25 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
         expect(runner).
           to receive(:call).
           with(:files => expected_files).
-          and_return(results)
+          and_return(expected)
 
-        expect(instance.call(*expected_files)).to be == results
+        results = instance.call(*expected_files)
+
+        expect(results).to be_a expected_class
+        expect(results).to be == expected
       end # it
     end # shared_examples
 
     let(:expected_files)   { [] }
     let(:expected_options) { ['--color', '--tty', '--format=documentation'] }
-    let(:results) do
+    let(:expected_class)   { SleepingKingStudios::Tasks::Ci::RSpecResults }
+    let(:expected) do
       {
-        'duration'       => 1.0,
-        'examples_count' => 6,
-        'failure_count'  => 1,
-        'pending_count'  => 2
-      } # end results
+        'duration'      => 1.0,
+        'example_count' => 6,
+        'failure_count' => 1,
+        'pending_count' => 2
+      } # end expected
     end # let
     let(:runner) do
       SleepingKingStudios::Tasks::Ci::RSpecRunner.
@@ -67,6 +71,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     describe 'with --quiet=true' do
       let(:options)          { { 'quiet' => true } }
       let(:expected_options) { ['--color', '--tty'] }
+
+      include_examples 'should call an RSpec runner'
+    end # describe
+
+    describe 'with --raw=true' do
+      let(:options)        { { 'raw' => true } }
+      let(:expected_class) { Hash }
 
       include_examples 'should call an RSpec runner'
     end # describe
