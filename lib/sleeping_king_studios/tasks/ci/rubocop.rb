@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tasks/ci/rubocop.rb
 
 require 'sleeping_king_studios/tasks/ci'
+require 'sleeping_king_studios/tasks/ci/rubocop_results'
 require 'sleeping_king_studios/tasks/ci/rubocop_runner'
 
 module SleepingKingStudios::Tasks::Ci
@@ -19,9 +20,16 @@ module SleepingKingStudios::Tasks::Ci
       :type    => :boolean,
       :default => false,
       :desc    => 'Do not write lint results to STDOUT.'
+    option :raw,
+      :aliases => '-r',
+      :type    => :boolean,
+      :default => false,
+      :desc    => 'Return a Hash instead of a results object.'
 
     def call *files
-      rubocop_runner.call(:files => files)
+      results = rubocop_runner.call(:files => files)
+
+      raw? ? results : RuboCopResults.new(results)
     end # method call
 
     private

@@ -31,19 +31,23 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
         expect(runner).
           to receive(:call).
           with(:files => expected_files).
-          and_return(results)
+          and_return(expected)
 
-        expect(instance.call(*expected_files)).to be == results
+        results = instance.call(*expected_files)
+
+        expect(results).to be_a expected_class
+        expect(results).to be == expected
       end # it
     end # shared_examples
 
     let(:expected_files)   { [] }
     let(:expected_options) { ['--color', '--format=progress'] }
-    let(:results) do
+    let(:expected_class)   { SleepingKingStudios::Tasks::Ci::RuboCopResults }
+    let(:expected) do
       {
         'inspected_file_count' => 1.0,
         'offense_count'        => 3
-      } # end results
+      } # end expected
     end # let
     let(:runner) do
       SleepingKingStudios::Tasks::Ci::RuboCopRunner.
@@ -65,6 +69,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
     describe 'with --quiet=true' do
       let(:options)          { { 'quiet' => true } }
       let(:expected_options) { ['--color'] }
+
+      include_examples 'should call a RuboCop runner'
+    end # describe
+
+    describe 'with --raw=true' do
+      let(:options)        { { 'raw' => true } }
+      let(:expected_class) { Hash }
 
       include_examples 'should call a RuboCop runner'
     end # describe
