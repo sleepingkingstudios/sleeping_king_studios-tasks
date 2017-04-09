@@ -85,5 +85,11 @@ module SleepingKingStudios::Tasks
 
       super
     end # method say
+
+    private
+
+    def tools
+      SleepingKingStudios::Tools::Toolbelt.instance
+    end # method tools
   end # class
 end # module

@@ -23,7 +23,12 @@ module SleepingKingStudios::Tasks
         define_method(task_name) do |*args|
           definition.new(self.options).call(*args)
         end # define_method
-      end # method task
+      end # class method task
+
+      # @return [Boolean] True.
+      def exit_on_failure?
+        true
+      end # class method exit_on_failure?
     end # module
     extend ClassMethods
   end # class
