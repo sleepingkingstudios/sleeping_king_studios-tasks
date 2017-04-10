@@ -81,15 +81,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
     let(:expected_steps) do
       {
         'RSpec' => {
-          :class   => SleepingKingStudios::Tasks::Ci::RSpec,
+          :require => 'sleeping_king_studios/tasks/ci/rspec',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
           :results => rspec_results
         }, # end rspec
         'RuboCop' => {
-          :class   => SleepingKingStudios::Tasks::Ci::RuboCop,
+          :require => 'sleeping_king_studios/tasks/ci/rubocop',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop',
           :results => rubocop_results
         }, # end rubocop
         'SimpleCov' => {
-          :class   => SleepingKingStudios::Tasks::Ci::SimpleCov,
+          :require => 'sleeping_king_studios/tasks/ci/simplecov',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov',
           :results => simplecov_results
         } # end simplecov
       } # end steps
@@ -127,10 +130,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
     end # method capture_task
 
     before(:example) do
-      expected_steps.each_value do |config|
-        instance = config[:class].new(options)
+      allow(instance).to receive(:ci_steps).and_return(expected_steps)
 
-        expect(config[:class]).
+      expected_steps.each_value do |config|
+        step_class = Object.const_get(config[:class])
+        instance   = step_class.new(options)
+
+        expect(step_class).
           to receive(:new).
           with(options).
           and_return(instance)
@@ -201,5 +207,32 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
         expect(captured).not_to match 'The following steps failed:'
       end # it
     end # context
+  end # describe
+
+  describe '#ci_steps' do
+    let(:expected_steps) do
+      {
+        'RSpec' => {
+          :require => 'sleeping_king_studios/tasks/ci/rspec',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec'
+        }, # end rspec
+        'RuboCop' => {
+          :require => 'sleeping_king_studios/tasks/ci/rubocop',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop'
+        }, # end rubocop
+        'SimpleCov' => {
+          :require => 'sleeping_king_studios/tasks/ci/simplecov',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov'
+        } # end simplecov
+      } # end steps
+    end # let
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:ci_steps)
+
+      expect(instance).to respond_to(:ci_steps, true).with(0).arguments
+    end # it
+
+    it { expect(instance.send :ci_steps).to be == expected_steps }
   end # describe
 end # describe

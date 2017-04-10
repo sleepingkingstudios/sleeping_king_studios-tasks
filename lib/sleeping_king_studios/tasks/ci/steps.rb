@@ -1,9 +1,6 @@
 # lib/sleeping_king_studios/tasks/ci/steps.rb
 
 require 'sleeping_king_studios/tasks/ci'
-require 'sleeping_king_studios/tasks/ci/rspec'
-require 'sleeping_king_studios/tasks/ci/rubocop'
-require 'sleeping_king_studios/tasks/ci/simplecov'
 
 module SleepingKingStudios::Tasks::Ci
   # Thor task for running each step in the CI suite and generating a report.
@@ -14,12 +11,10 @@ module SleepingKingStudios::Tasks::Ci
 
     def call *files
       results = {}
-      results['RSpec']     =
-        SleepingKingStudios::Tasks::Ci::RSpec.new(options).call(*files)
-      results['RuboCop']   =
-        SleepingKingStudios::Tasks::Ci::RuboCop.new(options).call(*files)
-      results['SimpleCov'] =
-        SleepingKingStudios::Tasks::Ci::SimpleCov.new(options).call(*files)
+
+      ci_steps.each do |name, config|
+        results[name] = call_step(config, files)
+      end # reduce
 
       say "\n"
 
@@ -29,6 +24,37 @@ module SleepingKingStudios::Tasks::Ci
     end # method call
 
     private
+
+    # rubocop:disable Metrics/MethodLength
+    def ci_steps
+      {
+        'RSpec' => {
+          :require => 'sleeping_king_studios/tasks/ci/rspec',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec'
+        }, # end RSpec
+        'RuboCop' => {
+          :require => 'sleeping_king_studios/tasks/ci/rubocop',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop'
+        }, # end RuboCop
+        'SimpleCov' => {
+          :require => 'sleeping_king_studios/tasks/ci/simplecov',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov'
+        } # end SimpleCov
+      } # end steps
+    end # method ci_steps
+    # rubocop:enable Metrics/MethodLength
+
+    def call_step config, files
+      class_name   = config[:class]
+      require_path = config.fetch(:require, require_path(class_name))
+
+      require require_path
+
+      step_class = Object.const_get(class_name)
+      instance   = step_class.new(options)
+
+      instance.call(*files)
+    end # method call_step
 
     def color_heading str, obj
       color =
@@ -77,5 +103,12 @@ module SleepingKingStudios::Tasks::Ci
       raise Thor::Error, 'The CI suite failed.'
     end # method report_failures
     # rubocop:enable Metrics/MethodLength
+
+    def require_path class_name
+      class_name.
+        split('::').
+        map { |str| tools.string.underscore(str) }.
+        join '/'
+    end # method require_path
   end # class
 end # module
