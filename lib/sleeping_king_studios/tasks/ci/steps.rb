@@ -2,7 +2,8 @@
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/rspec'
-require 'sleeping_king_studios/tasks/ci/rspec_results'
+require 'sleeping_king_studios/tasks/ci/rubocop'
+require 'sleeping_king_studios/tasks/ci/simplecov'
 
 module SleepingKingStudios::Tasks::Ci
   # Thor task for running each step in the CI suite and generating a report.
@@ -13,8 +14,12 @@ module SleepingKingStudios::Tasks::Ci
 
     def call *files
       results = {}
-      results['RSpec']   = RSpec.new(options).call(*files)
-      results['RuboCop'] = RuboCop.new(options).call(*files)
+      results['RSpec']     =
+        SleepingKingStudios::Tasks::Ci::RSpec.new(options).call(*files)
+      results['RuboCop']   =
+        SleepingKingStudios::Tasks::Ci::RuboCop.new(options).call(*files)
+      results['SimpleCov'] =
+        SleepingKingStudios::Tasks::Ci::SimpleCov.new(options).call(*files)
 
       say "\n"
 

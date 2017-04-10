@@ -65,6 +65,17 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
         'offense_count'        => 3
       ) # end rubocop results
     end # let
+    let(:simplecov_results) do
+      SleepingKingStudios::Tasks::Ci::SimpleCovResults.new(
+        double(
+          'results',
+          :covered_percent => 97.0,
+          :covered_lines   => 97,
+          :missed_lines    => 3,
+          :total_lines     => 100
+        ) # end double
+      ) # end results
+    end # let
     let(:expected_files)   { [] }
     let(:expected_options) { [] }
     let(:expected_steps) do
@@ -76,7 +87,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
         'RuboCop' => {
           :class   => SleepingKingStudios::Tasks::Ci::RuboCop,
           :results => rubocop_results
-        } # end rubocop
+        }, # end rubocop
+        'SimpleCov' => {
+          :class   => SleepingKingStudios::Tasks::Ci::SimpleCov,
+          :results => simplecov_results
+        } # end simplecov
       } # end steps
     end # let
     let(:failing_steps) do
