@@ -28,10 +28,11 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sleeping_king_studios-tools',
     '>= 0.7.0.alpha.0'
 
-  gem.add_development_dependency 'erubis',  '~> 2.7.0'
-  gem.add_development_dependency 'byebug',  '~> 9.0', '>= 9.0.6'
-  gem.add_development_dependency 'rspec',   '~> 3.5'
+  gem.add_development_dependency 'erubis',    '~> 2.7.0'
+  gem.add_development_dependency 'byebug',    '~> 9.0', '>= 9.0.6'
+  gem.add_development_dependency 'rspec',     '~> 3.5'
   gem.add_development_dependency 'rspec-sleeping_king_studios',
     '~> 2.2', '>= 2.2.2'
-  gem.add_development_dependency 'rubocop', '~> 0.47.0'
+  gem.add_development_dependency 'rubocop',   '~> 0.47.0'
+  gem.add_development_dependency 'simplecov', '~> 0.14', '>= 0.14.1'
 end # gemspec

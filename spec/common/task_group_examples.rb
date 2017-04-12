@@ -1,5 +1,7 @@
 # spec/common/task_group_examples.rb
 
+require 'thor/runner'
+
 module Spec::Common
   # Shared contexts and examples for testing task groups.
   module TaskGroupExamples

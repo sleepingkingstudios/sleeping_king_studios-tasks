@@ -1,5 +1,9 @@
 # spec/spec_helper.rb
 
+require 'simplecov'
+
+SimpleCov.start unless ENV['COVERAGE'] == 'false'
+
 require 'rspec/sleeping_king_studios/all'
 require 'byebug'
 

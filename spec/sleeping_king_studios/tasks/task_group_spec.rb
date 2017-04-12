@@ -1,7 +1,5 @@
 # spec/sleeping_king_studios/tasks/task_group_spec.rb
 
-require 'thor/runner'
-
 require 'sleeping_king_studios/tasks'
 
 require 'common/task_group_examples'
