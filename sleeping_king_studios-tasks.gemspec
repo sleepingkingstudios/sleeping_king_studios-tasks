@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rake', '~> 12.0'
   gem.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.4'
   gem.add_runtime_dependency 'sleeping_king_studios-tools',
-    '>= 0.7.0.alpha.0'
+    '>= 0.7.0.beta.0'
 
   gem.add_development_dependency 'erubis',    '~> 2.7.0'
   gem.add_development_dependency 'byebug',    '~> 9.0', '>= 9.0.6'

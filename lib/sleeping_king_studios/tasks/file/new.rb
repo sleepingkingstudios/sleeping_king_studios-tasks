@@ -154,8 +154,14 @@ module SleepingKingStudios::Tasks::File
     end # prompt_confirmation
 
     def render_template name, locals = {}
-      template_path = File.join(templates_path, name)
-      template      = File.read(template_path)
+      template =
+        template_paths.each do |template_dir|
+          template_path = File.join(template_dir, name)
+
+          next unless File.exist?(template_path)
+
+          break File.read(template_path)
+        end # each
 
       Erubis::Eruby.new(template).result(locals)
     end # method render_template
@@ -207,9 +213,9 @@ module SleepingKingStudios::Tasks::File
       @relative_path = fragments
     end # method split_relative_path
 
-    def templates_path
-      'lib/sleeping_king_studios/tasks/file/templates'
-    end # method templates_path
+    def template_paths
+      SleepingKingStudios::Tasks.configuration.file.template_paths
+    end # method template_paths
 
     def tools
       SleepingKingStudios::Tools::Toolbelt.instance
