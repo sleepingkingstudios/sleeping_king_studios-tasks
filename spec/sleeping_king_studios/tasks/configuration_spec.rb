@@ -16,11 +16,17 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
 
     describe '::default_template_path' do
       let(:expected) do
-        File.join(
-          SleepingKingStudios::Tasks.gem_path,
-          'file',
-          'templates'
-        ) # end join
+        relative_path =
+          File.join(
+            SleepingKingStudios::Tasks.gem_path,
+            'lib',
+            'sleeping_king_studios',
+            'tasks',
+            'file',
+            'templates'
+          ) # end join
+
+        File.expand_path(relative_path)
       end # let
 
       it 'should define the class method' do
@@ -32,13 +38,17 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
 
     describe '#template_paths' do
       let(:expected) do
-        [
+        relative_path =
           File.join(
             SleepingKingStudios::Tasks.gem_path,
+            'lib',
+            'sleeping_king_studios',
+            'tasks',
             'file',
             'templates'
           ) # end join
-        ] # end array
+
+        [File.expand_path(relative_path)]
       end # let
 
       it 'should define the option' do

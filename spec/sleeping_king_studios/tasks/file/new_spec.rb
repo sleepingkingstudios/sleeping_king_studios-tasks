@@ -260,18 +260,19 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
 
     context 'with a template directory' do
       let(:template_paths) { ['path/to/templates'] }
-      let(:template_name)  { File.join template_paths.first, name }
 
       before(:example) do
         allow(instance).to receive(:template_paths).and_return(template_paths)
       end # before example
 
       it 'should load and render the template' do
-        expect(File).to receive(:exist?).with(template_name).and_return(true)
+        expanded = ::File.expand_path(File.join template_paths[0], name)
+
+        expect(File).to receive(:exist?).with(expanded).and_return(true)
 
         expect(File).
           to receive(:read).
-          with(template_name).
+          with(expanded).
           and_return(template)
 
         expect(instance.send :render_template, name, locals).to be == expected
@@ -292,17 +293,21 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
       end # before example
 
       it 'should load and render the template' do
-        expect(File).to receive(:exist?).
-          with(File.join template_paths[0], name).
-          and_return(false)
+        expanded = ::File.expand_path(File.join template_paths[0], name)
 
         expect(File).to receive(:exist?).
-          with(File.join template_paths[1], name).
+          with(expanded).
+          and_return(false)
+
+        expanded = ::File.expand_path(File.join template_paths[1], name)
+
+        expect(File).to receive(:exist?).
+          with(expanded).
           and_return(true)
 
         expect(File).
           to receive(:read).
-          with(File.join template_paths[1], name).
+          with(expanded).
           and_return(template)
 
         expect(instance.send :render_template, name, locals).to be == expected

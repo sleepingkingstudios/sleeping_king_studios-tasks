@@ -9,9 +9,17 @@ module SleepingKingStudios::Tasks
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
     namespace :file do
       def self.default_template_path
-        ::File.
-          join(SleepingKingStudios::Tasks.gem_path, 'file', 'templates').
-          freeze
+        relative_path =
+          ::File.join(
+            SleepingKingStudios::Tasks.gem_path,
+            'lib',
+            'sleeping_king_studios',
+            'tasks',
+            'file',
+            'templates'
+          ) # end join
+
+        ::File.expand_path(relative_path).freeze
       end # method default_template_path
 
       option :template_paths, :default => [default_template_path]

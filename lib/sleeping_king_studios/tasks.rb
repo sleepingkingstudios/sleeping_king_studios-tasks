@@ -15,6 +15,10 @@ module SleepingKingStudios
       @configuration ||= SleepingKingStudios::Tasks::Configuration.new
     end # class method configuration
 
+    def self.configure
+      yield configuration
+    end # class method configure
+
     # The file path to the root of the gem directory.
     def self.gem_path
       @gem_path ||= __dir__.sub %r{/lib/sleeping_king_studios\z}, ''
