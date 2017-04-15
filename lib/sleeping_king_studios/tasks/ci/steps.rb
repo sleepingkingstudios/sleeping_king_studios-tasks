@@ -13,7 +13,9 @@ module SleepingKingStudios::Tasks::Ci
       results = {}
 
       ci_steps.each do |name, config|
-        results[name] = call_step(config, files)
+        title = config.fetch(:title, name)
+
+        results[title] = call_step(config, files)
       end # reduce
 
       say "\n"
@@ -25,24 +27,9 @@ module SleepingKingStudios::Tasks::Ci
 
     private
 
-    # rubocop:disable Metrics/MethodLength
     def ci_steps
-      {
-        'RSpec' => {
-          :require => 'sleeping_king_studios/tasks/ci/rspec',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec'
-        }, # end RSpec
-        'RuboCop' => {
-          :require => 'sleeping_king_studios/tasks/ci/rubocop',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop'
-        }, # end RuboCop
-        'SimpleCov' => {
-          :require => 'sleeping_king_studios/tasks/ci/simplecov',
-          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov'
-        } # end SimpleCov
-      } # end steps
+      SleepingKingStudios::Tasks.configuration.ci.steps_with_options
     end # method ci_steps
-    # rubocop:enable Metrics/MethodLength
 
     def call_step config, files
       class_name   = config[:class]

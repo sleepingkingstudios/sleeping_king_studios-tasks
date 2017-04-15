@@ -7,6 +7,84 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
   let(:config_class) { SleepingKingStudios::Tools::Toolbox::Configuration }
   let(:instance)     { described_class.new(data) }
 
+  describe '#ci' do
+    it 'should define the namespace' do
+      expect(instance).
+        to have_reader(:ci).
+        with_value(be_a config_class)
+    end # it
+
+    describe '#rspec' do
+      let(:expected) do
+        {
+          :require => 'sleeping_king_studios/tasks/ci/rspec',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
+          :title   => 'RSpec'
+        } # end rspec
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:rspec).
+          with_value(be == expected)
+      end # it
+    end # describe
+
+    describe '#rubocop' do
+      let(:expected) do
+        {
+          :require => 'sleeping_king_studios/tasks/ci/rubocop',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop',
+          :title   => 'RuboCop'
+        } # end rubocop
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:rubocop).
+          with_value(be == expected)
+      end # it
+    end # describe
+
+    describe '#simplecov' do
+      let(:expected) do
+        {
+          :require => 'sleeping_king_studios/tasks/ci/simplecov',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov',
+          :title   => 'SimpleCov'
+        } # end simplecov
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:simplecov).
+          with_value(be == expected)
+      end # it
+    end # describe
+
+    describe '#steps' do
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:steps).
+          with_value(%i(rspec rubocop simplecov))
+      end # it
+    end # describe
+
+    describe '#steps_with_options' do
+      let(:expected) do
+        instance.ci.steps.each.with_object({}) do |step, hsh|
+          hsh[step] = instance.ci.send(step)
+        end # each
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:steps_with_options).
+          with_value(be == expected)
+      end # it
+    end # describe
+  end # describe
+
   describe '#file' do
     it 'should define the namespace' do
       expect(instance).
