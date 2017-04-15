@@ -1,4 +1,4 @@
-# spec/sleeping_king_studios/tasks/file/templates/rspec.erb_spec.rb
+# spec/sleeping_king_studios/tasks/file/templates/rspec_spec.rb
 
 require 'erubis'
 
@@ -18,13 +18,11 @@ RSpec.describe 'file/templates/ruby.erb' do
   end # let
   let(:raw) do
     <<-RUBY
-      # spec/ichi_spec.rb
-
       require 'ichi'
 
       RSpec.describe Ichi do
         pending
-      end # describe
+      end
     RUBY
   end # let
   let(:expected) do
@@ -49,13 +47,11 @@ RSpec.describe 'file/templates/ruby.erb' do
     end # let
     let(:raw) do
       <<-RUBY
-        # spec/ichi/ni/san_spec.rb
-
         require 'ichi/ni/san'
 
         RSpec.describe Ichi::Ni::San do
           pending
-        end # describe
+        end
       RUBY
     end # let
 

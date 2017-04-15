@@ -245,9 +245,6 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
   end # describe
 
   describe '#render_template' do
-    let(:templates_path) do
-      'lib/sleeping_king_studios/tasks/file/templates'
-    end # let
     let(:template) { 'Greetings, <%= name %>!' }
     let(:locals)   { { :name => 'starfighter' } }
     let(:name)     { 'ruby.erb' }
@@ -261,13 +258,73 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
         with(1..2).arguments
     end # it
 
-    it 'should load and render the template' do
-      expect(File).
-        to receive(:read).
-        with(File.join templates_path, name).
-        and_return(template)
+    context 'with a template directory' do
+      let(:template_paths) { ['path/to/templates'] }
 
-      expect(instance.send :render_template, name, locals).to be == expected
+      before(:example) do
+        allow(instance).to receive(:template_paths).and_return(template_paths)
+      end # before example
+
+      it 'should load and render the template' do
+        expanded = ::File.expand_path(File.join template_paths[0], name)
+
+        expect(File).to receive(:exist?).with(expanded).and_return(true)
+
+        expect(File).
+          to receive(:read).
+          with(expanded).
+          and_return(template)
+
+        expect(instance.send :render_template, name, locals).to be == expected
+      end # it
+    end # context
+
+    context 'with many template directories' do
+      let(:template_paths) do
+        [
+          'path/to/templates',
+          'fallback/path',
+          'default/path'
+        ] # let
+      end # let
+
+      before(:example) do
+        allow(instance).to receive(:template_paths).and_return(template_paths)
+      end # before example
+
+      it 'should load and render the template' do
+        expanded = ::File.expand_path(File.join template_paths[0], name)
+
+        expect(File).to receive(:exist?).
+          with(expanded).
+          and_return(false)
+
+        expanded = ::File.expand_path(File.join template_paths[1], name)
+
+        expect(File).to receive(:exist?).
+          with(expanded).
+          and_return(true)
+
+        expect(File).
+          to receive(:read).
+          with(expanded).
+          and_return(template)
+
+        expect(instance.send :render_template, name, locals).to be == expected
+      end # it
+    end # context
+  end # describe
+
+  describe '#template_paths' do
+    it 'should define the private reader' do
+      expect(instance).not_to respond_to(:template_paths)
+
+      expect(instance).to respond_to(:template_paths, true).with(0).arguments
+    end # it
+
+    it 'should return the configured value' do
+      expect(instance.send :template_paths).
+        to be == SleepingKingStudios::Tasks.configuration.file.template_paths
     end # it
   end # describe
 end # describe

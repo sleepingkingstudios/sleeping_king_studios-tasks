@@ -211,20 +211,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
 
   describe '#ci_steps' do
     let(:expected_steps) do
-      {
-        'RSpec' => {
-          :require => 'sleeping_king_studios/tasks/ci/rspec',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec'
-        }, # end rspec
-        'RuboCop' => {
-          :require => 'sleeping_king_studios/tasks/ci/rubocop',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop'
-        }, # end rubocop
-        'SimpleCov' => {
-          :require => 'sleeping_king_studios/tasks/ci/simplecov',
-          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov'
-        } # end simplecov
-      } # end steps
+      SleepingKingStudios::Tasks.configuration.ci.steps_with_options
     end # let
 
     it 'should define the private method' do

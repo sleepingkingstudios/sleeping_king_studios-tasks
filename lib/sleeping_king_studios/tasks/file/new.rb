@@ -99,6 +99,18 @@ module SleepingKingStudios::Tasks::File
       FileUtils.mkdir_p directory_names.compact.join(File::SEPARATOR)
     end # method create_directories
 
+    def find_template name
+      template_paths.each do |template_dir|
+        template_path = File.expand_path(File.join template_dir, name)
+
+        next unless File.exist?(template_path)
+
+        return File.read(template_path)
+      end # each
+
+      nil
+    end # method find_template
+
     def preview
       say 'Files to create:'
       say "\n"
@@ -154,8 +166,7 @@ module SleepingKingStudios::Tasks::File
     end # prompt_confirmation
 
     def render_template name, locals = {}
-      template_path = File.join(templates_path, name)
-      template      = File.read(template_path)
+      template = find_template(name)
 
       Erubis::Eruby.new(template).result(locals)
     end # method render_template
@@ -207,9 +218,9 @@ module SleepingKingStudios::Tasks::File
       @relative_path = fragments
     end # method split_relative_path
 
-    def templates_path
-      'lib/sleeping_king_studios/tasks/file/templates'
-    end # method templates_path
+    def template_paths
+      SleepingKingStudios::Tasks.configuration.file.template_paths
+    end # method template_paths
 
     def tools
       SleepingKingStudios::Tools::Toolbelt.instance

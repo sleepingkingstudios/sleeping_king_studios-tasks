@@ -1,4 +1,4 @@
-# spec/sleeping_king_studios/tasks/file/templates/ruby.erb_spec.rb
+# spec/sleeping_king_studios/tasks/file/templates/ruby_spec.rb
 
 require 'erubis'
 
@@ -18,11 +18,9 @@ RSpec.describe 'file/templates/ruby.erb' do
   end # let
   let(:raw) do
     <<-RUBY
-      # lib/ichi.rb
-
       module Ichi
 
-      end # module
+      end
     RUBY
   end # let
   let(:expected) do
@@ -41,11 +39,9 @@ RSpec.describe 'file/templates/ruby.erb' do
     let(:locals) { super().merge :superclass => 'Ni::San' }
     let(:raw) do
       <<-RUBY
-        # lib/ichi.rb
-
         class Ichi < Ni::San
 
-        end # class
+        end
       RUBY
     end # let
 
@@ -62,15 +58,13 @@ RSpec.describe 'file/templates/ruby.erb' do
     end # let
     let(:raw) do
       <<-RUBY
-        # lib/ichi/ni/san.rb
-
         require 'ichi/ni'
 
         module Ichi::Ni
           module San
 
-          end # module
-        end # module
+          end
+        end
       RUBY
     end # let
 
@@ -80,15 +74,13 @@ RSpec.describe 'file/templates/ruby.erb' do
       let(:locals) { super().merge :superclass => 'Yon::Go' }
       let(:raw) do
         <<-RUBY
-          # lib/ichi/ni/san.rb
-
           require 'ichi/ni'
 
           module Ichi::Ni
             class San < Yon::Go
 
-            end # class
-          end # module
+            end
+          end
         RUBY
       end # let
 
