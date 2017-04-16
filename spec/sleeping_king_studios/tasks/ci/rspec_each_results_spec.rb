@@ -1,37 +1,32 @@
-# spec/sleeping_king_studios/tasks/ci/rspec_results_spec.rb
+# spec/sleeping_king_studios/tasks/ci/rspec_each_results_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rspec_results'
+require 'sleeping_king_studios/tasks/ci/rspec_each_results'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
+RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
   shared_context 'when the results are empty' do
     let(:results) { {} }
   end # shared_context
 
-  shared_context 'when the results have no examples' do
+  shared_context 'when the results are failing' do
     let(:results) do
-      {
-        'duration'      => 0.0,
-        'example_count' => 0,
-        'failure_count' => 0,
-        'pending_count' => 0
-      } # end results
+      super().merge 'failing_files' =>
+        ['path/to/first', 'path/to/second', 'path/to/third']
     end # let
-  end # shared_examples
-
-  shared_context 'when the results are pending' do
-    let(:results) { super().merge 'failure_count' => 0 }
   end # shared_context
 
-  shared_context 'when the results are passing' do
-    let(:results) { super().merge 'failure_count' => 0, 'pending_count' => 0 }
+  shared_context 'when the results are pending' do
+    let(:results) do
+      super().merge 'pending_files' =>
+        ['path/to/first', 'path/to/second', 'path/to/third']
+    end # let
   end # shared_context
 
   let(:results) do
     {
-      'duration'      => 1.0,
-      'example_count' => 6,
-      'failure_count' => 1,
-      'pending_count' => 2
+      'failing_files' => [],
+      'pending_files' => [],
+      'file_count'    => 6,
+      'duration'      => 10.0
     } # end results
   end # let
   let(:instance) { described_class.new(results) }
@@ -43,10 +38,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
   describe '#==' do
     let(:other) do
       described_class.new(
-        'duration'      => 1.0,
-        'example_count' => 6,
-        'failure_count' => 1,
-        'pending_count' => 2
+        'failing_files' => [],
+        'pending_files' => [],
+        'file_count'    => 6,
+        'duration'      => 10.0
       ) # end other
     end # let
 
@@ -82,10 +77,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
       describe 'with a results object with no examples' do
         let(:other) do
           described_class.new(
-            'duration'      => 0.0,
-            'example_count' => 0,
-            'failure_count' => 0,
-            'pending_count' => 0
+            'failing_files' => [],
+            'pending_files' => [],
+            'file_count'    => 0,
+            'duration'      => 0.0
           ) # end other
         end # let
 
@@ -93,7 +88,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
       end # describe
     end # wrap_context
 
-    wrap_context 'when the results are passing' do
+    wrap_context 'when the results are failing' do
       it { expect(instance).not_to be == other }
     end # wrap_context
   end # describe
@@ -101,7 +96,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
   describe '#duration' do
     include_examples 'should have reader',
       :duration,
-      ->() { results['duration'] }
+      ->() { be == results['duration'] }
 
     wrap_context 'when the results are empty' do
       it { expect(instance.duration).to be == 0.0 }
@@ -114,87 +109,99 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     wrap_context 'when the results are empty' do
       it { expect(instance.empty?).to be true }
     end # wrap_context
-
-    wrap_context 'when the results have no examples' do
-      it { expect(instance.empty?).to be true }
-    end # wrap_context
-  end # describe
-
-  describe '#errored?' do
-    include_examples 'should have predicate', :errored?, false
-
-    wrap_context 'when the results are empty' do
-      it { expect(instance.errored?).to be true }
-    end # wrap_context
-
-    wrap_context 'when the results have no examples' do
-      it { expect(instance.errored?).to be false }
-    end # wrap_context
-  end # describe
-
-  describe '#example_count' do
-    include_examples 'should have reader',
-      :example_count,
-      ->() { results['example_count'] }
-
-    wrap_context 'when the results are empty' do
-      it { expect(instance.example_count).to be 0 }
-    end # wrap_context
   end # describe
 
   describe '#failing?' do
-    include_examples 'should have predicate', :failing?, true
+    include_examples 'should have predicate', :failing?, false
 
     wrap_context 'when the results are empty' do
       it { expect(instance.failing?).to be false }
     end # wrap_context
 
-    wrap_context 'when the results have no examples' do
-      it { expect(instance.failing?).to be false }
+    wrap_context 'when the results are failing' do
+      it { expect(instance.failing?).to be true }
+    end # wrap_context
+  end # describe
+
+  describe '#failing_files' do
+    include_examples 'should have reader',
+      :failing_files,
+      ->() { be == results['failing_files'] }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.failing_files).to be == [] }
     end # wrap_context
 
-    wrap_context 'when the results are passing' do
-      it { expect(instance.failing?).to be false }
+    wrap_context 'when the results are failing' do
+      it { expect(instance.failing_files).to be == results['failing_files'] }
     end # wrap_context
   end # describe
 
   describe '#failure_count' do
     include_examples 'should have reader',
       :failure_count,
-      ->() { results['failure_count'] }
+      ->() { be == results['failing_files'].count }
 
     wrap_context 'when the results are empty' do
-      it { expect(instance.failure_count).to be 0 }
+      it { expect(instance.failure_count).to be == 0 }
+    end # wrap_context
+
+    wrap_context 'when the results are failing' do
+      it 'should define the reader' do
+        expect(instance.failure_count).to be == results['failing_files'].count
+      end # it
+    end # wrap_context
+  end # describe
+
+  describe '#file_count' do
+    include_examples 'should have reader',
+      :file_count,
+      ->() { be == results['file_count'] }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.file_count).to be == 0 }
     end # wrap_context
   end # describe
 
   describe '#pending?' do
-    include_examples 'should have predicate', :pending?, true
+    include_examples 'should have predicate', :pending?, false
 
     wrap_context 'when the results are empty' do
-      it { expect(instance.pending?).to be false }
-    end # wrap_context
-
-    wrap_context 'when the results have no examples' do
       it { expect(instance.pending?).to be false }
     end # wrap_context
 
     wrap_context 'when the results are pending' do
       it { expect(instance.pending?).to be true }
     end # wrap_context
-
-    wrap_context 'when the results are passing' do
-      it { expect(instance.pending?).to be false }
-    end # wrap_context
   end # describe
 
   describe '#pending_count' do
     include_examples 'should have reader',
       :pending_count,
-      ->() { results['pending_count'] }
+      ->() { be == results['pending_files'].count }
 
     wrap_context 'when the results are empty' do
-      it { expect(instance.pending_count).to be 0 }
+      it { expect(instance.pending_count).to be == 0 }
+    end # wrap_context
+
+    wrap_context 'when the results are pending' do
+      it 'should define the reader' do
+        expect(instance.pending_count).to be == results['pending_files'].count
+      end # it
+    end # wrap_context
+  end # describe
+
+  describe '#pending_files' do
+    include_examples 'should have reader',
+      :pending_files,
+      ->() { be == results['pending_files'] }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.pending_files).to be == [] }
+    end # wrap_context
+
+    wrap_context 'when the results are pending' do
+      it { expect(instance.pending_files).to be == results['pending_files'] }
     end # wrap_context
   end # describe
 
@@ -206,24 +213,20 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     wrap_context 'when the results are empty' do
       let(:expected) do
         {
-          'duration'      => 0.0,
-          'example_count' => 0,
-          'failure_count' => 0,
-          'pending_count' => 0
+          'failing_files' => [],
+          'pending_files' => [],
+          'file_count'    => 0,
+          'duration'      => 0.0
         } # end results
       end # let
 
       it { expect(instance.to_h).to be == expected }
     end # wrap_context
-
-    wrap_context 'when the results have no examples' do
-      it { expect(instance.to_h).to be == results }
-    end # wrap_context
   end # describe
 
   describe '#to_s' do
     let(:expected) do
-      str = "#{instance.example_count} examples"
+      str = "#{instance.file_count} files"
 
       str << ", #{instance.failure_count} failures"
 
@@ -242,15 +245,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
       it { expect(instance.to_s).to be == expected }
     end # wrap_context
 
-    wrap_context 'when the results have no examples' do
+    wrap_context 'when the results are failing' do
       it { expect(instance.to_s).to be == expected }
     end # wrap_context
 
     wrap_context 'when the results are pending' do
-      it { expect(instance.to_s).to be == expected }
-    end # wrap_context
-
-    wrap_context 'when the results are passing' do
       it { expect(instance.to_s).to be == expected }
     end # wrap_context
   end # describe
