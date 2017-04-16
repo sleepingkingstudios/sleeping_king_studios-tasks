@@ -14,6 +14,11 @@
 
 - task ci:rspec: |
 
+  Add --coverage option
+
+    enable/disable SimpleCov
+    defaults to true if run on all files, otherwise false
+
   Add --gemfile option (prepare for per-application reports!)
 
 ### Files

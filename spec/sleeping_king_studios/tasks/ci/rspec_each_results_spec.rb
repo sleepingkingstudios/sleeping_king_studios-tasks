@@ -35,6 +35,64 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
     it { expect(described_class).to be_constructible.with(1).argument }
   end # describe
 
+  describe '#==' do
+    let(:other) do
+      described_class.new(
+        'failing_files' => [],
+        'pending_files' => [],
+        'file_count'    => 6,
+        'duration'      => 10.0
+      ) # end other
+    end # let
+
+    it { expect(instance).to be == other }
+
+    describe 'with nil' do
+      # rubocop:disable Style/NilComparison
+      it { expect(instance).not_to be == nil }
+      # rubocop:enable Style/NilComparison
+    end # describe
+
+    describe 'with an empty hash' do
+      it { expect(instance).not_to be == {} }
+    end # describe
+
+    describe 'with a matching hash' do
+      it { expect(instance).to be == results }
+    end # describe
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance).not_to be == other }
+
+      describe 'with an empty hash' do
+        it { expect(instance).to be == {} }
+      end # describe
+
+      describe 'with an empty results object' do
+        let(:other) { described_class.new({}) }
+
+        it { expect(instance).to be == other }
+      end # describe
+
+      describe 'with a results object with no examples' do
+        let(:other) do
+          described_class.new(
+            'failing_files' => [],
+            'pending_files' => [],
+            'file_count'    => 0,
+            'duration'      => 0.0
+          ) # end other
+        end # let
+
+        it { expect(instance).to be == other }
+      end # describe
+    end # wrap_context
+
+    wrap_context 'when the results are failing' do
+      it { expect(instance).not_to be == other }
+    end # wrap_context
+  end # describe
+
   describe '#duration' do
     include_examples 'should have reader',
       :duration,

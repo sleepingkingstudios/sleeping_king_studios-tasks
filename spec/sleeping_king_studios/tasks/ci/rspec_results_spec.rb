@@ -120,6 +120,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     end # wrap_context
   end # describe
 
+  describe '#errored?' do
+    include_examples 'should have predicate', :errored?, false
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.errored?).to be true }
+    end # wrap_context
+
+    wrap_context 'when the results have no examples' do
+      it { expect(instance.errored?).to be false }
+    end # wrap_context
+  end # describe
+
   describe '#example_count' do
     include_examples 'should have reader',
       :example_count,

@@ -33,6 +33,11 @@ module SleepingKingStudios::Tasks::Ci
       example_count.zero?
     end # method empty?
 
+    # @return [Boolean] True if there are no results, otherwise false.
+    def errored?
+      @results.empty?
+    end # method errored?
+
     # @return [Integer] The total number of examples.
     def example_count
       @results.fetch('example_count', 0)

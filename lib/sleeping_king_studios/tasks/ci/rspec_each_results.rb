@@ -10,6 +10,19 @@ module SleepingKingStudios::Tasks::Ci
       @results = results
     end # constructor
 
+    # @param other [RSpecEachResults] The other results object to compare.
+    #
+    # @return [Boolean] True if the results are equal, otherwise false.
+    def == other
+      if other.is_a?(Hash)
+        empty? ? other.empty? : to_h == other
+      elsif other.is_a?(RSpecEachResults)
+        to_h == other.to_h
+      else
+        false
+      end # if-elsif-else
+    end # method ==
+
     # @return [Float] The duration value.
     def duration
       @results.fetch('duration', 0.0)
