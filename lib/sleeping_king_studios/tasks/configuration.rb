@@ -7,12 +7,20 @@ require 'sleeping_king_studios/tasks'
 module SleepingKingStudios::Tasks
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
+    # rubocop:disable Metrics/BlockLength
     namespace :ci do
       option :rspec, :default =>
         {
           :require => 'sleeping_king_studios/tasks/ci/rspec',
           :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
           :title   => 'RSpec'
+        } # end rspec
+
+      option :rspec_each, :default =>
+        {
+          :require => 'sleeping_king_studios/tasks/ci/rspec_each',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEach',
+          :title   => 'RSpec (Each)'
         } # end rspec
 
       option :rubocop, :default =>
@@ -37,6 +45,7 @@ module SleepingKingStudios::Tasks
         end # each
       end # method steps_with_options
     end # namespace
+    # rubocop:enable Metrics/BlockLength
 
     namespace :file do
       def self.default_template_path

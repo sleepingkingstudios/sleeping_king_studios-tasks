@@ -11,6 +11,10 @@ $: << 'lib'
 require 'sleeping_king_studios/tasks'
 
 SleepingKingStudios::Tasks.configure do |config|
+  config.ci do |ci|
+    ci.steps = %i(rspec rspec_each rubocop simplecov)
+  end # ci
+
   config.file do |file|
     file.template_paths =
       [

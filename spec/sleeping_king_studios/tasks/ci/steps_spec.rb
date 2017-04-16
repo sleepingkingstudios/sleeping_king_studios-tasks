@@ -1,5 +1,8 @@
 # spec/sleeping_king_studios/tasks/ci/steps_spec.rb
 
+require 'sleeping_king_studios/tasks/ci/rspec'
+require 'sleeping_king_studios/tasks/ci/rubocop'
+require 'sleeping_king_studios/tasks/ci/simplecov'
 require 'sleeping_king_studios/tasks/ci/steps'
 
 RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do

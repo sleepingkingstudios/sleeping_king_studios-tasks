@@ -17,6 +17,14 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Tasks do
       :namespace => 'ci'
   end # describe
 
+  describe '#rspec_each' do
+    let(:args) { ['path/to/file'] }
+
+    include_examples 'should define task',
+      SleepingKingStudios::Tasks::Ci::RSpecEach,
+      :namespace => 'ci'
+  end # describe
+
   describe '#rubocop' do
     let(:args) { ['path/to/file'] }
 

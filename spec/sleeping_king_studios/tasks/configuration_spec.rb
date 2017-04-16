@@ -30,6 +30,22 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
       end # it
     end # describe
 
+    describe '#rspec_each' do
+      let(:expected) do
+        {
+          :require => 'sleeping_king_studios/tasks/ci/rspec_each',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEach',
+          :title   => 'RSpec (Each)'
+        } # end rspec
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:rspec_each).
+          with_value(be == expected)
+      end # it
+    end # describe
+
     describe '#rubocop' do
       let(:expected) do
         {
