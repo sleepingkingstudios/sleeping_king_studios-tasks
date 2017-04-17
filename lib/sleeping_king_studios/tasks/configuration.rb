@@ -7,6 +7,10 @@ require 'sleeping_king_studios/tasks'
 module SleepingKingStudios::Tasks
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
+    namespace :apps do
+      option :config_file, :default => 'applications.yml'
+    end # namespace
+
     # rubocop:disable Metrics/BlockLength
     namespace :ci do
       option :rspec, :default =>

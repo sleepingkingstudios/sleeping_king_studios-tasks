@@ -7,6 +7,22 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
   let(:config_class) { SleepingKingStudios::Tools::Toolbox::Configuration }
   let(:instance)     { described_class.new(data) }
 
+  describe '#apps' do
+    it 'should define the namespace' do
+      expect(instance).
+        to have_reader(:apps).
+        with_value(be_a config_class)
+    end # it
+
+    describe '#config_file' do
+      it 'should define the option' do
+        expect(instance.apps).
+          to have_reader(:config_file).
+          with_value(be == 'applications.yml')
+      end # it
+    end # describe
+  end # describe
+
   describe '#ci' do
     it 'should define the namespace' do
       expect(instance).
