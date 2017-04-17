@@ -74,6 +74,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
           expect(results).to be_a expected_class
           expect(results).to be == expected
 
+          if results.is_a?(Hash)
+            results =
+              SleepingKingStudios::Tasks::Ci::RSpecEachResults.new(results)
+          end # if
+
           expect(captured).to include(results.to_s)
         end # it
       end # describe
@@ -171,6 +176,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
 
     describe 'with files' do
       let(:expected_groups) { ['spec/sleeping_king_studios/tasks/ci'] }
+
+      include_examples 'should run each RSpec file'
+    end # describe
+
+    describe 'with --raw=true' do
+      let(:options)        { { 'raw' => true } }
+      let(:expected_class) { Hash }
 
       include_examples 'should run each RSpec file'
     end # describe

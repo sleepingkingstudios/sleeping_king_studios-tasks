@@ -6,6 +6,8 @@ require 'sleeping_king_studios/tasks/ci/rspec_results'
 require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Ci
+  # rubocop:disable Metrics/ClassLength
+
   # Defines a Thor task for running the full RSpec test suite.
   class RSpecEach < SleepingKingStudios::Tasks::Task
     def self.description
@@ -21,6 +23,11 @@ module SleepingKingStudios::Tasks::Ci
       :type    => :boolean,
       :default => false,
       :desc    => 'Do not write spec results to STDOUT.'
+    option :raw,
+      :aliases => '-r',
+      :type    => :boolean,
+      :default => false,
+      :desc    => 'Return a Hash instead of a results object.'
 
     def call *groups
       mute! if quiet?
@@ -36,7 +43,7 @@ module SleepingKingStudios::Tasks::Ci
       report_failing results
       report_totals  results
 
-      results
+      raw? ? results.to_h : results
     end # method call
 
     private
@@ -140,5 +147,7 @@ module SleepingKingStudios::Tasks::Ci
 
       RSpecEachResults.new(totals)
     end # method run_files
-  end # clas
+  end # class
+
+  # rubocop:enable Metrics/ClassLength
 end # module
