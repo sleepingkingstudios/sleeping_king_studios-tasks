@@ -48,4 +48,47 @@ reports: {}
         to be == SleepingKingStudios::Tasks.configuration.apps.config_file
     end # it
   end # describe
+
+  describe '#filter_applications' do
+    let(:applications) do
+      {
+        'admin'   => {},
+        'public'  => {},
+        'reports' => {}
+      } # end applications
+    end # let
+    let(:expected) { applications }
+
+    before(:example) do
+      allow(instance).to receive(:applications).and_return(applications)
+    end # before example
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:filter_applications)
+
+      expect(instance).
+        to respond_to(:filter_applications, true).
+        with(0).arguments.
+        and_keywords(:only)
+    end # it
+
+    it 'should filter the applications' do
+      expect(instance.send :filter_applications, :only => []).to be == expected
+    end # it
+
+    describe 'with :only => applications' do
+      let(:only) { %w(admin reports) }
+      let(:expected) do
+        {
+          'admin'   => {},
+          'reports' => {}
+        } # end applications
+      end # let
+
+      it 'should filter the applications' do
+        expect(instance.send :filter_applications, :only => only).
+          to be == expected
+      end # it
+    end # describe
+  end # describe
 end # describe

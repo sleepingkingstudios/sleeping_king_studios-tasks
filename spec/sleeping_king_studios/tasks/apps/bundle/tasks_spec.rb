@@ -9,7 +9,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Tasks do
 
   let(:instance) { described_class.new }
 
-  describe '#rspec' do
+  describe '#install' do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',

@@ -22,5 +22,16 @@ module SleepingKingStudios::Tasks::Apps
     def config_file
       SleepingKingStudios::Tasks.configuration.apps.config_file
     end # method config_file
+
+    def filter_applications only: []
+      filtered = applications
+
+      if only && !only.empty?
+        normalized = only.map(&:to_s)
+        filtered   = filtered.select { |key, _| normalized.include?(key) }
+      end # if
+
+      filtered
+    end # method filter_applications
   end # class
 end # module

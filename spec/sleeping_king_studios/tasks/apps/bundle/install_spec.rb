@@ -34,11 +34,18 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
           expect(runner).to receive(:call).with(gemfile)
         end # each
 
-        instance.call(*applications)
+        instance.call(*only)
       end # it
     end # shared_examples
 
-    let(:applications) { [] }
+    let(:applications) do
+      {
+        'admin'   => {},
+        'public'  => {},
+        'reports' => {}
+      } # end applications
+    end # let
+    let(:only) { [] }
     let(:gemfiles) do
       ['Gemfile', 'path/to/gemfile', 'path/to/other/Gemfile']
     end # let
@@ -47,6 +54,11 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
     end # let
 
     before(:example) do
+      allow(instance).
+        to receive(:filter_applications).
+        with(:only => only).
+        and_return(applications)
+
       allow(instance).
         to receive(:gemfiles).
         with(applications).
@@ -60,7 +72,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
     include_examples 'should call an install runner'
 
     describe 'with applications' do
-      let(:applications) { %w(public) }
+      let(:only) { %w(public) }
 
       include_examples 'should call an install runner'
     end # describe
@@ -77,26 +89,14 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
         'reports' => {}
       } # end applications
     end # let
-    let(:only)     { [] }
     let(:expected) { ['Gemfile', 'path/to/gemfile'] }
 
-    before(:example) do
-      allow(instance).to receive(:applications).and_return(applications)
-    end # before example
-
-    it 'should define the private reader' do
+    it 'should define the private method' do
       expect(instance).not_to respond_to(:gemfiles)
 
       expect(instance).to respond_to(:gemfiles, true).with(1).arguments
     end # it
 
-    it { expect(instance.send :gemfiles, only).to be == expected }
-
-    describe 'with filtered applications' do
-      let(:only)     { %w(public) }
-      let(:expected) { ['path/to/gemfile'] }
-
-      it { expect(instance.send :gemfiles, only).to be == expected }
-    end # describe
+    it { expect(instance.send :gemfiles, applications).to be == expected }
   end # describe
 end # describe

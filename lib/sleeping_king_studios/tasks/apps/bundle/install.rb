@@ -12,7 +12,9 @@ module SleepingKingStudios::Tasks::Apps::Bundle
     end # class method description
 
     def call *applications
-      gemfiles(applications).each do |gemfile|
+      filtered = filter_applications(:only => applications)
+
+      gemfiles(filtered).each do |gemfile|
         say %(\nInstalling gems for gemfile "#{gemfile}")
         say '-' * 80
         say "\n"
@@ -23,15 +25,8 @@ module SleepingKingStudios::Tasks::Apps::Bundle
 
     private
 
-    def gemfiles only
-      filtered = applications
-
-      unless only.empty?
-        normalized = only.map(&:to_s)
-        filtered   = filtered.select { |key, _| normalized.include?(key) }
-      end # unless
-
-      filtered.map do |_, config|
+    def gemfiles applications
+      applications.map do |_, config|
         config.fetch('gemfile', 'Gemfile')
       end. # map
         uniq
