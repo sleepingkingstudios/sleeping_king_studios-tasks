@@ -65,9 +65,24 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     include_examples 'should call an RSpec runner'
 
     describe 'with files' do
+      let(:expected_env) { { :coverage => false } }
       let(:expected_files) do
         ['spec/foo', 'spec/bar', 'spec/wibble/wobble_spec.rb']
       end # let
+
+      include_examples 'should call an RSpec runner'
+
+      describe 'with --coverage=true' do
+        let(:options)      { { 'coverage' => true } }
+        let(:expected_env) { {} }
+
+        include_examples 'should call an RSpec runner'
+      end # describe
+    end # describe
+
+    describe 'with --coverage=false' do
+      let(:options)      { { 'coverage' => false } }
+      let(:expected_env) { { :coverage => false } }
 
       include_examples 'should call an RSpec runner'
     end # describe
