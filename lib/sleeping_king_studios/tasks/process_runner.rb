@@ -43,7 +43,7 @@ module SleepingKingStudios::Tasks
         join ' '
     end # method build_environment
 
-    def build_options files:, options:, **_kwargs
+    def build_options files: [], options: [], **_kwargs
       (Array(files) + default_options + options).join ' '
     end # method build_options
 
