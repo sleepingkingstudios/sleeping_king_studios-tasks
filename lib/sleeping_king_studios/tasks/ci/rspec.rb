@@ -15,6 +15,9 @@ module SleepingKingStudios::Tasks::Ci
       :rspec
     end # class method task_name
 
+    option :gemfile,
+      :type    => :string,
+      :desc    => 'The Gemfile used to run the specs.'
     option :quiet,
       :aliases => '-q',
       :type    => :boolean,
@@ -35,10 +38,13 @@ module SleepingKingStudios::Tasks::Ci
     private
 
     def rspec_runner
+      env = {}
+      env[:bundle_gemfile] = gemfile if gemfile
+
       opts = %w(--color --tty)
       opts << '--format=documentation' unless quiet?
 
-      RSpecRunner.new(:options => opts)
+      RSpecRunner.new(:env => env, :options => opts)
     end # method rspec_runner
   end # class
 end # module
