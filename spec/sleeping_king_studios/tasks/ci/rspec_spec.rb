@@ -25,7 +25,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
       it 'should call an RSpec runner' do
         allow(SleepingKingStudios::Tasks::Ci::RSpecRunner).
           to receive(:new).
-          with(:options => expected_options).
+          with(:env => expected_env, :options => expected_options).
           and_return(runner)
 
         expect(runner).
@@ -41,6 +41,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     end # shared_examples
 
     let(:expected_files)   { [] }
+    let(:expected_env)     { {} }
     let(:expected_options) { ['--color', '--tty', '--format=documentation'] }
     let(:expected_class)   { SleepingKingStudios::Tasks::Ci::RSpecResults }
     let(:expected) do
@@ -53,7 +54,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     end # let
     let(:runner) do
       SleepingKingStudios::Tasks::Ci::RSpecRunner.
-        new(:options => expected_options)
+        new(
+          :env     => expected_env,
+          :options => expected_options
+        ) # end new
     end # let
 
     it { expect(instance).to respond_to(:call).with_unlimited_arguments }
@@ -61,9 +65,31 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
     include_examples 'should call an RSpec runner'
 
     describe 'with files' do
+      let(:expected_env) { { :coverage => false } }
       let(:expected_files) do
         ['spec/foo', 'spec/bar', 'spec/wibble/wobble_spec.rb']
       end # let
+
+      include_examples 'should call an RSpec runner'
+
+      describe 'with --coverage=true' do
+        let(:options)      { { 'coverage' => true } }
+        let(:expected_env) { {} }
+
+        include_examples 'should call an RSpec runner'
+      end # describe
+    end # describe
+
+    describe 'with --coverage=false' do
+      let(:options)      { { 'coverage' => false } }
+      let(:expected_env) { { :coverage => false } }
+
+      include_examples 'should call an RSpec runner'
+    end # describe
+
+    describe 'with --gemfile=GEMFILE' do
+      let(:options)      { { 'gemfile' => 'path/to/gemfile' } }
+      let(:expected_env) { { :bundle_gemfile => 'path/to/gemfile' } }
 
       include_examples 'should call an RSpec runner'
     end # describe

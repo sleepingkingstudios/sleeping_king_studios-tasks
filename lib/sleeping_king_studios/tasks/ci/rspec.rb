@@ -15,6 +15,12 @@ module SleepingKingStudios::Tasks::Ci
       :rspec
     end # class method task_name
 
+    option :coverage,
+      :type    => :boolean,
+      :desc    => 'Enable or disable coverage with SimpleCov, if available.'
+    option :gemfile,
+      :type    => :string,
+      :desc    => 'The Gemfile used to run the specs.'
     option :quiet,
       :aliases => '-q',
       :type    => :boolean,
@@ -27,18 +33,24 @@ module SleepingKingStudios::Tasks::Ci
       :desc    => 'Return a Hash instead of a results object.'
 
     def call *files
-      results = rspec_runner.call(:files => files)
+      results = rspec_runner(files.empty?).call(:files => files)
 
       raw? ? results : RSpecResults.new(results)
     end # method call
 
     private
 
-    def rspec_runner
+    def rspec_runner default_coverage = true
+      coverage = options.fetch('coverage', default_coverage)
+
+      env = {}
+      env[:bundle_gemfile] = gemfile if gemfile
+      env[:coverage]       = false unless coverage
+
       opts = %w(--color --tty)
       opts << '--format=documentation' unless quiet?
 
-      RSpecRunner.new(:options => opts)
+      RSpecRunner.new(:env => env, :options => opts)
     end # method rspec_runner
   end # class
 end # module
