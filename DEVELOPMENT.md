@@ -13,6 +13,10 @@
 
   Checks for configuration file and runs CI steps, concatenating the results.
 
+  Add --only, --except
+
+    only runs filtered CI steps
+
 ### Files
 
 - task new [filename]: |

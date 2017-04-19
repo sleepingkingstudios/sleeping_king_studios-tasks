@@ -1,10 +1,13 @@
 # lib/sleeping_king_studios/tasks/ci/steps.rb
 
 require 'sleeping_king_studios/tasks/ci'
+require 'sleeping_king_studios/tasks/ci/results_helpers'
 
 module SleepingKingStudios::Tasks::Ci
   # Thor task for running each step in the CI suite and generating a report.
   class Steps < SleepingKingStudios::Tasks::Task
+    include SleepingKingStudios::Tasks::Ci::ResultsHelpers
+
     def self.description
       'Runs the configured steps for your test suite.'
     end # class method description
@@ -43,19 +46,6 @@ module SleepingKingStudios::Tasks::Ci
       instance.call(*files)
     end # method call_step
 
-    def color_heading str, obj
-      color =
-        if obj.failing?
-          :red
-        elsif obj.pending? || obj.empty?
-          :yellow
-        else
-          :green
-        end # if-else
-
-      set_color("#{str}:", color)
-    end # method color_heading
-
     def format_failures failing_steps
       tools.array.humanize_list(failing_steps) do |name|
         set_color(name, :red)
@@ -64,7 +54,9 @@ module SleepingKingStudios::Tasks::Ci
 
     def report results
       rows =
-        results.map { |key, obj| [color_heading(key, obj), obj.to_s] }
+        results.map do |key, obj|
+          [set_color(key, results_color(obj)), obj.to_s]
+        end # results
 
       print_table rows
     end # method report
