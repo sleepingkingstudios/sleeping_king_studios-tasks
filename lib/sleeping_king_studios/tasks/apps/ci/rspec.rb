@@ -66,13 +66,15 @@ module SleepingKingStudios::Tasks::Apps::Ci
     end # method rspec_runner
 
     def run_rspec_for_application name, config
-      gemfile  = config.fetch('gemfile', 'Gemfile')
-      spec_dir = spec_directories(name, config)
-
       say %(\nRunning specs for application "#{name}":)
 
-      env = { :bundle_gemfile => gemfile }
+      spec_dir = spec_directories(name, config)
 
+      if spec_dir.empty?
+        return SleepingKingStudios::Tasks::Ci::RSpecResults.new({})
+      end # if
+
+      env = { :bundle_gemfile => config.fetch('gemfile', 'Gemfile') }
       raw = rspec_runner.call(:env => env, :files => spec_dir)
 
       SleepingKingStudios::Tasks::Ci::RSpecResults.new(raw)
