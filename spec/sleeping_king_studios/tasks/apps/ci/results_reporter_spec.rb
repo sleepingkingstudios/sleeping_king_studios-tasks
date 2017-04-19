@@ -85,7 +85,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::ResultsReporter do
                   :missed_lines    => 0,
                   :total_lines     => 50
                 ) # end results
-              ) # end RSpec results
+              ) # end SimpleCov results
           } # end totals
       } # end results
     end # let
