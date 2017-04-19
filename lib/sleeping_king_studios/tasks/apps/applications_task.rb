@@ -33,5 +33,25 @@ module SleepingKingStudios::Tasks::Apps
 
       filtered
     end # method filter_applications
+
+    def source_files name, config
+      src_files =
+        config.fetch('source_files') do
+          ["apps/#{name}.rb", "apps/#{name}", "lib/#{name}.rb", "lib/#{name}"].
+            select { |file_name| File.exist?(file_name) }
+        end # fetch
+
+      Array(src_files)
+    end # method source_files
+
+    def spec_directories name, config
+      spec_dir =
+        config.fetch('spec_dir') do
+          ["spec/#{name}", "apps/#{name}/spec"].
+            select { |dir_name| File.directory?(dir_name) }
+        end # fetch
+
+      Array(spec_dir)
+    end # methodd spec_directories
   end # class
 end # module

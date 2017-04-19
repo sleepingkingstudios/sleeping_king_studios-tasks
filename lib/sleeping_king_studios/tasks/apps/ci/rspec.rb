@@ -1,7 +1,5 @@
 # lib/sleeping_king_studios/tasks/apps/ci/rspec.rb
 
-require 'sleeping_king_studios/tools/toolbox/delegator'
-
 require 'sleeping_king_studios/tasks/apps/applications_task'
 require 'sleeping_king_studios/tasks/apps/ci'
 require 'sleeping_king_studios/tasks/apps/ci/results_reporter'
@@ -79,15 +77,5 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
       SleepingKingStudios::Tasks::Ci::RSpecResults.new(raw)
     end # method run_rspec_for_application
-
-    def spec_directories name, config
-      spec_dir =
-        config.fetch('spec_dir') do
-          ["spec/#{name}", "apps/#{name}/spec"].
-            select { |dir_name| File.directory?(dir_name) }
-        end # fetch
-
-      Array(spec_dir)
-    end # methodd spec_directories
   end # class
 end # module

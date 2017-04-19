@@ -91,4 +91,102 @@ reports: {}
       end # it
     end # describe
   end # describe
+
+  describe '#source_files' do
+    let(:name)   { 'application_name' }
+    let(:config) { {} }
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:source_files)
+
+      expect(instance).to respond_to(:source_files, true).with(2).arguments
+    end # it
+
+    it 'should return existing files' do
+      expect(File).
+        to receive(:exist?).
+        with("apps/#{name}.rb").
+        and_return(true)
+
+      expect(File).
+        to receive(:exist?).
+        with("apps/#{name}").
+        and_return(true)
+
+      expect(File).
+        to receive(:exist?).
+        with("lib/#{name}.rb").
+        and_return(false)
+
+      expect(File).
+        to receive(:exist?).
+        with("lib/#{name}").
+        and_return(false)
+
+      expect(instance.send :source_files, name, config).
+        to be == ["apps/#{name}.rb", "apps/#{name}"]
+    end # it
+
+    context 'when the configured value is an array' do
+      let(:config)   { { 'source_files' => expected } }
+      let(:expected) { ['path/to/lib'] }
+
+      it 'should return the configured value' do
+        expect(instance.send :source_files, name, config).to be == expected
+      end # it
+    end # context
+
+    context 'when the configured value is a string' do
+      let(:config)   { { 'source_files' => expected.first } }
+      let(:expected) { ['path/to/lib'] }
+
+      it 'should return the configured value' do
+        expect(instance.send :source_files, name, config).to be == expected
+      end # it
+    end # context
+  end # describe
+
+  describe '#spec_directories' do
+    let(:name)   { 'application_name' }
+    let(:config) { {} }
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:spec_directories)
+
+      expect(instance).to respond_to(:spec_directories, true).with(2).arguments
+    end # it
+
+    it 'should return existing directories' do
+      expect(File).
+        to receive(:directory?).
+        with("spec/#{name}").
+        and_return(false)
+
+      expect(File).
+        to receive(:directory?).
+        with("apps/#{name}/spec").
+        and_return(true)
+
+      expect(instance.send :spec_directories, name, config).
+        to be == ["apps/#{name}/spec"]
+    end # it
+
+    context 'when the configured value is an array' do
+      let(:config)   { { 'spec_dir' => expected } }
+      let(:expected) { ['path/to/spec'] }
+
+      it 'should return the configured value' do
+        expect(instance.send :spec_directories, name, config).to be == expected
+      end # it
+    end # context
+
+    context 'when the configured value is a string' do
+      let(:config)   { { 'spec_dir' => expected.first } }
+      let(:expected) { ['path/to/spec'] }
+
+      it 'should return the configured value' do
+        expect(instance.send :spec_directories, name, config).to be == expected
+      end # it
+    end # context
+  end # describe
 end # describe

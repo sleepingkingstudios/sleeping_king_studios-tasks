@@ -157,48 +157,4 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpec do
       include_examples 'should call an RSpec runner for each application'
     end # describe
   end # describe
-
-  describe '#spec_directories' do
-    let(:name)   { 'application-name' }
-    let(:config) { {} }
-
-    it 'should define the private method' do
-      expect(instance).not_to respond_to(:spec_directories)
-
-      expect(instance).to respond_to(:spec_directories, true).with(2).arguments
-    end # it
-
-    it 'should return existing directories' do
-      expect(File).
-        to receive(:directory?).
-        with("spec/#{name}").
-        and_return(false)
-
-      expect(File).
-        to receive(:directory?).
-        with("apps/#{name}/spec").
-        and_return(true)
-
-      expect(instance.send :spec_directories, name, config).
-        to be == ["apps/#{name}/spec"]
-    end # it
-
-    context 'when the configured value is an array' do
-      let(:config)   { { 'spec_dir' => expected } }
-      let(:expected) { ['path/to/spec'] }
-
-      it 'should return the configured value' do
-        expect(instance.send :spec_directories, name, config).to be == expected
-      end # it
-    end # context
-
-    context 'when the configured value is a string' do
-      let(:config)   { { 'spec_dir' => expected.first } }
-      let(:expected) { ['path/to/spec'] }
-
-      it 'should return the configured value' do
-        expect(instance.send :spec_directories, name, config).to be == expected
-      end # it
-    end # context
-  end # describe
 end # describe
