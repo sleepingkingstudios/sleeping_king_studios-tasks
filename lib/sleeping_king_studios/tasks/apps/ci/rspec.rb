@@ -23,22 +23,26 @@ module SleepingKingStudios::Tasks::Apps::Ci
       :type    => :boolean,
       :default => false,
       :desc    => 'Do not write spec results to STDOUT.'
+    option :report,
+      :aliases => '-r',
+      :type    => :boolean,
+      :default => true,
+      :desc    => 'Write summary report to STDOUT.'
 
     def call *applications
       mute! if quiet?
 
       filtered = filter_applications :only => applications
-      results  = Hash.new { |hsh, key| hsh[key] = {} }
+      results  = run_rspec(filtered)
 
-      filtered.each do |name, app|
-        results[name]['RSpec'] = run_rspec_for_application(name, app)
-      end # each
+      return results unless report?
 
-      totals = aggregate_results(results)
-      results['Totals']['RSpec'] = totals
+      @mute = false
 
       reporter = ResultsReporter.new(self)
       reporter.call(results)
+
+      results
     end # method call
 
     private
@@ -48,14 +52,14 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
       results.each do |_, app_results|
         rspec = app_results['RSpec']
-
-        totals['duration']      += rspec.duration
-        totals['example_count'] += rspec.example_count
-        totals['failure_count'] += rspec.failure_count
-        totals['pending_count'] += rspec.pending_count
+        rspec.to_h.each do |key, value|
+          totals[key] += value
+        end # each
       end # each
 
-      SleepingKingStudios::Tasks::Ci::RSpecResults.new(totals)
+      totals = SleepingKingStudios::Tasks::Ci::RSpecResults.new(totals)
+
+      results['Totals']['RSpec'] = totals
     end # method aggregate_results
 
     def rspec_runner
@@ -64,6 +68,18 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
       SleepingKingStudios::Tasks::Ci::RSpecRunner.new(:options => opts)
     end # method rspec_runner
+
+    def run_rspec applications
+      results = Hash.new { |hsh, key| hsh[key] = {} }
+
+      applications.each do |name, app|
+        results[name]['RSpec'] = run_rspec_for_application(name, app)
+      end # each
+
+      aggregate_results(results)
+
+      results
+    end # method run_rspec
 
     def run_rspec_for_application name, config
       say %(\nRunning specs for application "#{name}":)

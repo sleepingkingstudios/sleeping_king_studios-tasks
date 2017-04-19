@@ -22,22 +22,26 @@ module SleepingKingStudios::Tasks::Apps::Ci
       :type    => :boolean,
       :default => false,
       :desc    => 'Do not write lint results to STDOUT.'
+    option :report,
+      :aliases => '-r',
+      :type    => :boolean,
+      :default => true,
+      :desc    => 'Write summary report to STDOUT.'
 
     def call *applications
       mute! if quiet?
 
       filtered = filter_applications :only => applications
-      results  = Hash.new { |hsh, key| hsh[key] = {} }
+      results  = run_rubocop(filtered)
 
-      filtered.each do |name, app|
-        results[name]['RuboCop'] = run_rubocop_for_application(name, app)
-      end # each
+      return results unless report?
 
-      totals = aggregate_results(results)
-      results['Totals']['RuboCop'] = totals
+      @mute = false
 
       reporter = ResultsReporter.new(self)
       reporter.call(results)
+
+      results
     end # method call
 
     private
@@ -52,7 +56,9 @@ module SleepingKingStudios::Tasks::Apps::Ci
         totals['offense_count']        += rubocop.offense_count
       end # each
 
-      SleepingKingStudios::Tasks::Ci::RuboCopResults.new(totals)
+      totals = SleepingKingStudios::Tasks::Ci::RuboCopResults.new(totals)
+
+      results['Totals']['RuboCop'] = totals
     end # method aggregate_results
 
     def rubocop_runner
@@ -61,6 +67,18 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
       SleepingKingStudios::Tasks::Ci::RuboCopRunner.new(:options => opts)
     end # method rubocop_runner
+
+    def run_rubocop applications
+      results = Hash.new { |hsh, key| hsh[key] = {} }
+
+      applications.each do |name, app|
+        results[name]['RuboCop'] = run_rubocop_for_application(name, app)
+      end # each
+
+      aggregate_results(results)
+
+      results
+    end # method run_rubocop
 
     def run_rubocop_for_application name, config
       gemfile   = config.fetch('gemfile', 'Gemfile')

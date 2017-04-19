@@ -55,9 +55,13 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpec do
               and_return(results[name]['RSpec'].to_h)
           end # each
 
-          expect(reporter).to receive(:call).with(be == expected_results)
+          if options.fetch('report', true)
+            expect(reporter).to receive(:call).with(be == expected_results)
+          else
+            expect(reporter).not_to receive(:call)
+          end # if-else
 
-          instance.call(*only)
+          expect(instance.call(*only)).to be == expected_results
         end # it
       end # describe
     end # shared_examples
@@ -153,6 +157,12 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpec do
 
         hsh
       end # let
+
+      include_examples 'should call an RSpec runner for each application'
+    end # describe
+
+    describe 'with :report => false' do
+      let(:options) { super().merge 'report' => false }
 
       include_examples 'should call an RSpec runner for each application'
     end # describe

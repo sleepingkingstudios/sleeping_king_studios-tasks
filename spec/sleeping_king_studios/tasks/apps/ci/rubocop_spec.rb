@@ -54,9 +54,13 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RuboCop do
               and_return(results[name]['RuboCop'].to_h)
           end # each
 
-          expect(reporter).to receive(:call).with(expected_results)
+          if options.fetch('report', true)
+            expect(reporter).to receive(:call).with(expected_results)
+          else
+            expect(reporter).not_to receive(:call)
+          end # if
 
-          instance.call(*only)
+          expect(instance.call(*only)).to be == expected_results
         end # it
       end # describe
     end # shared_examples
@@ -122,6 +126,8 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RuboCop do
 
     it { expect(instance).to respond_to(:call).with_unlimited_arguments }
 
+    include_examples 'should call a RuboCop runner for each application'
+
     describe 'with applications' do
       let(:only) { %w(public) }
       let(:expected_applications) do
@@ -135,6 +141,12 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RuboCop do
 
         hsh
       end # let
+
+      include_examples 'should call a RuboCop runner for each application'
+    end # describe
+
+    describe 'with :report => false' do
+      let(:options) { super().merge 'report' => false }
 
       include_examples 'should call a RuboCop runner for each application'
     end # describe

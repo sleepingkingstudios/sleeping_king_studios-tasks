@@ -24,6 +24,8 @@
   add smarter/configurable pattern matching
   e.g. configure _controller.rb to use controller.erb template
 
+  (optional) opens files in text editor?
+
 ### Git
 
 - task git:delete-merged
