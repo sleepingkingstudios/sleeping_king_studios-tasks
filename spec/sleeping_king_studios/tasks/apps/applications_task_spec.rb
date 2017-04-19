@@ -36,6 +36,66 @@ reports: {}
     end # it
   end # describe
 
+  describe '#ci_step_config' do
+    let(:name) { 'public' }
+    let(:step) { :rubocop }
+    let(:applications) do
+      {
+        'admin'   => {},
+        'public'  => {},
+        'reports' => {}
+      } # end applications
+    end # let
+    let(:expected) do
+      SleepingKingStudios::Tasks.configuration.ci.steps_with_options.fetch(step)
+    end # let
+
+    before(:example) do
+      allow(instance).to receive(:applications).and_return(applications)
+    end # before example
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:ci_step_config)
+
+      expect(instance).to respond_to(:ci_step_config, true).with(2).arguments
+    end # it
+
+    it 'should return the configured value' do
+      expect(instance.send :ci_step_config, name, step).to be == expected
+    end # it
+
+    context 'when the configuration disables a step' do
+      let(:applications) do
+        hsh = super()
+
+        hsh['public'] = { 'ci' => { 'rubocop' => false } }
+
+        hsh
+      end # let
+
+      it 'should return false' do
+        expect(instance.send :ci_step_config, name, step).to be false
+      end # it
+    end # context
+
+    context 'when the configuration updates a step' do
+      let(:applications) do
+        hsh = super()
+
+        hsh['public'] = { 'ci' => { 'rubocop' => { 'title' => 'OcpLint' } } }
+
+        hsh
+      end # let
+      let(:expected) do
+        super().merge :title => 'OcpLint'
+      end # let
+
+      it 'should return the updated value' do
+        expect(instance.send :ci_step_config, name, step).to be == expected
+      end # it
+    end # context
+  end # describe
+
   describe '#config_file' do
     it 'should define the private reader' do
       expect(instance).not_to respond_to(:config_file)

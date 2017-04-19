@@ -167,6 +167,39 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpec do
       include_examples 'should call an RSpec runner for each application'
     end # describe
 
+    context 'when an application disables the rspec step' do
+      let(:applications) do
+        hsh = super()
+
+        (hsh['public']['ci'] = {})['rspec'] = false
+
+        hsh
+      end # let
+      let(:expected_applications) do
+        applications.reject { |key, _| key == 'public' }
+      end # let
+      let(:expected_results) do
+        hsh = results.dup
+
+        hsh.delete('public')
+
+        hsh['Totals'] =
+          {
+            'RSpec' =>
+              SleepingKingStudios::Tasks::Ci::RSpecResults.new(
+                'duration'      => 2.5,
+                'example_count' => 9,
+                'failure_count' => 1,
+                'pending_count' => 1
+              ) # end RSpec results
+          } # end totals
+
+        hsh
+      end # let
+
+      include_examples 'should call an RSpec runner for each application'
+    end # context
+
     context 'when an application does not have spec files' do
       let(:expected_files) do
         {

@@ -19,6 +19,24 @@ module SleepingKingStudios::Tasks::Apps
         end # applications
     end # method applications
 
+    # rubocop:disable Metrics/AbcSize
+    def ci_step_config name, step
+      default =
+        SleepingKingStudios::Tasks.
+        configuration.ci.steps_with_options.
+        fetch(step.intern)
+      config  = applications.fetch(name, {}).fetch('ci', {})[step.to_s]
+
+      return false   if config == false
+      return default unless config.is_a?(Hash)
+
+      config  = tools.hash.convert_keys_to_symbols(config)
+      updated = tools.hash.deep_dup(default)
+
+      updated.merge(config)
+    end # method ci_step_config
+    # rubocop:enable Metrics/AbcSize
+
     def config_file
       SleepingKingStudios::Tasks.configuration.apps.config_file
     end # method config_file

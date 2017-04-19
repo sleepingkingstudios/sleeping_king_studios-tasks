@@ -150,5 +150,36 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RuboCop do
 
       include_examples 'should call a RuboCop runner for each application'
     end # describe
+
+    context 'when an application disables the rspec step' do
+      let(:applications) do
+        hsh = super()
+
+        (hsh['public']['ci'] = {})['rubocop'] = false
+
+        hsh
+      end # let
+      let(:expected_applications) do
+        applications.reject { |key, _| key == 'public' }
+      end # let
+      let(:expected_results) do
+        hsh = results.dup
+
+        hsh.delete('public')
+
+        hsh['Totals'] =
+          {
+            'RuboCop' =>
+              SleepingKingStudios::Tasks::Ci::RuboCopResults.new(
+                'inspected_file_count' => 20,
+                'offense_count'        => 3
+              ) # end RSpec results
+          } # end totals
+
+        hsh
+      end # let
+
+      include_examples 'should call a RuboCop runner for each application'
+    end # context
   end # describe
 end # describe

@@ -72,6 +72,8 @@ module SleepingKingStudios::Tasks::Apps::Ci
       results = Hash.new { |hsh, key| hsh[key] = {} }
 
       applications.each do |name, app|
+        next if ci_step_config(name, :rubocop) == false
+
         results[name]['RuboCop'] = run_rubocop_for_application(name, app)
       end # each
 

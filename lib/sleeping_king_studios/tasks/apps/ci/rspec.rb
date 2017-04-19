@@ -73,6 +73,8 @@ module SleepingKingStudios::Tasks::Apps::Ci
       results = Hash.new { |hsh, key| hsh[key] = {} }
 
       applications.each do |name, app|
+        next if ci_step_config(name, :rspec) == false
+
         results[name]['RSpec'] = run_rspec_for_application(name, app)
       end # each
 
