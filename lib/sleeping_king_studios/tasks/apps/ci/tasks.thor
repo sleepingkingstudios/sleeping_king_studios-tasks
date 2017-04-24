@@ -3,6 +3,7 @@
 require 'sleeping_king_studios/tasks/apps/ci'
 require 'sleeping_king_studios/tasks/apps/ci/rspec'
 require 'sleeping_king_studios/tasks/apps/ci/rubocop'
+require 'sleeping_king_studios/tasks/apps/ci/steps'
 
 module SleepingKingStudios::Tasks::Apps::Ci
   # Thor integration for continuous integration tasks in semi-distributed
@@ -12,5 +13,6 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
     task SleepingKingStudios::Tasks::Apps::Ci::RSpec
     task SleepingKingStudios::Tasks::Apps::Ci::RuboCop
+    task SleepingKingStudios::Tasks::Apps::Ci::Steps
   end # class
 end # module

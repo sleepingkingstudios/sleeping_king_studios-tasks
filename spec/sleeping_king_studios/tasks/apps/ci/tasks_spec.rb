@@ -24,4 +24,12 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Tasks do
       SleepingKingStudios::Tasks::Apps::Ci::RuboCop,
       :namespace => 'apps:ci'
   end # describe
+
+  describe '#steps' do
+    let(:args) { ['path/to/file'] }
+
+    include_examples 'should define task',
+      SleepingKingStudios::Tasks::Apps::Ci::Steps,
+      :namespace => 'apps:ci'
+  end # describe
 end # describe
