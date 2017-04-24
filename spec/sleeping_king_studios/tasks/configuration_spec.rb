@@ -37,11 +37,27 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         end # it
       end # describe
 
+      describe '#rubocop' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rubocop_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RuboCopWrapper',
+            :title   => 'RuboCop'
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:rubocop).
+            with_value(be == expected)
+        end # it
+      end # describe
+
       describe '#steps' do
         it 'should define the option' do
           expect(instance.apps.ci).
             to have_reader(:steps).
-            with_value(%i(rspec))
+            with_value(%i(rspec rubocop))
         end # it
       end # describe
 

@@ -129,6 +129,31 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopResults do
     end # wrap_examples
   end # describe
 
+  describe '#merge' do
+    let(:other) do
+      described_class.new(
+        'inspected_file_count' => 20,
+        'offense_count'        => 5
+      ) # end results
+    end # let
+
+    it { expect(instance).to respond_to(:merge).with(1).argument }
+
+    it 'should not change the existing values' do
+      expect { instance.merge other }.not_to change(instance, :to_h)
+    end # it
+
+    it 'should return a new results object with the totals' do
+      totals = instance.merge other
+
+      expect(totals).to be_a described_class
+
+      %w(inspected_file_count offense_count).each do |prop|
+        expect(totals.send prop).to be == instance.send(prop) + other.send(prop)
+      end # each
+    end # it
+  end # describe
+
   describe '#offense_count' do
     include_examples 'should have reader',
       :offense_count,

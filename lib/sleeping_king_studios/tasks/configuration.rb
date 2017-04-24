@@ -16,7 +16,14 @@ module SleepingKingStudios::Tasks
             :title   => 'RSpec'
           } # end rspec
 
-        option :steps, :default => %i(rspec)
+        option :rubocop, :default =>
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rubocop_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RuboCopWrapper',
+            :title   => 'RuboCop'
+          } # end rspec
+
+        option :steps, :default => %i(rspec rubocop)
 
         define_method :steps_with_options do
           steps.each.with_object({}) do |step, hsh|
