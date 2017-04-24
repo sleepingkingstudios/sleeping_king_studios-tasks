@@ -8,6 +8,23 @@ module SleepingKingStudios::Tasks
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
     namespace :apps do
+      namespace :ci do
+        option :rspec, :default =>
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper',
+            :title   => 'RSpec'
+          } # end rspec
+
+        option :steps, :default => %i(rspec)
+
+        define_method :steps_with_options do
+          steps.each.with_object({}) do |step, hsh|
+            hsh[step] = send(step)
+          end # each
+        end # method steps_with_options
+      end # namespace
+
       option :config_file, :default => 'applications.yml'
     end # namespace
 

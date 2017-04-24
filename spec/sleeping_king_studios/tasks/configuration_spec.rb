@@ -14,6 +14,52 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         with_value(be_a config_class)
     end # it
 
+    describe '#ci' do
+      it 'should define the namespace' do
+        expect(instance.apps).
+          to have_reader(:ci).
+          with_value(be_a config_class)
+      end # it
+
+      describe '#rspec' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper',
+            :title   => 'RSpec'
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:rspec).
+            with_value(be == expected)
+        end # it
+      end # describe
+
+      describe '#steps' do
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:steps).
+            with_value(%i(rspec))
+        end # it
+      end # describe
+
+      describe '#steps_with_options' do
+        let(:expected) do
+          instance.apps.ci.steps.each.with_object({}) do |step, hsh|
+            hsh[step] = instance.apps.ci.send(step)
+          end # each
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:steps_with_options).
+            with_value(be == expected)
+        end # it
+      end # describe
+    end # describe
+
     describe '#config_file' do
       it 'should define the option' do
         expect(instance.apps).
