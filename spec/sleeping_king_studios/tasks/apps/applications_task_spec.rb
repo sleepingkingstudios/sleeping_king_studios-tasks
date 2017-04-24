@@ -3,6 +3,11 @@
 require 'sleeping_king_studios/tasks/apps/applications_task'
 
 RSpec.describe SleepingKingStudios::Tasks::Apps::ApplicationsTask do
+  let(:described_class) do
+    Class.new(SleepingKingStudios::Tasks::Task) do
+      include SleepingKingStudios::Tasks::Apps::ApplicationsTask
+    end # class
+  end # let
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 

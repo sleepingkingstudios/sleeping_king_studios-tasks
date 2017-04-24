@@ -5,9 +5,9 @@ require 'yaml'
 require 'sleeping_king_studios/tasks/apps'
 
 module SleepingKingStudios::Tasks::Apps
-  # Task class with additional configuration for performing actions on a
+  # Extension module with additional configuration for performing actions on a
   # per-application basis.
-  class ApplicationsTask < SleepingKingStudios::Tasks::Task
+  module ApplicationsTask
     private
 
     def applications

@@ -8,7 +8,9 @@ require 'sleeping_king_studios/tasks/ci/rubocop_runner'
 
 module SleepingKingStudios::Tasks::Apps::Ci
   # Defines a Thor task for running the RuboCop linter for each application.
-  class RuboCop < SleepingKingStudios::Tasks::Apps::ApplicationsTask
+  class RuboCop < SleepingKingStudios::Tasks::Task
+    include SleepingKingStudios::Tasks::Apps::ApplicationsTask
+
     def self.description
       'Runs the RuboCop linter for each application.'
     end # class method description

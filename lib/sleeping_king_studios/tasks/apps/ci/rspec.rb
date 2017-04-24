@@ -9,7 +9,9 @@ require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Apps::Ci
   # Defines a Thor task for running the RSpec test suite for each application.
-  class RSpec < SleepingKingStudios::Tasks::Apps::ApplicationsTask
+  class RSpec < SleepingKingStudios::Tasks::Task
+    include SleepingKingStudios::Tasks::Apps::ApplicationsTask
+
     def self.description
       'Runs the RSpec test suite for each application.'
     end # class method description

@@ -8,7 +8,10 @@ require 'sleeping_king_studios/tasks/ci/rubocop_results'
 require 'sleeping_king_studios/tasks/ci/simplecov_results'
 
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::ResultsReporter do
-  let(:context)  { SleepingKingStudios::Tasks::Apps::ApplicationsTask.new({}) }
+  let(:context) do
+    SleepingKingStudios::Tasks::Task.new({}).
+      extend(SleepingKingStudios::Tasks::Apps::ApplicationsTask)
+  end # let
   let(:instance) { described_class.new(context) }
 
   describe '::new' do

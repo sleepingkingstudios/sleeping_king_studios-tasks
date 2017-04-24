@@ -6,7 +6,9 @@ require 'sleeping_king_studios/tasks/apps/bundle/install_runner'
 
 module SleepingKingStudios::Tasks::Apps::Bundle
   # Defines a Thor task for installing gem dependencies for each application.
-  class Install < SleepingKingStudios::Tasks::Apps::ApplicationsTask
+  class Install < SleepingKingStudios::Tasks::Task
+    include SleepingKingStudios::Tasks::Apps::ApplicationsTask
+
     def self.description
       'Installs the Ruby gem dependencies for each application.'
     end # class method description
