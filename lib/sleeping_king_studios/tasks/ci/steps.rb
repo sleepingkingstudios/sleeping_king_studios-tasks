@@ -2,10 +2,11 @@
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/results_helpers'
+require 'sleeping_king_studios/tasks/ci/steps_runner'
 
 module SleepingKingStudios::Tasks::Ci
   # Thor task for running each step in the CI suite and generating a report.
-  class Steps < SleepingKingStudios::Tasks::Task
+  class Steps < SleepingKingStudios::Tasks::Ci::StepsRunner
     include SleepingKingStudios::Tasks::Ci::ResultsHelpers
 
     def self.description
@@ -13,19 +14,13 @@ module SleepingKingStudios::Tasks::Ci
     end # class method description
 
     def call *files
-      results = {}
-
-      ci_steps.each do |name, config|
-        title = config.fetch(:title, name)
-
-        results[title] = call_step(config, files)
-      end # reduce
-
-      say "\n"
+      results = super
 
       report results
 
       report_failures results
+
+      results
     end # method call
 
     private
@@ -33,18 +28,6 @@ module SleepingKingStudios::Tasks::Ci
     def ci_steps
       SleepingKingStudios::Tasks.configuration.ci.steps_with_options
     end # method ci_steps
-
-    def call_step config, files
-      class_name   = config[:class]
-      require_path = config.fetch(:require, require_path(class_name))
-
-      require require_path
-
-      step_class = Object.const_get(class_name)
-      instance   = step_class.new(options)
-
-      instance.call(*files)
-    end # method call_step
 
     def format_failures failing_steps
       tools.array.humanize_list(failing_steps) do |name|
@@ -57,6 +40,8 @@ module SleepingKingStudios::Tasks::Ci
         results.map do |key, obj|
           [set_color(key, results_color(obj)), obj.to_s]
         end # results
+
+      say "\n"
 
       print_table rows
     end # method report
@@ -82,12 +67,5 @@ module SleepingKingStudios::Tasks::Ci
       raise Thor::Error, 'The CI suite failed.'
     end # method report_failures
     # rubocop:enable Metrics/MethodLength
-
-    def require_path class_name
-      class_name.
-        split('::').
-        map { |str| tools.string.underscore(str) }.
-        join '/'
-    end # method require_path
   end # class
 end # module

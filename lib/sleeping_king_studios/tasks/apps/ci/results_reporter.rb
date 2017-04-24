@@ -42,20 +42,24 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
     def generate_rows results, width:
       results.map do |key, obj|
+        next nil if obj.nil?
+
         badge = format("  %-#{width}.#{width}s", "#{key}:")
 
         [set_color(badge, results_color(obj)), obj.to_s]
-      end # rows
+      end. # rows
+        compact
     end # method generate_rows
 
     def report_application app_name, results, width:
       config   = applications.fetch(app_name, {})
       app_name = config.fetch('name', app_name)
+      rows     = generate_rows(results, :width => width)
+
+      return if rows.empty?
 
       say "#{app_name}:"
       say "\n"
-
-      rows = generate_rows(results, :width => width)
 
       print_table rows
 
