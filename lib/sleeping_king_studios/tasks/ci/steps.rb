@@ -13,6 +13,15 @@ module SleepingKingStudios::Tasks::Ci
       'Runs the configured steps for your test suite.'
     end # class method description
 
+    option :except,
+      :type    => :array,
+      :default => [],
+      :desc    => 'Exclude steps from the CI process.'
+    option :only,
+      :type    => :array,
+      :default => [],
+      :desc    => 'Run only the specified steps from the CI process.'
+
     def call *files
       results = super
 

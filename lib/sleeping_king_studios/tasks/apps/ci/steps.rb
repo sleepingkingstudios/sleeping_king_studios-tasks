@@ -15,6 +15,15 @@ module SleepingKingStudios::Tasks::Apps::Ci
       'Runs the configured steps for each application.'
     end # class method description
 
+    option :except,
+      :type    => :array,
+      :default => [],
+      :desc    => 'Exclude steps from the CI process.'
+    option :only,
+      :type    => :array,
+      :default => [],
+      :desc    => 'Run only the specified steps from the CI process.'
+
     def call *applications
       filtered = filter_applications :only => applications
       results  = run_steps(filtered)

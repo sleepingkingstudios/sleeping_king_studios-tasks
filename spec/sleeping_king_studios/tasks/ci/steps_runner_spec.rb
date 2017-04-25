@@ -16,7 +16,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsRunner do
     shared_examples 'should return the results for each step' do
       describe 'should return the results for each step' do
         before(:example) do
-          allow(instance).to receive(:ci_steps).and_return(expected_steps)
+          allow(instance).to receive(:filtered_steps).and_return(expected_steps)
 
           allow(instance).to receive(:require_path).and_return(nil)
 
@@ -96,6 +96,46 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsRunner do
     end # it
 
     it { expect(instance.send :ci_steps).to be == [] }
+  end # describe
+
+  describe '#filtered_steps' do
+    let(:ci_steps) do
+      {
+        'first'  => {},
+        'second' => {},
+        'third'  => {}
+      } # end steps
+    end # let
+
+    before(:example) do
+      allow(instance).to receive(:ci_steps).and_return(ci_steps)
+    end # before example
+
+    it 'should define the private method' do
+      expect(instance).not_to respond_to(:filtered_steps)
+
+      expect(instance).to respond_to(:filtered_steps, true).with(0).arguments
+    end # it
+
+    it { expect(instance.send :filtered_steps).to be == ci_steps }
+
+    context 'when options["except"] is set' do
+      let(:options) { super().merge 'except' => %w(second) }
+      let(:expected) do
+        ci_steps.reject { |key, _| key == 'second' }
+      end # let
+
+      it { expect(instance.send :filtered_steps).to be == expected }
+    end # context
+
+    context 'when options["only"] is set' do
+      let(:options) { super().merge 'only' => %w(second) }
+      let(:expected) do
+        ci_steps.select { |key, _| key == 'second' }
+      end # let
+
+      it { expect(instance.send :filtered_steps).to be == expected }
+    end # context
   end # describe
 
   describe '#skip_step?' do

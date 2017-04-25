@@ -8,7 +8,7 @@ module SleepingKingStudios::Tasks::Ci
     def call *args
       results = {}
 
-      ci_steps.each do |name, config|
+      filtered_steps.each do |name, config|
         next if skip_step?(name, config)
 
         title = config.fetch(:title, name)
@@ -36,6 +36,24 @@ module SleepingKingStudios::Tasks::Ci
 
       instance.call(*args)
     end # method call_step
+
+    # rubocop:disable Metrics/AbcSize
+    def filtered_steps
+      filtered = ci_steps
+
+      if options.key?('except') && !options['except'].empty?
+        filtered =
+          filtered.reject { |key, _| options['except'].include?(key.to_s) }
+      end # if
+
+      if options.key?('only') && !options['only'].empty?
+        filtered =
+          filtered.select { |key, _| options['only'].include?(key.to_s) }
+      end # if
+
+      filtered
+    end # method filtered_steps
+    # rubocop:enable Metrics/AbcSize
 
     def require_path class_name
       class_name.
