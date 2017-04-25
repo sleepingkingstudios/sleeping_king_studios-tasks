@@ -21,6 +21,11 @@ module SleepingKingStudios::Tasks::Ci
       :type    => :array,
       :default => [],
       :desc    => 'Run only the specified steps from the CI process.'
+    option :quiet,
+      :aliases => '-q',
+      :type    => :boolean,
+      :default => false,
+      :desc    => 'Do not write intermediate results to STDOUT.'
 
     def call *files
       results = super

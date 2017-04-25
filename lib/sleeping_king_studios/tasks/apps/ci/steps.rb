@@ -23,6 +23,11 @@ module SleepingKingStudios::Tasks::Apps::Ci
       :type    => :array,
       :default => [],
       :desc    => 'Run only the specified steps from the CI process.'
+    option :quiet,
+      :aliases => '-q',
+      :type    => :boolean,
+      :default => false,
+      :desc    => 'Do not write intermediate results to STDOUT.'
 
     def call *applications
       filtered = filter_applications :only => applications
@@ -32,6 +37,8 @@ module SleepingKingStudios::Tasks::Apps::Ci
       aggregate_results(results) if filtered.count > 1
 
       (results['Totals'] ||= {}).update(globals)
+
+      say "\n" unless quiet?
 
       reporter = ResultsReporter.new(self)
       reporter.call(results)
