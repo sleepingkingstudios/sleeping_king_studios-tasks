@@ -38,7 +38,7 @@ module SleepingKingStudios::Tasks::Ci
     def report results
       rows =
         results.map do |key, obj|
-          [set_color(key, results_color(obj)), obj.to_s]
+          [set_color("#{key}:", results_color(obj)), obj.to_s]
         end # results
 
       say "\n"

@@ -35,4 +35,5 @@ Gem::Specification.new do |gem|
     '~> 2.2', '>= 2.2.2'
   gem.add_development_dependency 'rubocop',   '~> 0.47.0'
   gem.add_development_dependency 'simplecov', '~> 0.14', '>= 0.14.1'
+  gem.add_development_dependency 'simplecov-json', '~> 0.2'
 end # gemspec

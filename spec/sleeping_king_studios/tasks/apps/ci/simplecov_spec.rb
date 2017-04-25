@@ -1,5 +1,7 @@
 # spec/sleeping_king_studios/tasks/apps/ci/simplecov_spec.rb
 
+require 'simplecov'
+
 require 'sleeping_king_studios/tasks/apps/ci/simplecov'
 
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
@@ -8,6 +10,76 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(1).argument }
+  end # describe
+
+  describe '::configure_simplecov!' do
+    let(:config) do
+      Class.new do
+        def initialize
+          @command_name = 'rspec'
+          @formatter    = :default_formatter
+        end # constructor
+
+        attr_accessor :formatter
+
+        def command_name *args
+          args.empty? ? @command_name : @command_name = args.first
+        end # method command_name
+      end.new
+    end # let
+
+    it 'should define the class method' do
+      expect(described_class).
+        to respond_to(:configure_simplecov!).
+        with(0).arguments
+    end # it
+
+    it 'should configure the formatter' do
+      allow(::SimpleCov).to receive(:configure) do |&block|
+        config.instance_exec(&block)
+      end # allow
+
+      described_class.configure_simplecov!
+
+      formatter = config.formatter.new
+      expect(formatter.formatters).
+        to contain_exactly(
+          :default_formatter,
+          SimpleCov::Formatter::JSONFormatter
+        ) # end contain_exactly
+    end # it
+
+    context 'when ENV["APP_NAME"] is set' do
+      let(:name) { 'tps_reports' }
+
+      around(:example) do |example|
+        begin
+          prior           = ENV['APP_NAME']
+          ENV['APP_NAME'] = name
+
+          example.call
+        ensure
+          ENV['APP_NAME'] = prior
+        end # begin-ensure
+      end # around example
+
+      it 'should configure the formatter' do
+        allow(::SimpleCov).to receive(:configure) do |&block|
+          config.instance_exec(&block)
+        end # allow
+
+        described_class.configure_simplecov!
+
+        expect(config.command_name).to be == "rspec:#{name}"
+
+        formatter = config.formatter.new
+        expect(formatter.formatters).
+          to contain_exactly(
+            :default_formatter,
+            SimpleCov::Formatter::JSONFormatter
+          ) # end contain_exactly
+      end # it
+    end # context
   end # describe
 
   describe '#call' do
@@ -70,5 +142,18 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
 
       expect(results).to be == data['metrics']
     end # it
+
+    context 'when the report fails to load' do
+      let(:raw) { 'not JSON, no sirree' }
+
+      it 'should return an empty data hash' do
+        results = nil
+
+        expect { results = instance.send :load_report, :report => report }.
+          not_to raise_error
+
+        expect(results).to be == {}
+      end # it
+    end # context
   end # describe
 end # describe
