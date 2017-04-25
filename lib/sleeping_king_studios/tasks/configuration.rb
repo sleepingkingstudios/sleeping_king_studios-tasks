@@ -7,6 +7,7 @@ require 'sleeping_king_studios/tasks'
 module SleepingKingStudios::Tasks
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
+    # rubocop:disable Metrics/BlockLength
     namespace :apps do
       namespace :ci do
         option :rspec, :default =>
@@ -23,7 +24,15 @@ module SleepingKingStudios::Tasks
             :title   => 'RuboCop'
           } # end rspec
 
-        option :steps, :default => %i(rspec rubocop)
+        option :simplecov, :default =>
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCov',
+            :title   => 'SimpleCov',
+            :global  => true
+          } # end rspec
+
+        option :steps, :default => %i(rspec rubocop simplecov)
 
         define_method :steps_with_options do
           steps.each.with_object({}) do |step, hsh|
@@ -34,6 +43,7 @@ module SleepingKingStudios::Tasks
 
       option :config_file, :default => 'applications.yml'
     end # namespace
+    # rubocop:enable Metrics/BlockLength
 
     # rubocop:disable Metrics/BlockLength
     namespace :ci do

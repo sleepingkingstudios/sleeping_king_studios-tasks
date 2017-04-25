@@ -18,8 +18,11 @@ module SleepingKingStudios::Tasks::Apps::Ci
     def call *applications
       filtered = filter_applications :only => applications
       results  = run_steps(filtered)
+      globals  = run_global_steps
 
       aggregate_results(results) if filtered.count > 1
+
+      (results['Totals'] ||= {}).update(globals)
 
       reporter = ResultsReporter.new(self)
       reporter.call(results)
@@ -44,6 +47,13 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
       results['Totals'] = totals
     end # method aggregate_results
+
+    def run_global_steps
+      opts   = options.merge 'global' => true
+      runner = SleepingKingStudios::Tasks::Apps::Ci::StepsRunner.new(opts)
+
+      runner.call(nil)
+    end # method run_global_steps
 
     def run_steps applications
       results = Hash.new { |hsh, key| hsh[key] = {} }

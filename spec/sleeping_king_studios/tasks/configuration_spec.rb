@@ -53,11 +53,28 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         end # it
       end # describe
 
+      describe '#simplecov' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCov',
+            :title   => 'SimpleCov',
+            :global  => true
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:simplecov).
+            with_value(be == expected)
+        end # it
+      end # describe
+
       describe '#steps' do
         it 'should define the option' do
           expect(instance.apps.ci).
             to have_reader(:steps).
-            with_value(%i(rspec rubocop))
+            with_value(%i(rspec rubocop simplecov))
         end # it
       end # describe
 
