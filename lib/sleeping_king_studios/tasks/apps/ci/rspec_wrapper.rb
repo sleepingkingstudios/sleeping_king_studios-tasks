@@ -10,17 +10,20 @@ module SleepingKingStudios::Tasks::Apps::Ci
     def call application
       super
 
-      config    = applications[application]
-      spec_dirs = spec_directories(application, config)
-
-      if spec_dirs.empty?
+      if spec_files.empty?
         return SleepingKingStudios::Tasks::Ci::RSpecResults.new({})
       end # if
 
-      run_step(*spec_dirs)
+      run_step(*spec_files)
     end # method call
 
     private
+
+    def spec_files
+      SleepingKingStudios::Tasks::Apps.
+        configuration[current_application].
+        spec_files
+    end # method spec_files
 
     def step_key
       :rspec

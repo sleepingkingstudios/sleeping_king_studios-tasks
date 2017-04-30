@@ -28,10 +28,7 @@ module SleepingKingStudios::Tasks::Apps::Bundle
     private
 
     def gemfiles applications
-      applications.map do |_, config|
-        config.fetch('gemfile', 'Gemfile')
-      end. # map
-        uniq
+      applications.map { |_, config| config.gemfile }.uniq
     end # method gemfiles
 
     def install_runner

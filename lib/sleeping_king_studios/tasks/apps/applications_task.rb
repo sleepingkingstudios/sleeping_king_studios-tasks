@@ -11,35 +11,8 @@ module SleepingKingStudios::Tasks::Apps
     private
 
     def applications
-      @applications ||=
-        begin
-          raw = File.read(config_file)
-
-          YAML.safe_load raw
-        end # applications
+      SleepingKingStudios::Tasks::Apps.configuration
     end # method applications
-
-    # rubocop:disable Metrics/AbcSize
-    def ci_step_config name, step
-      default =
-        SleepingKingStudios::Tasks.
-        configuration.ci.steps_with_options.
-        fetch(step.intern)
-      config  = applications.fetch(name, {}).fetch('ci', {})[step.to_s]
-
-      return false   if config == false
-      return default unless config.is_a?(Hash)
-
-      config  = tools.hash.convert_keys_to_symbols(config)
-      updated = tools.hash.deep_dup(default)
-
-      updated.merge(config)
-    end # method ci_step_config
-    # rubocop:enable Metrics/AbcSize
-
-    def config_file
-      SleepingKingStudios::Tasks.configuration.apps.config_file
-    end # method config_file
 
     def filter_applications only: []
       filtered = applications
@@ -51,25 +24,5 @@ module SleepingKingStudios::Tasks::Apps
 
       filtered
     end # method filter_applications
-
-    def source_files name, config
-      src_files =
-        config.fetch('source_files') do
-          ["apps/#{name}.rb", "apps/#{name}", "lib/#{name}.rb", "lib/#{name}"].
-            select { |file_name| File.exist?(file_name) }
-        end # fetch
-
-      Array(src_files)
-    end # method source_files
-
-    def spec_directories name, config
-      spec_dir =
-        config.fetch('spec_dir') do
-          ["spec/#{name}", "apps/#{name}/spec"].
-            select { |dir_name| File.directory?(dir_name) }
-        end # fetch
-
-      Array(spec_dir)
-    end # methodd spec_directories
   end # class
 end # module

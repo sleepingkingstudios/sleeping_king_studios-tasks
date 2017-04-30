@@ -35,30 +35,12 @@ module SleepingKingStudios::Tasks::Apps::Ci
       step_config == false
     end # method skip_step?
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
     def step_config
-      return @step_config unless @step_config.nil?
+      config = SleepingKingStudios::Tasks.configuration
+      steps  = config.ci.steps_with_options
 
-      default =
-        SleepingKingStudios::Tasks.
-        configuration.ci.steps_with_options.
-        fetch(step_key)
-      config  =
-        applications.
-        fetch(current_application, {}).
-        fetch('ci', {})[step_key.to_s]
-
-      return false   if config == false
-      return default unless config.is_a?(Hash)
-
-      config  = tools.hash.convert_keys_to_symbols(config)
-      updated = tools.hash.deep_dup(default)
-
-      @step_config = updated.merge(config)
+      steps.fetch(step_key, false)
     end # method step_config
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/MethodLength
 
     def step_options
       options

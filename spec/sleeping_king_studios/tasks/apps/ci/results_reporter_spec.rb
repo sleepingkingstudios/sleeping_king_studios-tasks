@@ -13,19 +13,27 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::ResultsReporter do
       extend(SleepingKingStudios::Tasks::Apps::ApplicationsTask)
   end # let
   let(:instance) { described_class.new(context) }
+  let(:applications) do
+    {
+      'admin'   => { 'name' => 'Admin' },
+      'public'  => { 'name' => 'Public' },
+      'reports' => { 'name' => 'Reports' }
+    } # end applications
+  end # let
+  let(:config) do
+    applications.each.with_object({}) do |(name, data), hsh|
+      tools = SleepingKingStudios::Tools::Toolbelt.instance
+      data  = tools.hash.convert_keys_to_symbols(data)
+
+      hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # each
+  end # let
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(1).argument }
   end # describe
 
   describe '#call' do
-    let(:applications) do
-      {
-        'admin'   => { 'name' => 'Admin' },
-        'public'  => { 'name' => 'Public' },
-        'reports' => { 'name' => 'Reports' }
-      } # end applications
-    end # let
     let(:results) do
       {
         'admin' =>
@@ -94,7 +102,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::ResultsReporter do
     end # let
 
     before(:example) do
-      allow(context).to receive(:applications).and_return(applications)
+      allow(context).to receive(:applications).and_return(config)
     end # before example
 
     def capture_stdout

@@ -10,15 +10,17 @@ module SleepingKingStudios::Tasks::Apps::Ci
     def call application
       super
 
-      config    = applications[application]
-      src_files =
-        source_files(application, config) +
-        spec_directories(application, config)
-
-      run_step(*src_files)
+      run_step(*source_files)
     end # method call
 
     private
+
+    def source_files
+      config =
+        SleepingKingStudios::Tasks::Apps.configuration[current_application]
+
+      config.source_files + config.spec_files
+    end # method source_files
 
     def step_key
       :rubocop

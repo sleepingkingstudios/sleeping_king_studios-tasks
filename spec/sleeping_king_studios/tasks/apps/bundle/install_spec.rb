@@ -5,6 +5,21 @@ require 'sleeping_king_studios/tasks/apps/bundle/install'
 RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
+  let(:applications) do
+    {
+      'admin'   => {},
+      'public'  => {},
+      'reports' => {}
+    } # end applications
+  end # let
+  let(:config) do
+    applications.each.with_object({}) do |(name, data), hsh|
+      tools = SleepingKingStudios::Tools::Toolbelt.instance
+      data  = tools.hash.convert_keys_to_symbols(data)
+
+      hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # each
+  end # let
 
   describe '::description' do
     let(:expected) do
@@ -38,13 +53,6 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
       end # it
     end # shared_examples
 
-    let(:applications) do
-      {
-        'admin'   => {},
-        'public'  => {},
-        'reports' => {}
-      } # end applications
-    end # let
     let(:only) { [] }
     let(:gemfiles) do
       ['Gemfile', 'path/to/gemfile', 'path/to/other/Gemfile']
@@ -57,11 +65,11 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
       allow(instance).
         to receive(:filter_applications).
         with(:only => only).
-        and_return(applications)
+        and_return(config)
 
       allow(instance).
         to receive(:gemfiles).
-        with(applications).
+        with(config).
         and_return(gemfiles)
 
       instance.mute!
@@ -97,6 +105,6 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
       expect(instance).to respond_to(:gemfiles, true).with(1).arguments
     end # it
 
-    it { expect(instance.send :gemfiles, applications).to be == expected }
+    it { expect(instance.send :gemfiles, config).to be == expected }
   end # describe
 end # describe

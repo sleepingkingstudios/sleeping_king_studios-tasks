@@ -10,16 +10,23 @@ module SleepingKingStudios::Tasks::Apps::Ci
     include SleepingKingStudios::Tasks::Apps::ApplicationsTask
 
     def call application
+      @current_application = application
+
       super application
     end # method call
 
     private
 
+    attr_reader :current_application
+
     def ci_steps
-      SleepingKingStudios::Tasks.configuration.apps.ci.steps_with_options
+      SleepingKingStudios::Tasks::Apps.configuration[current_application].
+        ci.steps_with_options
     end # method ci_steps
 
     def skip_step? _name, config
+      return true if config == false
+
       if options.fetch('global', false)
         !config.fetch(:global, false)
       else

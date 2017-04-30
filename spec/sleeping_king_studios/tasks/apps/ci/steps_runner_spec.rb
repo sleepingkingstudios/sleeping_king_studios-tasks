@@ -1,8 +1,10 @@
 # spec/sleeping_king_studios/tasks/apps/ci/steps_runner_spec.rb
 
 require 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper'
+require 'sleeping_king_studios/tasks/apps/ci/rubocop_wrapper'
 require 'sleeping_king_studios/tasks/apps/ci/steps_runner'
 require 'sleeping_king_studios/tasks/ci/rspec_results'
+require 'sleeping_king_studios/tasks/ci/rubocop_results'
 
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsRunner do
   let(:options)  { {} }
@@ -15,6 +17,8 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsRunner do
           allow(instance).to receive(:ci_steps).and_return(expected_steps)
 
           expected_steps.each_value do |config|
+            next if config == false
+
             step_class = Object.const_get(config[:class])
             instance   = step_class.new(options)
 
@@ -47,17 +51,30 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsRunner do
         'pending_count' => 2
       ) # end rspec results
     end # let
+    let(:rubocop_results) do
+      SleepingKingStudios::Tasks::Ci::RuboCopResults.new(
+        'inspected_file_count' => 10,
+        'offense_count'        => 3
+      ) # end rubocop results
+    end # let
     let(:expected_steps) do
       {
         'RSpec' => {
           :require => 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper',
           :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper',
           :results => rspec_results
-        } # end rspec
+        }, # end rspec
+        'RuboCop' => {
+          :require => 'sleeping_king_studios/tasks/apps/ci/rubocop_wrapper',
+          :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RuboCopWrapper',
+          :results => rubocop_results
+        } # end rubocop
       } # end steps
     end # let
     let(:expected_results) do
       expected_steps.each.with_object({}) do |(name, step), hsh|
+        next if step == false
+
         hsh[name] = step[:results]
       end # each
     end # let
@@ -65,12 +82,26 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsRunner do
     it { expect(instance).to respond_to(:call).with(1).argument }
 
     include_examples 'should return the results for each step'
+
+    context 'when a step is disabled' do
+      let(:expected_steps) do
+        super().merge 'RuboCop' => false
+      end # let
+
+      include_examples 'should return the results for each step'
+    end # context
   end # describe
 
   describe '#ci_steps' do
+    let(:application) { 'public' }
     let(:expected_steps) do
-      SleepingKingStudios::Tasks.configuration.apps.ci.steps_with_options
+      SleepingKingStudios::Tasks::Apps.configuration[application].
+        ci.steps_with_options
     end # let
+
+    before(:example) do
+      allow(instance).to receive(:current_application).and_return(application)
+    end # before example
 
     it 'should define the private method' do
       expect(instance).not_to respond_to(:ci_steps)

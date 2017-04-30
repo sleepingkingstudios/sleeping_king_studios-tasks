@@ -3,6 +3,7 @@
 - add missing specs for full coverage
 - task names should be strings, not symbols
 - formalize (public) task names as _Task, _task.rb ?
+- remove erubis dependency
 
 ### Apps
 

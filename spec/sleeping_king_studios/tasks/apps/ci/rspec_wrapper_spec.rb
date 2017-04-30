@@ -5,28 +5,36 @@ require 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper'
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
+  let(:applications) do
+    {
+      'admin'   => {},
+      'public'  => {},
+      'reports' => {}
+    } # end applications
+  end # let
+  let(:config) do
+    applications.each.with_object({}) do |(name, data), hsh|
+      tools = SleepingKingStudios::Tools::Toolbelt.instance
+      data  = tools.hash.convert_keys_to_symbols(data)
+
+      hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # each
+  end # let
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(1).argument }
   end # describe
 
   describe '#call' do
-    let(:applications) do
-      {
-        'admin'   => {},
-        'public'  => {},
-        'reports' => {}
-      } # end applications
-    end # let
     let(:expected_args) { ['path/to/app/spec'] }
     let(:results)       { double('results') }
 
     before(:example) do
-      allow(instance).to receive(:applications).and_return(applications)
+      allow(instance).to receive(:applications).and_return(config)
 
       allow(instance).to receive(:run_step)
 
-      allow(instance).to receive(:spec_directories).and_return(expected_args)
+      allow(instance).to receive(:spec_files).and_return(expected_args)
     end # before example
 
     it { expect(instance).to respond_to(:call).with(1).argument }
@@ -60,6 +68,36 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper do
     end # context
   end # describe
 
+  describe '#spec_files' do
+    let(:data) do
+      { :spec_files => expected }
+    end # let
+    let(:config) do
+      SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # let
+    let(:application) { 'public' }
+    let(:expected)    { ['path/to/app/spec'] }
+
+    before(:example) do
+      allow(instance).to receive(:current_application).and_return(application)
+
+      allow(SleepingKingStudios::Tasks::Apps.configuration).
+        to receive(:[]).
+        with(application).
+        and_return(config)
+    end # before example
+
+    it 'should define the private reader' do
+      expect(instance).not_to respond_to(:spec_files)
+
+      expect(instance).
+        to respond_to(:spec_files, true).
+        with(0).arguments
+    end # it
+
+    it { expect(instance.send :spec_files).to be == expected }
+  end # describe
+
   describe '#step_key' do
     it 'should define the private reader' do
       expect(instance).not_to respond_to(:step_key)
@@ -73,13 +111,6 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper do
   end # describe
 
   describe '#step_options' do
-    let(:applications) do
-      {
-        'admin'   => {},
-        'public'  => {},
-        'reports' => {}
-      } # end applications
-    end # let
     let(:gemfile)  { 'Gemfile' }
     let(:expected) do
       {
@@ -90,7 +121,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper do
     end # let
 
     before(:example) do
-      allow(instance).to receive(:applications).and_return(applications)
+      allow(instance).to receive(:applications).and_return(config)
 
       allow(instance).to receive(:current_application).and_return('public')
     end # before example

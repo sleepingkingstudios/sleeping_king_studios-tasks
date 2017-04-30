@@ -13,6 +13,21 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
   end # let
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
+  let(:applications) do
+    {
+      'admin'   => {},
+      'public'  => {},
+      'reports' => {}
+    } # end applications
+  end # let
+  let(:config) do
+    applications.each.with_object({}) do |(name, data), hsh|
+      tools = SleepingKingStudios::Tools::Toolbelt.instance
+      data  = tools.hash.convert_keys_to_symbols(data)
+
+      hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # each
+  end # let
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(1).argument }
@@ -140,20 +155,13 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
   end # describe
 
   describe '#step_config' do
-    let(:applications) do
-      {
-        'admin'   => {},
-        'public'  => {},
-        'reports' => {}
-      } # end applications
-    end # let
     let(:step) { instance.send :step_key }
     let(:expected) do
       SleepingKingStudios::Tasks.configuration.ci.steps_with_options.fetch(step)
     end # let
 
     before(:example) do
-      allow(instance).to receive(:applications).and_return(applications)
+      allow(instance).to receive(:applications).and_return(config)
 
       allow(instance).to receive(:current_application).and_return('public')
 
@@ -171,37 +179,6 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
     it 'should return the configured value' do
       expect(instance.send :step_config).to be == expected
     end # it
-
-    context 'when the configuration disables a step' do
-      let(:applications) do
-        hsh = super()
-
-        hsh['public'] = { 'ci' => { 'rubocop' => false } }
-
-        hsh
-      end # let
-
-      it 'should return false' do
-        expect(instance.send :step_config).to be false
-      end # it
-    end # context
-
-    context 'when the configuration updates a step' do
-      let(:applications) do
-        hsh = super()
-
-        hsh['public'] = { 'ci' => { 'rubocop' => { 'title' => 'OcpLint' } } }
-
-        hsh
-      end # let
-      let(:expected) do
-        super().merge :title => 'OcpLint'
-      end # let
-
-      it 'should return the updated value' do
-        expect(instance.send :step_config).to be == expected
-      end # it
-    end # context
   end # describe
 
   describe '#step_options' do

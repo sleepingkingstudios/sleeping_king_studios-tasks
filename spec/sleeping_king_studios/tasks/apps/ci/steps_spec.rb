@@ -8,6 +8,21 @@ require 'sleeping_king_studios/tasks/ci/simplecov_results'
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Steps do
   let(:options)  { { 'quiet' => true } }
   let(:instance) { described_class.new(options) }
+  let(:applications) do
+    {
+      'admin'   => {},
+      'public'  => {},
+      'reports' => {}
+    } # end applications
+  end # let
+  let(:config) do
+    applications.each.with_object({}) do |(name, data), hsh|
+      tools = SleepingKingStudios::Tools::Toolbelt.instance
+      data  = tools.hash.convert_keys_to_symbols(data)
+
+      hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
+    end # each
+  end # let
 
   describe '::description' do
     let(:expected) { 'Runs the configured steps for each application.' }
@@ -39,12 +54,12 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Steps do
         end # let
 
         before(:example) do
-          allow(instance).to receive(:applications).and_return(applications)
+          allow(instance).to receive(:applications).and_return(config)
 
           allow(instance).
             to receive(:filter_applications).
             with(:only => only).
-            and_return(applications)
+            and_return(config)
 
           allow(SleepingKingStudios::Tasks::Apps::Ci::StepsRunner).
             to receive(:new) do |opts|
@@ -78,13 +93,6 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Steps do
       end # describe
     end # shared_examples
 
-    let(:applications) do
-      {
-        'admin'   => {},
-        'public'  => {},
-        'reports' => {}
-      } # end applications
-    end # let
     let(:only) { [] }
     let(:global_results) do
       {
