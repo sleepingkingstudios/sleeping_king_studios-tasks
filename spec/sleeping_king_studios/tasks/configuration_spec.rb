@@ -7,6 +7,101 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
   let(:config_class) { SleepingKingStudios::Tools::Toolbox::Configuration }
   let(:instance)     { described_class.new(data) }
 
+  describe '#apps' do
+    it 'should define the namespace' do
+      expect(instance).
+        to have_reader(:apps).
+        with_value(be_a config_class)
+    end # it
+
+    describe '#ci' do
+      it 'should define the namespace' do
+        expect(instance.apps).
+          to have_reader(:ci).
+          with_value(be_a config_class)
+      end # it
+
+      describe '#rspec' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rspec_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RSpecWrapper',
+            :title   => 'RSpec'
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:rspec).
+            with_value(be == expected)
+        end # it
+      end # describe
+
+      describe '#rubocop' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/rubocop_wrapper',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::RuboCopWrapper',
+            :title   => 'RuboCop'
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:rubocop).
+            with_value(be == expected)
+        end # it
+      end # describe
+
+      describe '#simplecov' do
+        let(:expected) do
+          {
+            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCov',
+            :title   => 'SimpleCov',
+            :global  => true
+          } # end rspec
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:simplecov).
+            with_value(be == expected)
+        end # it
+      end # describe
+
+      describe '#steps' do
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:steps).
+            with_value(%i(rspec rubocop simplecov))
+        end # it
+      end # describe
+
+      describe '#steps_with_options' do
+        let(:expected) do
+          instance.apps.ci.steps.each.with_object({}) do |step, hsh|
+            hsh[step] = instance.apps.ci.send(step)
+          end # each
+        end # let
+
+        it 'should define the option' do
+          expect(instance.apps.ci).
+            to have_reader(:steps_with_options).
+            with_value(be == expected)
+        end # it
+      end # describe
+    end # describe
+
+    describe '#config_file' do
+      it 'should define the option' do
+        expect(instance.apps).
+          to have_reader(:config_file).
+          with_value(be == 'applications.yml')
+      end # it
+    end # describe
+  end # describe
+
   describe '#ci' do
     it 'should define the namespace' do
       expect(instance).

@@ -43,7 +43,7 @@ module SleepingKingStudios::Tasks::Ci
     def rspec_runner default_coverage = true
       coverage = options.fetch('coverage', default_coverage)
 
-      env = {}
+      env = options.fetch('__env__', {})
       env[:bundle_gemfile] = gemfile if gemfile
       env[:coverage]       = false unless coverage
 

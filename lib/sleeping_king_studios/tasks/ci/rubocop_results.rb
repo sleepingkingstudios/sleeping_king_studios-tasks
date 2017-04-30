@@ -38,6 +38,20 @@ module SleepingKingStudios::Tasks::Ci
       @results.fetch('inspected_file_count', 0)
     end # method inspected_file_count
 
+    # Adds the given result values and returns a new results object with the
+    # sums.
+    #
+    # @param other [RuboCopResults] The results to add.
+    #
+    # @return [RuboCopResults] The total results.
+    def merge other
+      self.class.new(
+        'inspected_file_count' =>
+          inspected_file_count + other.inspected_file_count,
+        'offense_count'        => offense_count + other.offense_count
+      ) # end new
+    end # method merge
+
     # @return [Integer] The number of detected offenses.
     def offense_count
       @results.fetch('offense_count', 0)

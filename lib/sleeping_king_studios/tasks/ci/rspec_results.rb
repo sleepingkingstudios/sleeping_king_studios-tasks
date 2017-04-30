@@ -53,6 +53,21 @@ module SleepingKingStudios::Tasks::Ci
       @results.fetch('failure_count', 0)
     end # method failure_count
 
+    # Adds the given result values and returns a new results object with the
+    # sums.
+    #
+    # @param other [RSpecResults] The results to add.
+    #
+    # @return [RSpecResults] The total results.
+    def merge other
+      self.class.new(
+        'duration'      => duration      + other.duration,
+        'example_count' => example_count + other.example_count,
+        'failure_count' => failure_count + other.failure_count,
+        'pending_count' => pending_count + other.pending_count
+      ) # end new
+    end # method merge
+
     # @return [Boolean] True if there are any pending examples, otherwise false.
     def pending?
       !pending_count.zero?

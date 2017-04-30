@@ -51,11 +51,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
             results = expected_results[index]
             badge   =
               if !results['failure_count'].zero?
-                'Failure'
+                'Failing'
               elsif !results['pending_count'].zero?
                 'Pending'
               else
-                'Success'
+                'Passing'
               end # if-elsif-else
 
             expect(captured.each_line).to satisfy { |enum|

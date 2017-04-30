@@ -1,15 +1,16 @@
 # lib/sleeping_king_studios/tasks/ci/rspec_each.rb
 
 require 'sleeping_king_studios/tasks/ci'
+require 'sleeping_king_studios/tasks/ci/results_helpers'
 require 'sleeping_king_studios/tasks/ci/rspec_each_results'
 require 'sleeping_king_studios/tasks/ci/rspec_results'
 require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Ci
-  # rubocop:disable Metrics/ClassLength
-
   # Defines a Thor task for running the full RSpec test suite.
   class RSpecEach < SleepingKingStudios::Tasks::Task
+    include SleepingKingStudios::Tasks::Ci::ResultsHelpers
+
     def self.description
       'Runs each spec file as an individual RSpec process.'
     end # class method description
@@ -66,18 +67,6 @@ module SleepingKingStudios::Tasks::Ci
       } # end results
     end # method build_totals
 
-    def color_heading results
-      if results.errored?
-        set_color('Errored', :red)
-      elsif results.failing?
-        set_color('Failure', :red)
-      elsif results.pending? || results.empty?
-        set_color('Pending', :yellow)
-      else
-        set_color('Success', :green)
-      end # if-else
-    end # method color_heading
-
     def files_list groups
       groups = %w(spec) if groups.empty?
 
@@ -132,7 +121,7 @@ module SleepingKingStudios::Tasks::Ci
       results = rspec_runner.call(:files => [file])
       results = RSpecResults.new(results)
 
-      say "#{color_heading results} #{file}"
+      say "#{set_color results_state(results), results_color(results)} #{file}"
 
       results
     end # method run_file
@@ -148,6 +137,4 @@ module SleepingKingStudios::Tasks::Ci
       RSpecEachResults.new(totals)
     end # method run_files
   end # class
-
-  # rubocop:enable Metrics/ClassLength
 end # module
