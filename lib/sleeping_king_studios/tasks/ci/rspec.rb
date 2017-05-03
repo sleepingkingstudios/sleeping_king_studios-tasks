@@ -20,7 +20,8 @@ module SleepingKingStudios::Tasks::Ci
       :desc    => 'Enable or disable coverage with SimpleCov, if available.'
     option :gemfile,
       :type    => :string,
-      :desc    => 'The Gemfile used to run the specs.'
+      :desc    => 'The Gemfile used to run the specs.',
+      :default => ENV['BUNDLE_GEMFILE']
     option :quiet,
       :aliases => '-q',
       :type    => :boolean,
@@ -39,6 +40,20 @@ module SleepingKingStudios::Tasks::Ci
     end # method call
 
     private
+
+    def default_gemfile
+      File.join(Dir.pwd, 'Gemfile')
+    end # method default_gemfile
+
+    def gemfile
+      return options['gemfile'] if options.key?('gemfile')
+
+      gemfile = ENV['BUNDLE_GEMFILE']
+
+      return gemfile if gemfile && gemfile != default_gemfile
+
+      nil
+    end # method gemfile
 
     def rspec_runner default_coverage = true
       coverage = options.fetch('coverage', default_coverage)

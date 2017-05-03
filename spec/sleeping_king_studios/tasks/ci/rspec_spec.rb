@@ -107,5 +107,30 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
 
       include_examples 'should call an RSpec runner'
     end # describe
+
+    context 'when a gemfile is specified via the environment' do
+      let(:bundled_gemfile) { 'path/to/bundle' }
+      let(:expected_env)    { { :bundle_gemfile => bundled_gemfile } }
+
+      around(:example) do |example|
+        begin
+          prior                 = ENV['BUNDLE_GEMFILE']
+          ENV['BUNDLE_GEMFILE'] = bundled_gemfile
+
+          example.call
+        ensure
+          ENV['BUNDLE_GEMFILE'] = prior
+        end # begin-ensure
+      end # around example
+
+      include_examples 'should call an RSpec runner'
+
+      describe 'with --gemfile=GEMFILE' do
+        let(:options)      { { 'gemfile' => 'path/to/gemfile' } }
+        let(:expected_env) { { :bundle_gemfile => 'path/to/gemfile' } }
+
+        include_examples 'should call an RSpec runner'
+      end # describe
+    end # context
   end # describe
 end # describe
