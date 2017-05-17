@@ -19,7 +19,28 @@ RSpec.describe SleepingKingStudios::Tasks::ProcessRunner do
   end # describe
 
   describe '#default_env' do
+    let(:gemfile)  { nil }
+    let(:expected) { default_env }
+
+    around(:example) do |example|
+      begin
+        prior                 = ENV['BUNDLE_GEMFILE']
+        ENV['BUNDLE_GEMFILE'] = gemfile
+
+        example.call
+      ensure
+        ENV['BUNDLE_GEMFILE'] = prior
+      end # begin-ensure
+    end # around example
+
     include_examples 'should have reader', :default_env, ->() { default_env }
+
+    context 'when BUNDLE_GEMFILE is set' do
+      let(:gemfile)  { 'path/to/gemfile' }
+      let(:expected) { default_env.merge :bundle_gemfile => gemfile }
+
+      it { expect(instance.default_env).to be == expected }
+    end # context
   end # describe
 
   describe '#build_command' do
@@ -41,7 +62,7 @@ RSpec.describe SleepingKingStudios::Tasks::ProcessRunner do
     let(:options) { [] }
     let(:expected) do
       expected_opts = files + default_opts + options
-      expected_env  = default_env.merge env
+      expected_env  = instance.send(:default_env).merge env
       expected_env  =
         expected_env.
         map do |key, value|

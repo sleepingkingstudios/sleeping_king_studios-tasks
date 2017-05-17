@@ -7,27 +7,21 @@
 
 ### Apps
 
-- extract Configuration object for applications?
+- task apps:ci:rspec_each: |
 
-- step(s) runner: |
-
-  RSpecResults#merge
-  RSpecWrapper - extends ApplicationsTask, invokes Ci::RSpec with config
-  Configuration.apps.ci.steps
-  StepsRunner - runs each step for each application
-
-  generalization of steps:
-  - handling apps-specific config?
-    - source files, spec directories, etc.
-    - subclass regular tasks with addl. configuration?
-      - e.g. a task for "run STEP for one application"
-
-  two strategies:
-  - for each application, run each configured step
-  - for each configured step, run each application
-    - requires preprocess to determine configured steps?
+  Also add support for apps:ci:steps.
 
 ### CI
+
+- task ci:rspec: |
+
+  Add --env option
+
+- task ci:rspec_each: |
+
+  Add --env option
+
+  Add --gemfile option
 
 - task ci:steps: |
 

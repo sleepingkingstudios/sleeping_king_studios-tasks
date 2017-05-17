@@ -3,7 +3,9 @@
 require 'sleeping_king_studios/tasks/ci/rubocop_runner'
 
 RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopRunner do
-  let(:default_env)  { { :ci => true } }
+  let(:default_env) do
+    { :ci => true, :bundle_gemfile => ENV['BUNDLE_GEMFILE'] }
+  end # let
   let(:default_opts) { ['--color'] }
   let(:instance) do
     described_class.new :env => default_env, :options => default_opts
@@ -32,9 +34,9 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopRunner do
     let(:expected_command) do
       opts = expected_files + default_opts + expected_options
       env  = default_env.merge expected_env
-      env  = env.map { |k, v| "#{tools.string.underscore(k).upcase}=#{v}" }
+      env  = instance.send(:build_environment, :env => env)
 
-      "#{env.join ' '} bundle exec rubocop #{opts.join ' '}".strip
+      "#{env} bundle exec rubocop #{opts.join ' '}".strip
     end # let
 
     def tools
@@ -72,7 +74,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopRunner do
     describe 'with :env => environment variables' do
       let(:env) { { :bundle_gemfile => 'path/to/Gemfile' } }
       let(:expected_env) do
-        super().merge :bundle_gemfile => '"path/to/Gemfile"'
+        super().merge :bundle_gemfile => 'path/to/Gemfile'
       end # let
 
       it 'should call a rubocop process' do
