@@ -10,6 +10,10 @@ module SleepingKingStudios::Tasks
     def initialize env: {}, options: []
       @default_env     = env
       @default_options = options
+
+      return unless ENV['BUNDLE_GEMFILE']
+
+      @default_env = @default_env.merge :bundle_gemfile => ENV['BUNDLE_GEMFILE']
     end # constructor
 
     # @return [Hash] Environment variables to set for the RSpec process.
