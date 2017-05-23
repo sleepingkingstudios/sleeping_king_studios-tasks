@@ -1,10 +1,6 @@
 # lib/sleeping_king_studios/tasks/file/new.rb
 
-begin
-  require 'erubis'
-rescue LoadError
-  require 'erb'
-end # begin-rescue
+require 'erubi'
 
 require 'fileutils'
 
@@ -172,14 +168,14 @@ module SleepingKingStudios::Tasks::File
 
     def render_template name, locals = {}
       template = find_template(name)
-      engine   =
-        if defined?(Erubis)
-          Erubis::Eruby.new(template)
-        else
-          ERB.new(template)
-        end # if-else
+      source   = Erubi::Engine.new(template).src
+      binding  = Object.new.send(:binding)
 
-      engine.result(locals)
+      locals.each do |key, value|
+        binding.local_variable_set key, value
+      end # each
+
+      binding.eval source
     end # method render_template
 
     def rendered_source
