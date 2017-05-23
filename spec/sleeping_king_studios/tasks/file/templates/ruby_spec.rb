@@ -1,6 +1,6 @@
 # spec/sleeping_king_studios/tasks/file/templates/ruby_spec.rb
 
-require 'erubis'
+require 'erubi'
 
 RSpec.describe 'file/templates/ruby.erb' do
   let(:locals) do
@@ -14,7 +14,10 @@ RSpec.describe 'file/templates/ruby.erb' do
     File.read 'lib/sleeping_king_studios/tasks/file/templates/ruby.erb'
   end # let
   let(:rendered) do
-    Erubis::Eruby.new(template).result(locals)
+    source  = Erubi::Engine.new(template).src
+    binding = tools.hash.generate_binding(locals)
+
+    binding.eval(source)
   end # let
   let(:raw) do
     <<-RUBY
