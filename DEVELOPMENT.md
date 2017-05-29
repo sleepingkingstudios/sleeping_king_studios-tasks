@@ -1,5 +1,6 @@
 ## Tasks
 
+- RSpec, RSpecEach results should handle "N errors" output
 - add missing specs for full coverage
 - task names should be strings, not symbols
 - formalize (public) task names as _Task, _task.rb ?

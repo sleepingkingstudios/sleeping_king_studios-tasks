@@ -15,5 +15,9 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Tasks do
     include_examples 'should define task',
       SleepingKingStudios::Tasks::Apps::Bundle::Install,
       :namespace => 'apps:bundle'
+
+    include_examples 'should define task',
+      SleepingKingStudios::Tasks::Apps::Bundle::Update,
+      :namespace => 'apps:bundle'
   end # describe
 end # describe
