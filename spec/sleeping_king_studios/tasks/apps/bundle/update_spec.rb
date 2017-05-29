@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/apps/bundle/install_spec.rb
+# spec/sleeping_king_studios/tasks/apps/bundle/update_spec.rb
 
-require 'sleeping_king_studios/tasks/apps/bundle/install'
+require 'sleeping_king_studios/tasks/apps/bundle/update'
 
-RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
+RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Update do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
   let(:applications) do
@@ -23,7 +23,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
 
   describe '::description' do
     let(:expected) do
-      'Installs the Ruby gem dependencies for each application.'
+      'Updates the Ruby gem dependencies for each application.'
     end # let
 
     it 'should define the class reader' do
@@ -33,12 +33,12 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value 'install'
+      expect(described_class).to have_reader(:task_name).with_value 'update'
     end # it
   end # describe
 
   describe '#call' do
-    shared_examples 'should call an install runner' do
+    shared_examples 'should call an update runner' do
       before(:example) do
         allow(instance).
           to receive(:filter_applications).
@@ -53,8 +53,8 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
         instance.mute!
       end # before example
 
-      it 'should call an install runner' do
-        allow(SleepingKingStudios::Tasks::Apps::Bundle::InstallRunner).
+      it 'should call an update runner' do
+        allow(SleepingKingStudios::Tasks::Apps::Bundle::UpdateRunner).
           to receive(:new).
           with(no_args).
           and_return(runner)
@@ -72,17 +72,17 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Install do
       ['Gemfile', 'path/to/gemfile', 'path/to/other/Gemfile']
     end # let
     let(:runner) do
-      SleepingKingStudios::Tasks::Apps::Bundle::InstallRunner.new
+      SleepingKingStudios::Tasks::Apps::Bundle::UpdateRunner.new
     end # let
 
     it { expect(instance).to respond_to(:call).with_unlimited_arguments }
 
-    include_examples 'should call an install runner'
+    include_examples 'should call an update runner'
 
     describe 'with applications' do
       let(:only) { %w(public) }
 
-      include_examples 'should call an install runner'
+      include_examples 'should call an update runner'
     end # describe
   end # describe
 
