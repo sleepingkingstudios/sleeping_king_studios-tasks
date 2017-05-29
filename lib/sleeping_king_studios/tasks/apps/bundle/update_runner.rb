@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tasks/apps/bundle/update_runner.rb
 
 require 'sleeping_king_studios/tasks/apps/bundle'
+require 'sleeping_king_studios/tasks/process_runner'
 
 module SleepingKingStudios::Tasks::Apps::Bundle
   # Service object to run bundle update as an external process.
