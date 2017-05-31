@@ -26,7 +26,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
         'duration'      => 1.0,
         'example_count' => 3,
         'failure_count' => 2,
-        'pending_count' => 1
+        'pending_count' => 1,
+        'error_count'   => 0
       } # end report
     end # let
     let(:report_file)      { 'tmp/ci/rspec.json' }
@@ -39,6 +40,9 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
       env  = instance.send(:build_environment, :env => env)
 
       "#{env} bundle exec rspec #{opts.join ' '}".strip
+    end # let
+    let(:expected_report) do
+      JSON.dump 'summary' => report
     end # let
 
     def tools
@@ -68,7 +72,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
       expect(File).
         to receive(:read).
         with(report_file).
-        and_return(JSON.dump 'summary' => report)
+        and_return(expected_report)
 
       expect(instance.call).to be == report
     end # it

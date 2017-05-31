@@ -49,7 +49,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
         'duration'      => 1.0,
         'example_count' => 6,
         'failure_count' => 1,
-        'pending_count' => 2
+        'pending_count' => 2,
+        'error_count'   => 0
       } # end expected
     end # let
     let(:runner) do
