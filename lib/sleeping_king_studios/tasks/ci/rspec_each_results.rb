@@ -33,6 +33,21 @@ module SleepingKingStudios::Tasks::Ci
       file_count.zero?
     end # method empty?
 
+    # @return [Boolean] True if there are any errored files, otherwise false.
+    def errored?
+      !errored_count.zero?
+    end # method errored?
+
+    # @return [Integer] The number of errored files.
+    def errored_count
+      errored_files.count
+    end # method errored_count
+
+    # @return [Array] The list of errored file names.
+    def errored_files
+      @results.fetch('errored_files', [])
+    end # method errored_files
+
     # @return [Boolean] True if there are any failing files, otherwise false.
     def failing?
       !failure_count.zero?
@@ -68,11 +83,16 @@ module SleepingKingStudios::Tasks::Ci
       @results.fetch('pending_files', [])
     end # method pending_files
 
+    def pluralize count, singular, plural = nil
+      "#{count} #{tools.integer.pluralize count, singular, plural}"
+    end # method pluralize
+
     # @return [Hash] The hash representation of the results.
     def to_h
       {
         'failing_files' => failing_files,
         'pending_files' => pending_files,
+        'errored_files' => errored_files,
         'file_count'    => file_count,
         'duration'      => duration
       } # end hash
@@ -82,11 +102,17 @@ module SleepingKingStudios::Tasks::Ci
     def to_s
       str = "#{file_count} files"
 
-      str << ", #{failure_count} failures"
+      str << ', ' << pluralize(failure_count, 'failure')
 
       str << ", #{pending_count} pending" if pending?
 
+      str << ", #{errored_count} errored" if errored?
+
       str << " in #{duration.round(2)} seconds"
     end # method to_s
+
+    def tools
+      SleepingKingStudios::Tools::Toolbelt.instance
+    end # method tools
   end # class
 end # module

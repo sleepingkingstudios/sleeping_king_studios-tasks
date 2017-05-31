@@ -43,6 +43,14 @@ module SleepingKingStudios::Tasks::Ci
       SleepingKingStudios::Tasks.configuration.ci.steps_with_options
     end # method ci_steps
 
+    def failing? step
+      return true if step.failing?
+
+      return true if step.respond_to?(:errored?) && step.errored?
+
+      false
+    end # method failing?
+
     def format_failures failing_steps
       tools.array.humanize_list(failing_steps) do |name|
         set_color(name, :red)
@@ -63,8 +71,8 @@ module SleepingKingStudios::Tasks::Ci
     # rubocop:disable Metrics/MethodLength
     def report_failures results
       failing_steps =
-        results.each.with_object([]) do |(key, obj), ary|
-          ary << key if obj.failing?
+        results.each.with_object([]) do |(key, step), ary|
+          ary << key if failing?(step)
         end # each
 
       say "\n"
