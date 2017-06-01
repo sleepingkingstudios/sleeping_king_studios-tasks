@@ -50,7 +50,9 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
           expected_files.each.with_index do |file, index|
             results = expected_results[index]
             badge   =
-              if !results['failure_count'].zero?
+              if !results['error_count'].zero?
+                'Errored'
+              elsif !results['failure_count'].zero?
                 'Failing'
               elsif !results['pending_count'].zero?
                 'Pending'
@@ -105,6 +107,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
       hsh = {
         'failing_files' => [],
         'pending_files' => [],
+        'errored_files' => [],
         'file_count'    => 0,
         'duration'      => 3.0
       } # end hash
@@ -114,7 +117,9 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
 
         result = expected_results[index]
 
-        if !result['failure_count'].zero?
+        if !result['error_count'].zero?
+          hsh['errored_files'] << file
+        elsif !result['failure_count'].zero?
           hsh['failing_files'] << file
         elsif !result['pending_count'].zero?
           hsh['pending_files'] << file
@@ -127,12 +132,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
       SleepingKingStudios::Tasks::Ci::RSpecRunner.new(:env => expected_env)
     end # let
 
-    def build_results examples, pending: 0, failing: 0
+    def build_results examples, pending: 0, failing: 0, errors: 0
       {
         'duration'      => 1.0,
         'example_count' => examples,
         'failure_count' => failing,
-        'pending_count' => pending
+        'pending_count' => pending,
+        'error_count'   => errors
       } # end expected
     end # method build_results
 
@@ -167,6 +173,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
         results = super()
 
         results[1] = build_results(2, :failing => 1)
+
+        results
+      end # let
+
+      include_examples 'should run each RSpec file'
+    end # context
+
+    context 'when a file has errors' do
+      let(:expected_results) do
+        results = super()
+
+        results[1] = build_results(2, :errors => 1)
 
         results
       end # let

@@ -13,7 +13,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
         'duration'      => 0.0,
         'example_count' => 0,
         'failure_count' => 0,
-        'pending_count' => 0
+        'pending_count' => 0,
+        'error_count'   => 0
       } # end results
     end # let
   end # shared_examples
@@ -26,12 +27,17 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     let(:results) { super().merge 'failure_count' => 0, 'pending_count' => 0 }
   end # shared_context
 
+  shared_context 'when the results have errors' do
+    let(:results) { super().merge 'error_count' => 3 }
+  end # shared_context
+
   let(:results) do
     {
       'duration'      => 1.0,
       'example_count' => 6,
       'failure_count' => 1,
-      'pending_count' => 2
+      'pending_count' => 2,
+      'error_count'   => 0
     } # end results
   end # let
   let(:instance) { described_class.new(results) }
@@ -120,6 +126,20 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     end # wrap_context
   end # describe
 
+  describe '#error_count' do
+    include_examples 'should have reader',
+      :error_count,
+      ->() { results['error_count'] }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.error_count).to be 0 }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      it { expect(instance.error_count).to be results['error_count'] }
+    end # wrap_context
+  end # describe
+
   describe '#errored?' do
     include_examples 'should have predicate', :errored?, false
 
@@ -129,6 +149,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
 
     wrap_context 'when the results have no examples' do
       it { expect(instance.errored?).to be false }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      it { expect(instance.errored?).to be true }
     end # wrap_context
   end # describe
 
@@ -236,7 +260,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
           'duration'      => 0.0,
           'example_count' => 0,
           'failure_count' => 0,
-          'pending_count' => 0
+          'pending_count' => 0,
+          'error_count'   => 0
         } # end results
       end # let
 
@@ -252,7 +277,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     let(:expected) do
       str = "#{instance.example_count} examples"
 
-      str << ", #{instance.failure_count} failures"
+      str << ", #{instance.failure_count} failure"
+      str << 's' if instance.failure_count != 1
 
       if instance.pending?
         str << ", #{instance.pending_count} pending"
@@ -278,6 +304,23 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
     end # wrap_context
 
     wrap_context 'when the results are passing' do
+      it { expect(instance.to_s).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      let(:expected) do
+        str = "#{instance.example_count} examples"
+
+        str << ", #{instance.failure_count} failure"
+        str << 's' if instance.failure_count != 1
+
+        if instance.pending?
+          str << ", #{instance.pending_count} pending"
+        end # if
+
+        str << ", #{instance.error_count} errors occurred outside of examples"
+      end # let
+
       it { expect(instance.to_s).to be == expected }
     end # wrap_context
   end # describe

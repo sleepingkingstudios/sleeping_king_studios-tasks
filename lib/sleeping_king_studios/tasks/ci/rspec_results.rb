@@ -33,10 +33,16 @@ module SleepingKingStudios::Tasks::Ci
       example_count.zero?
     end # method empty?
 
-    # @return [Boolean] True if there are no results, otherwise false.
+    # @return [Boolean] True if there are no results or if errors occurred
+    #   outside of examples, otherwise false.
     def errored?
-      @results.empty?
+      @results.empty? || !error_count.zero?
     end # method errored?
+
+    # @return [Integer] The number of errors that occurred outside of examples.
+    def error_count
+      @results.fetch('error_count', 0)
+    end # method error_count
 
     # @return [Integer] The total number of examples.
     def example_count
@@ -78,25 +84,43 @@ module SleepingKingStudios::Tasks::Ci
       @results.fetch('pending_count', 0)
     end # method pending_count
 
+    def pluralize count, singular, plural = nil
+      "#{count} #{tools.integer.pluralize count, singular, plural}"
+    end # method pluralize
+
     # @return [Hash] The hash representation of the results.
     def to_h
       {
         'duration'      => duration,
         'example_count' => example_count,
         'failure_count' => failure_count,
-        'pending_count' => pending_count
+        'pending_count' => pending_count,
+        'error_count'   => error_count
       } # end hash
     end # method to_h
 
+    # rubocop:disable Metrics/AbcSize
+
     # @return [String] The string representation of the results.
     def to_s
-      str = "#{example_count} examples"
+      str = pluralize(example_count, 'example')
 
-      str << ", #{failure_count} failures"
+      str << ', ' << pluralize(failure_count, 'failure')
 
-      str << ", #{pending_count} pending" if pending?
+      str << ', ' << pending_count.to_s << ' pending' if pending?
 
-      str << " in #{duration.round(2)} seconds"
+      if error_count.zero?
+        str << " in #{duration.round(2)} seconds"
+      else
+        str << ', ' << pluralize(error_count, 'error') <<
+          ' occurred outside of examples'
+      end # if-else
     end # method to_s
+
+    # rubocop:enable Metrics/AbcSize
+
+    def tools
+      SleepingKingStudios::Tools::Toolbelt.instance
+    end # method tools
   end # class
 end # module

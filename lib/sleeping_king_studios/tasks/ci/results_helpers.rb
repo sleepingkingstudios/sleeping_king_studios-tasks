@@ -30,10 +30,10 @@ module SleepingKingStudios::Tasks::Ci
     #
     # @return [String] The results state.
     def results_state results
-      if results.failing?
-        'Failing'
-      elsif results.respond_to?(:errored?) && results.errored?
+      if results.respond_to?(:errored?) && results.errored?
         'Errored'
+      elsif results.failing?
+        'Failing'
       elsif results.pending? || results.empty?
         'Pending'
       else

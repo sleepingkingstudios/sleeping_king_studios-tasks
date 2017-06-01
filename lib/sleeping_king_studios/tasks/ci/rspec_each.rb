@@ -7,6 +7,8 @@ require 'sleeping_king_studios/tasks/ci/rspec_results'
 require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Ci
+  # rubocop:disable Metrics/ClassLength
+
   # Defines a Thor task for running the full RSpec test suite.
   class RSpecEach < SleepingKingStudios::Tasks::Task
     include SleepingKingStudios::Tasks::Ci::ResultsHelpers
@@ -42,6 +44,7 @@ module SleepingKingStudios::Tasks::Ci
 
       report_pending results
       report_failing results
+      report_errored results
       report_totals  results
 
       raw? ? results.to_h : results
@@ -50,7 +53,9 @@ module SleepingKingStudios::Tasks::Ci
     private
 
     def aggregate_results file, results, totals
-      if results.failing?
+      if results.errored?
+        totals['errored_files'] << file
+      elsif results.failing?
         totals['failing_files'] << file
       elsif results.pending?
         totals['pending_files'] << file
@@ -63,6 +68,7 @@ module SleepingKingStudios::Tasks::Ci
       {
         'pending_files' => [],
         'failing_files' => [],
+        'errored_files' => [],
         'file_count'    => 0
       } # end results
     end # method build_totals
@@ -85,6 +91,14 @@ module SleepingKingStudios::Tasks::Ci
       '**{,/*/**}/*_spec.rb'
     end # method pattern
 
+    def report_errored results
+      return unless results.errored?
+
+      say "\nErrored:\n\n"
+
+      results.errored_files.each { |file| say "  #{file}", :red }
+    end # report_pending
+
     def report_failing results
       return unless results.failing?
 
@@ -104,7 +118,7 @@ module SleepingKingStudios::Tasks::Ci
     def report_totals results
       say "\nFinished in #{results.duration.round(2)} seconds"
 
-      if results.failing?
+      if results.failing? || results.errored?
         say results.to_s, :red
       elsif results.pending? || results.empty?
         say results.to_s, :yellow
@@ -137,4 +151,6 @@ module SleepingKingStudios::Tasks::Ci
       RSpecEachResults.new(totals)
     end # method run_files
   end # class
+
+  # rubocop:enable Metrics/ClassLength
 end # module

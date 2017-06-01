@@ -21,10 +21,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
     end # let
   end # shared_context
 
+  shared_context 'when the results have errors' do
+    let(:results) do
+      super().merge 'errored_files' =>
+        ['path/to/first', 'path/to/second', 'path/to/third']
+    end # let
+  end # shared_context
+
   let(:results) do
     {
       'failing_files' => [],
       'pending_files' => [],
+      'errored_files' => [],
       'file_count'    => 6,
       'duration'      => 10.0
     } # end results
@@ -40,6 +48,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
       described_class.new(
         'failing_files' => [],
         'pending_files' => [],
+        'errored_files' => [],
         'file_count'    => 6,
         'duration'      => 10.0
       ) # end other
@@ -109,6 +118,48 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
     wrap_context 'when the results are empty' do
       it { expect(instance.empty?).to be true }
     end # wrap_context
+  end # describe
+
+  describe '#errored?' do
+    include_examples 'should have predicate', :errored?, false
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.errored?).to be false }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      it { expect(instance.errored?).to be true }
+    end # wrap_context
+  end # describe
+
+  describe '#errored_count' do
+    include_examples 'should have reader',
+      :failure_count,
+      ->() { be == results['errored_files'].count }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.errored_count).to be == 0 }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      it 'should define the reader' do
+        expect(instance.errored_count).to be == results['errored_files'].count
+      end # it
+    end # wrap_context
+  end # describe
+
+  describe '#errored_files' do
+    include_examples 'should have reader',
+      :errored_files,
+      ->() { results['errored_files'] }
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.errored_files).to be == [] }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
+      it { expect(instance.errored_files).to be == results['errored_files'] }
+    end # wraP-context
   end # describe
 
   describe '#failing?' do
@@ -215,6 +266,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
         {
           'failing_files' => [],
           'pending_files' => [],
+          'errored_files' => [],
           'file_count'    => 0,
           'duration'      => 0.0
         } # end results
@@ -234,6 +286,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
         str << ", #{instance.pending_count} pending"
       end # if
 
+      if instance.errored?
+        str << ", #{instance.errored_count} errored"
+      end # if
+
       str << " in #{instance.duration.round(2)} seconds"
     end # let
 
@@ -250,6 +306,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachResults do
     end # wrap_context
 
     wrap_context 'when the results are pending' do
+      it { expect(instance.to_s).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results have errors' do
       it { expect(instance.to_s).to be == expected }
     end # wrap_context
   end # describe

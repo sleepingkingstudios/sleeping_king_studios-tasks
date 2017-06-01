@@ -37,12 +37,26 @@ module SleepingKingStudios::Tasks::Ci
     end # method build_options
 
     def load_report report:
-      raw  = File.read report
-      json = JSON.parse raw
+      raw = File.read report
 
-      json['summary']
+      return {} if raw.empty?
+
+      json = JSON.parse raw
+      hsh  = json['summary']
+
+      hsh['error_count'] = parse_errors(json['summary_line'])
+
+      hsh
     rescue
       {}
     end # method load_report
+
+    def parse_errors summary
+      return 0 unless summary && !summary.empty?
+
+      match = summary.match(/(?<digits>\d+) error/)
+
+      match ? match[:digits].to_i : 0
+    end # method parse_errors
   end # class
 end # module
