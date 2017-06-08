@@ -34,6 +34,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec-sleeping_king_studios',
     '~> 2.2', '>= 2.2.3'
   gem.add_development_dependency 'rubocop',   '~> 0.47.0'
+  gem.add_development_dependency 'cucumber',  '~> 2.4'
   gem.add_development_dependency 'simplecov', '~> 0.14', '>= 0.14.1'
   gem.add_development_dependency 'simplecov-json', '~> 0.2'
 end # gemspec

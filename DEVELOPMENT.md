@@ -1,18 +1,26 @@
 ## Tasks
 
-- RSpec, RSpecEach results should handle "N errors" output
 - add missing specs for full coverage
 - task names should be strings, not symbols
 - formalize (public) task names as _Task, _task.rb ?
-- remove erubis dependency
+- integration testing for RSpec, RSpecEach tasks
+  - sample spec files with known output(s)
+- extract common Results object superclass
+  - defaults for #passing?, #pending?, #failing?, #errored?
+  - implement #==, #merge, #to_h
+  - simple DSL for hash-access-with-default method definitions
+    - also updates #to_h
+  - delegate #to_s to #summary
 
 ### Apps
 
-- task apps:ci:rspec_each: |
-
-  Also add support for apps:ci:steps.
-
 ### CI
+
+- task ci:cucumber
+  - Configuration settings
+  - enable for ci:steps
+  - with file, automatically load default files (step_definitions)
+    - configurable
 
 - task ci:rspec: |
 
@@ -32,18 +40,16 @@
 
   Checks for configuration file and runs CI steps, concatenating the results.
 
-  Add --only, --except
-
-    only runs filtered CI steps
-
 ### Files
 
-- task new [filename]: |
+- task file:new [filename]: |
 
   add smarter/configurable pattern matching
   e.g. configure _controller.rb to use controller.erb template
 
   (optional) opens files in text editor?
+
+- task file:move [source] [target]
 
 ### Git
 
