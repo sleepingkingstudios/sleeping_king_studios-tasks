@@ -26,7 +26,9 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
           instance.call file_path
         rescue RuntimeError => exception
           unless exception.message.start_with?('file already exists')
+            # :nocov:
             raise exception
+            # :nocov:
           end # unless
         end # begin-rescue
 
@@ -54,7 +56,9 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
           instance.call file_path
         rescue RuntimeError => exception
           unless exception.message.start_with?('file already exists')
+            # :nocov:
             raise exception
+            # :nocov:
           end # unless
         end # begin-rescue
 
@@ -241,6 +245,72 @@ RSpec.describe SleepingKingStudios::Tasks::File::New do
 
         include_examples 'should not render the spec file'
       end # context
+    end # describe
+
+    describe 'with --verbose' do
+      let(:options) { { 'verbose' => true } }
+
+      def capture_stdout
+        buffer  = StringIO.new
+        prior   = $stdout
+        $stdout = buffer
+
+        yield
+
+        buffer.string
+      ensure
+        $stdout = prior
+      end # method capture_stdout
+
+      it 'should build the intermediate directories' do
+        capture_stdout { instance.call file_path }
+
+        expect(FileUtils).to have_received(:mkdir_p).with('lib')
+
+        expect(FileUtils).to have_received(:mkdir_p).with('spec')
+      end # it
+
+      it 'should render the source file' do
+        expect(instance).
+          to receive(:render_template).
+          with('ruby.erb', source_locals).
+          and_return(rendered_source)
+
+        capture_stdout { instance.call file_path }
+
+        expect(File).to have_received(:write).with(file_path, rendered_source)
+      end # it
+
+      it 'should render the spec file' do
+        expect(instance).
+          to receive(:render_template).
+          with('rspec.erb', spec_locals).
+          and_return(rendered_spec)
+
+        capture_stdout { instance.call file_path }
+
+        expect(File).to have_received(:write).with(spec_path, rendered_spec)
+      end # it
+
+      it 'should preview the files' do
+        captured = capture_stdout { instance.call file_path }
+
+        expect(captured).to include('Files to create')
+
+        expect(captured).to satisfy do |str|
+          str.lines.any? do |line|
+            line.include?(file_path) &&
+              line.include?("using template 'ruby.erb'")
+          end # any?
+        end # captured
+
+        expect(captured).to satisfy do |str|
+          str.lines.any? do |line|
+            line.include?(spec_path) &&
+              line.include?("using template 'rspec.erb'")
+          end # any?
+        end # captured
+      end # it
     end # describe
   end # describe
 

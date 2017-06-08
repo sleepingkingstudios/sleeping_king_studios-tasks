@@ -30,6 +30,9 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
         'error_count'   => 0
       } # end report
     end # let
+    let(:summary_line) do
+      '3 examples, 2 failures, 1 pending in 1.0 seconds'
+    end # let
     let(:report_file)      { 'tmp/ci/rspec.json' }
     let(:expected_files)   { [] }
     let(:expected_env)     { {} }
@@ -42,12 +45,8 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
       "#{env} bundle exec rspec #{opts.join ' '}".strip
     end # let
     let(:expected_report) do
-      JSON.dump 'summary' => report
+      JSON.dump 'summary' => report, 'summary_line' => summary_line
     end # let
-
-    def tools
-      SleepingKingStudios::Tools::Toolbelt.new
-    end # method tools
 
     before(:example) do
       allow(instance).to receive(:stream_process)
@@ -76,6 +75,30 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecRunner do
 
       expect(instance.call).to be == report
     end # it
+
+    context 'when the summary line lists errors' do
+      let(:report) do
+        {
+          'duration'      => 1.0,
+          'example_count' => 3,
+          'failure_count' => 2,
+          'pending_count' => 1,
+          'error_count'   => 1
+        } # end report
+      end # let
+      let(:summary_line) do
+        '3 examples, 2 failures, 1 error occurred outside of examples'
+      end # let
+
+      it 'should load and parse the report file' do
+        expect(File).
+          to receive(:read).
+          with(report_file).
+          and_return(expected_report)
+
+        expect(instance.call).to be == report
+      end # it
+    end # context
 
     describe 'with :env => environment variables' do
       let(:env) { { :bundle_gemfile => 'path/to/Gemfile' } }
