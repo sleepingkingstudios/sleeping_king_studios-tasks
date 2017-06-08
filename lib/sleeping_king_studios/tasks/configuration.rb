@@ -47,6 +47,14 @@ module SleepingKingStudios::Tasks
 
     # rubocop:disable Metrics/BlockLength
     namespace :ci do
+      option :cucumber, :default =>
+        {
+          :require       => 'sleeping_king_studios/tasks/ci/cucumber',
+          :class         => 'SleepingKingStudios::Tasks::Ci::Cucumber',
+          :title         => 'Cucumber',
+          :default_files => ['step_definitions', 'step_definitions.rb']
+        } # end cucumber
+
       option :rspec, :default =>
         {
           :require => 'sleeping_king_studios/tasks/ci/rspec',

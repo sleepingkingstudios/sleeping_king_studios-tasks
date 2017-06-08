@@ -23,6 +23,8 @@ module SleepingKingStudios::Tasks::Ci
       :desc    => 'Return a Hash instead of a results object.'
 
     def call *files
+      files += default_files unless files.empty?
+
       results = cucumber_runner.call(:files => files)
 
       raw? ? results : CucumberResults.new(results)
@@ -36,5 +38,10 @@ module SleepingKingStudios::Tasks::Ci
 
       CucumberRunner.new(:options => opts)
     end # method cucumber_runner
+
+    def default_files
+      SleepingKingStudios::Tasks.configuration.ci.cucumber.
+        fetch('default_files', [])
+    end # method default_files
   end # class
 end # module
