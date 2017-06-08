@@ -109,6 +109,23 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         with_value(be_a config_class)
     end # it
 
+    describe '#cucumber' do
+      let(:expected) do
+        {
+          :require       => 'sleeping_king_studios/tasks/ci/cucumber',
+          :class         => 'SleepingKingStudios::Tasks::Ci::Cucumber',
+          :title         => 'Cucumber',
+          :default_files => ['step_definitions', 'step_definitions.rb']
+        } # end rspec
+      end # let
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:cucumber).
+          with_value(be == expected)
+      end # it
+    end # describe
+
     describe '#rspec' do
       let(:expected) do
         {
