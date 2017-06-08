@@ -3,6 +3,8 @@
 require 'sleeping_king_studios/tasks/ci'
 
 module SleepingKingStudios::Tasks::Ci
+  # rubocop:disable Metrics/ClassLength
+
   # Encapsulates the results of a Cucumber call.
   class CucumberResults
     # @param results [Hash] The raw results of the RSpec call.
@@ -96,26 +98,42 @@ module SleepingKingStudios::Tasks::Ci
       @results.fetch('scenario_count', 0)
     end # method scenario_count
 
+    # @return [String] A brief summary of the scenario results.
+    def scenarios_summary
+      build_summary(
+        'scenario',
+        scenario_count,
+        failing_scenario_count,
+        pending_scenario_count
+      ) # end build_summary
+    end # method scenarios_summary
+
     # @return [Integer] The total number of steps.
     def step_count
       @results.fetch('step_count', 0)
     end # method step_count
 
-    # rubocop:disable Metrics/AbcSize
+    # @return [String] A brief summary of the scenario results.
+    def steps_summary
+      build_summary(
+        'step',
+        step_count,
+        failing_step_count,
+        pending_step_count
+      ) # end build_summary
+    end # method steps_summary
 
     # @return [String] A brief summary of the results.
     def summary
-      str = pluralize(scenario_count, 'example')
+      str = scenarios_summary
 
-      str << ', ' << pluralize(failing_scenario_count, 'failure')
+      str << ', '
 
-      str << ', ' << pending_scenario_count.to_s << ' pending' if pending?
+      str << steps_summary
 
       str << " in #{duration.round(2)} seconds"
     end # method summary
     alias_method :to_s, :summary
-
-    # rubocop:enable Metrics/AbcSize
 
     # @return [Hash] The hash representation of the results.
     def to_h
@@ -127,6 +145,26 @@ module SleepingKingStudios::Tasks::Ci
     end # method to_h
 
     private
+
+    def build_summary name, count, failing_count, pending_count
+      str = pluralize(count, name)
+
+      return str if failing_count.zero? && pending_count.zero?
+
+      str << build_summary_details(failing_count, pending_count)
+    end # method build_summary
+
+    def build_summary_details failing_count, pending_count
+      str = ' ('
+
+      str << pluralize(failing_count, 'failure') unless failing_count.zero?
+
+      str << ', ' if !failing_count.zero? && !pending_count.zero?
+
+      str << "#{pending_count} pending" unless pending_count.zero?
+
+      str << ')'
+    end # method build_summary_details
 
     def keys
       %w(
@@ -148,4 +186,6 @@ module SleepingKingStudios::Tasks::Ci
       SleepingKingStudios::Tools::Toolbelt.instance
     end # method tools
   end # class
+
+  # rubocop:enable Metrics/ClassLength
 end # module

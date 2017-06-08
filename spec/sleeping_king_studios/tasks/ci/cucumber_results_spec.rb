@@ -41,6 +41,31 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
     end # let
   end # shared_context
 
+  shared_context 'when the results are pending and failing' do
+    let(:results) do
+      hsh = super()
+
+      hsh['pending_scenarios'] =
+        [
+          {
+            'location'    => 'features/example.feature:1',
+            'description' => 'Scenario: pending scenario'
+          } # end scenario
+        ] # end pending scenarios
+      hsh['pending_step_count'] = 1
+      hsh['failing_scenarios'] =
+        [
+          {
+            'location'    => 'features/example.feature:1',
+            'description' => 'Scenario: failing scenario'
+          } # end scenario
+        ] # end pending scenarios
+      hsh['failing_step_count'] = 1
+
+      hsh
+    end # let
+  end # shared_context
+
   shared_context 'when the results have no scenarios' do
     let(:results) do
       {
@@ -354,6 +379,52 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
     end # wrap_context
   end # describe
 
+  describe '#scenarios_summary' do
+    let(:expected) { "#{instance.scenario_count} scenarios" }
+
+    it { expect(instance).to respond_to(:scenarios_summary).with(0).arguments }
+
+    it { expect(instance.scenarios_summary).to be == expected }
+
+    wrap_context 'when the results have no scenarios' do
+      it { expect(instance.scenarios_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.scenarios_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are pending' do
+      let(:expected) do
+        "#{super()} (#{instance.pending_scenario_count} pending)"
+      end # let
+
+      it { expect(instance.scenarios_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are failing' do
+      let(:expected) do
+        "#{super()} (#{instance.failing_scenario_count} failure)"
+      end # let
+
+      it { expect(instance.scenarios_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are pending and failing' do
+      let(:expected) do
+        str = super()
+
+        str << ' ('
+        str << "#{instance.failing_scenario_count} failure"
+        str << ', '
+        str << "#{instance.pending_scenario_count} pending"
+        str << ')'
+      end # let
+
+      it { expect(instance.scenarios_summary).to be == expected }
+    end # wrap_context
+  end # describe
+
   describe '#step_count' do
     include_examples 'should have reader',
       :step_count,
@@ -364,16 +435,59 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
     end # wrap_context
   end # describe
 
+  describe '#steps_summary' do
+    let(:expected) { "#{instance.step_count} steps" }
+
+    it { expect(instance).to respond_to(:steps_summary).with(0).arguments }
+
+    it { expect(instance.steps_summary).to be == expected }
+
+    wrap_context 'when the results have no scenarios' do
+      it { expect(instance.steps_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are empty' do
+      it { expect(instance.steps_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are pending' do
+      let(:expected) do
+        "#{super()} (#{instance.pending_step_count} pending)"
+      end # let
+
+      it { expect(instance.steps_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are failing' do
+      let(:expected) do
+        "#{super()} (#{instance.failing_step_count} failure)"
+      end # let
+
+      it { expect(instance.steps_summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are pending and failing' do
+      let(:expected) do
+        str = super()
+
+        str << ' ('
+        str << "#{instance.failing_step_count} failure"
+        str << ', '
+        str << "#{instance.pending_step_count} pending"
+        str << ')'
+      end # let
+
+      it { expect(instance.steps_summary).to be == expected }
+    end # wrap_context
+  end # describe
+
   describe '#summary' do
     let(:expected) do
-      str = "#{instance.scenario_count} examples"
+      str = instance.scenarios_summary
 
-      str << ", #{instance.failing_scenario_count} failure"
-      str << 's' if instance.failing_scenario_count != 1
+      str << ', '
 
-      if instance.pending?
-        str << ", #{instance.pending_scenario_count} pending"
-      end # if
+      str << instance.steps_summary
 
       str << " in #{instance.duration.round(2)} seconds"
     end # let
@@ -397,6 +511,10 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
     end # wrap_context
 
     wrap_context 'when the results are failing' do
+      it { expect(instance.summary).to be == expected }
+    end # wrap_context
+
+    wrap_context 'when the results are pending and failing' do
       it { expect(instance.summary).to be == expected }
     end # wrap_context
   end # describe
