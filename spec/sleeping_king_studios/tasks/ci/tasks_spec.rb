@@ -9,6 +9,14 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Tasks do
 
   let(:instance) { described_class.new }
 
+  describe '#cucumber' do
+    let(:args) { ['path/to/file'] }
+
+    include_examples 'should define task',
+      SleepingKingStudios::Tasks::Ci::Cucumber,
+      :namespace => 'ci'
+  end # describe
+
   describe '#rspec' do
     let(:args) { ['path/to/file'] }
 
