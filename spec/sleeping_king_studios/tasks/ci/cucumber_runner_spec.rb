@@ -56,10 +56,6 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberRunner do
       "#{env} bundle exec cucumber #{opts.join ' '}".strip
     end # let
 
-    def tools
-      SleepingKingStudios::Tools::Toolbelt.new
-    end # method tools
-
     before(:example) do
       allow(instance).to receive(:stream_process)
 
@@ -92,6 +88,17 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberRunner do
 
       expect(instance.call).to be == report
     end # it
+
+    context 'when the report file is unparseable' do
+      it 'should return empty results' do
+        expect(File).
+          to receive(:read).
+          with(report_file).
+          and_return('Greetings, programs!')
+
+        expect(instance.call).to be == {}
+      end # it
+    end # context
 
     describe 'with :env => environment variables' do
       let(:env) { { :bundle_gemfile => 'path/to/Gemfile' } }

@@ -27,7 +27,9 @@ module SleepingKingStudios::Tasks
 
       # @return [Boolean] True.
       def exit_on_failure?
+        # :nocov:
         true
+        # :nocov:
       end # class method exit_on_failure?
     end # module
     extend ClassMethods

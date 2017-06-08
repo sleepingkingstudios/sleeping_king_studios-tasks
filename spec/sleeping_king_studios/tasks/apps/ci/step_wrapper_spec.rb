@@ -6,9 +6,7 @@ require 'sleeping_king_studios/tasks/ci/rubocop'
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
   let(:described_class) do
     Class.new(super()) do
-      def step_key
-        :example_step
-      end # method step_key
+      def step_key; end
     end # class
   end # let
   let(:options)  { {} }

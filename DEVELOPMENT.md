@@ -16,29 +16,11 @@
 
 ### CI
 
-- task ci:cucumber
-  - Configuration settings
-  - enable for ci:steps
-  - with file, automatically load default files (step_definitions)
-    - configurable
-
-- task ci:rspec: |
-
-  Add --env option
-
-- task ci:rspec_each: |
-
-  Add --env option
-
-  Add --gemfile option
-
 - task ci:steps: |
 
   Add --diff option
 
     only runs ci steps on changed files/parts of files.
-
-  Checks for configuration file and runs CI steps, concatenating the results.
 
 ### Files
 
@@ -49,7 +31,9 @@
 
   (optional) opens files in text editor?
 
-- task file:move [source] [target]
+- task file:move [source] [target]: |
+
+  Alias as file:refactor?
 
 ### Git
 
