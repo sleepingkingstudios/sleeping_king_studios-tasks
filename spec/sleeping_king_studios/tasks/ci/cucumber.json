@@ -1,0 +1,193 @@
+[
+  {
+    "uri": "features/one_failing_many_steps.feature",
+    "id": "one-failing-scenario-with-many-steps",
+    "keyword": "Feature",
+    "name": "One failing scenario with many steps",
+    "description": "",
+    "line": 1,
+    "elements": [
+      {
+        "id": "one-failing-scenario-with-many-steps;passing-twice-then-failing",
+        "keyword": "Scenario",
+        "name": "Passing Twice Then Failing",
+        "description": "",
+        "line": 2,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 3,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 390083
+            }
+          },
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 4,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16327
+            }
+          },
+          {
+            "keyword": "Given ",
+            "name": "this step is failing",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions.rb:9"
+            },
+            "result": {
+              "status": "failed",
+              "error_message": "\nexpected false\n     got true\n (RSpec::Expectations::ExpectationNotMetError)\n./features/step_definitions.rb:10:in `/^this step is failing$/'\nfeatures/one_failing_many_steps.feature:5:in `Given this step is failing'",
+              "duration": 9911584
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "uri": "features/one_passing_many_steps.feature",
+    "id": "one-passing-scenario-with-many-steps",
+    "keyword": "Feature",
+    "name": "One passing scenario with many steps",
+    "description": "",
+    "line": 1,
+    "elements": [
+      {
+        "id": "one-passing-scenario-with-many-steps;passing-three-times",
+        "keyword": "Scenario",
+        "name": "Passing Three Times",
+        "description": "",
+        "line": 2,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 3,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 42499
+            }
+          },
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 4,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 13554
+            }
+          },
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 5,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 27338
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "uri": "features/one_passing_one_failing.feature",
+    "id": "one-passing-scenario,-one-pending-scenario,-one-failing-scenario",
+    "keyword": "Feature",
+    "name": "One passing scenario, one pending scenario, one failing scenario",
+    "description": "",
+    "line": 1,
+    "elements": [
+      {
+        "id": "one-passing-scenario,-one-pending-scenario,-one-failing-scenario;passing",
+        "keyword": "Scenario",
+        "name": "Passing",
+        "description": "",
+        "line": 2,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "this step is passing",
+            "line": 3,
+            "match": {
+              "location": "features/step_definitions.rb:1"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16809
+            }
+          }
+        ]
+      },
+      {
+        "id": "one-passing-scenario,-one-pending-scenario,-one-failing-scenario;pending",
+        "keyword": "Scenario",
+        "name": "Pending",
+        "description": "",
+        "line": 5,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "this step is pending",
+            "line": 6,
+            "match": {
+              "location": "features/step_definitions.rb:5"
+            },
+            "result": {
+              "status": "pending",
+              "error_message": "TODO (Cucumber::Pending)\n./features/step_definitions.rb:6:in `/^this step is pending$/'\nfeatures/one_passing_one_failing.feature:6:in `Given this step is pending'",
+              "duration": 75581
+            }
+          }
+        ]
+      },
+      {
+        "id": "one-passing-scenario,-one-pending-scenario,-one-failing-scenario;failing",
+        "keyword": "Scenario",
+        "name": "Failing",
+        "description": "",
+        "line": 8,
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "this step is failing",
+            "line": 9,
+            "match": {
+              "location": "features/step_definitions.rb:9"
+            },
+            "result": {
+              "status": "failed",
+              "error_message": "\nexpected false\n     got true\n (RSpec::Expectations::ExpectationNotMetError)\n./features/step_definitions.rb:10:in `/^this step is failing$/'\nfeatures/one_passing_one_failing.feature:9:in `Given this step is failing'",
+              "duration": 129315
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
