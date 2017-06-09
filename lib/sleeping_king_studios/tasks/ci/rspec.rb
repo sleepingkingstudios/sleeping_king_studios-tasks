@@ -12,7 +12,7 @@ module SleepingKingStudios::Tasks::Ci
     end # class method description
 
     def self.task_name
-      :rspec
+      'rspec'
     end # class method task_name
 
     option :coverage,

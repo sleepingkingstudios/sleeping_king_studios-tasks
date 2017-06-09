@@ -19,7 +19,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::SimpleCov do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value :simplecov
+      expect(described_class).to have_reader(:task_name).with_value 'simplecov'
     end # it
   end # describe
 

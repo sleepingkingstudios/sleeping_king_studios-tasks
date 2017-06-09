@@ -13,7 +13,7 @@ module SleepingKingStudios::Tasks::Ci
     end # class method description
 
     def self.task_name
-      :simplecov
+      'simplecov'
     end # class method task_name
 
     def call *_args

@@ -30,6 +30,14 @@ module SleepingKingStudios::Tasks::Apps::Ci
       end # configure
     end # class method configure_simplecov!
 
+    def self.description
+      'Aggregates the SimpleCov results for all applications.'
+    end # class method description
+
+    def self.task_name
+      'simplecov'
+    end # class method task_name
+
     def call _application = nil
       results = load_report :report => File.join('coverage', 'coverage.json')
       results = convert_results_to_object(results)

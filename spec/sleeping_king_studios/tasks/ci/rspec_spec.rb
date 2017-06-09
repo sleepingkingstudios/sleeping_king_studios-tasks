@@ -16,7 +16,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpec do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value :rspec
+      expect(described_class).to have_reader(:task_name).with_value 'rspec'
     end # it
   end # describe
 

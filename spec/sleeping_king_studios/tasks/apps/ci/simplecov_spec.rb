@@ -12,6 +12,20 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
     it { expect(described_class).to be_constructible.with(1).argument }
   end # describe
 
+  describe '::description' do
+    let(:expected) { 'Aggregates the SimpleCov results for all applications.' }
+
+    it 'should define the class reader' do
+      expect(described_class).to have_reader(:description).with_value expected
+    end # it
+  end # describe
+
+  describe '::task_name' do
+    it 'should define the class reader' do
+      expect(described_class).to have_reader(:task_name).with_value 'simplecov'
+    end # it
+  end # describe
+
   describe '::configure_simplecov!' do
     let(:config) do
       Class.new do

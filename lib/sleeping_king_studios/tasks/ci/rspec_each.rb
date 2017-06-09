@@ -18,7 +18,7 @@ module SleepingKingStudios::Tasks::Ci
     end # class method description
 
     def self.task_name
-      :rspec_each
+      'rspec_each'
     end # class method task_name
 
     option :quiet,
