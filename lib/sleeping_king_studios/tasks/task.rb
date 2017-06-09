@@ -36,7 +36,7 @@ module SleepingKingStudios::Tasks
       def task_name
         tools = SleepingKingStudios::Tools::Toolbelt.instance
 
-        tools.string.underscore(name.split('::').last)
+        tools.string.underscore(name.split('::').last).sub(/_task$/, '')
       end # method task_name
 
       private

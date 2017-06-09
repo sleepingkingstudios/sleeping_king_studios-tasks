@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/file/new.rb
+# lib/sleeping_king_studios/tasks/file/new_task.rb
 
 require 'erubi'
 
@@ -10,7 +10,7 @@ module SleepingKingStudios::Tasks::File
   # rubocop:disable Metrics/ClassLength
 
   # Thor task for generating a new Ruby source file.
-  class New < SleepingKingStudios::Tasks::Task
+  class NewTask < SleepingKingStudios::Tasks::Task
     def self.description
       'Creates a Ruby source file and corresponding spec file.'
     end # class method description

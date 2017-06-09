@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/file/new_spec.rb
+# spec/sleeping_king_studios/tasks/file/new_task_spec.rb
 
-require 'sleeping_king_studios/tasks/file/new'
+require 'sleeping_king_studios/tasks/file/new_task'
 
-RSpec.describe SleepingKingStudios::Tasks::File::New do
+RSpec.describe SleepingKingStudios::Tasks::File::NewTask do
   let(:options)  { { 'quiet' => true } }
   let(:instance) { described_class.new options }
 
