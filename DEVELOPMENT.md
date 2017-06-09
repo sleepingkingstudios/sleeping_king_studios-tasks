@@ -28,6 +28,10 @@
 
     only runs ci steps on changed files/parts of files.
 
+- task ci:yard: |
+
+  Checks the number of undocumented modules, classes, constants, methods, etc.
+
 ### Files
 
 - task file:new [filename]: |
