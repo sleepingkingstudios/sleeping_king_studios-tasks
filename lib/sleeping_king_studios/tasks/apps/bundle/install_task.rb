@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/apps/bundle/install.rb
+# lib/sleeping_king_studios/tasks/apps/bundle/install_task.rb
 
 require 'sleeping_king_studios/tasks/apps/applications_task'
 require 'sleeping_king_studios/tasks/apps/bundle'
@@ -6,7 +6,7 @@ require 'sleeping_king_studios/tasks/apps/bundle/install_runner'
 
 module SleepingKingStudios::Tasks::Apps::Bundle
   # Defines a Thor task for installing gem dependencies for each application.
-  class Install < SleepingKingStudios::Tasks::Task
+  class InstallTask < SleepingKingStudios::Tasks::Task
     include SleepingKingStudios::Tasks::Apps::ApplicationsTask
 
     def self.description

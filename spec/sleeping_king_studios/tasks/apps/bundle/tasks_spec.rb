@@ -13,11 +13,11 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::Tasks do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::Apps::Bundle::Install,
+      SleepingKingStudios::Tasks::Apps::Bundle::InstallTask,
       :namespace => 'apps:bundle'
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::Apps::Bundle::Update,
+      SleepingKingStudios::Tasks::Apps::Bundle::UpdateTask,
       :namespace => 'apps:bundle'
   end # describe
 end # describe

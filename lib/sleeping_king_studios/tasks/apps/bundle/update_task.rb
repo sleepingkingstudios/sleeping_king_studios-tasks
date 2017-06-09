@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/apps/bundle/update.rb
+# lib/sleeping_king_studios/tasks/apps/bundle/update_task.rb
 
 require 'sleeping_king_studios/tasks/apps/applications_task'
 require 'sleeping_king_studios/tasks/apps/bundle'
@@ -6,7 +6,7 @@ require 'sleeping_king_studios/tasks/apps/bundle/update_runner'
 
 module SleepingKingStudios::Tasks::Apps::Bundle
   # Defines a Thor task for updating gem dependencies for each application.
-  class Update < SleepingKingStudios::Tasks::Task
+  class UpdateTask < SleepingKingStudios::Tasks::Task
     include SleepingKingStudios::Tasks::Apps::ApplicationsTask
 
     def self.description
