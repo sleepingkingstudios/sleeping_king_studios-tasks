@@ -1,11 +1,11 @@
-# spec/sleeping_king_studios/tasks/apps/ci/steps_spec.rb
+# spec/sleeping_king_studios/tasks/apps/ci/steps_task_spec.rb
 
-require 'sleeping_king_studios/tasks/apps/ci/steps'
+require 'sleeping_king_studios/tasks/apps/ci/steps_task'
 require 'sleeping_king_studios/tasks/ci/rspec_results'
 require 'sleeping_king_studios/tasks/ci/rubocop_results'
 require 'sleeping_king_studios/tasks/ci/simplecov_results'
 
-RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Steps do
+RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsTask do
   let(:options)  { { 'quiet' => true } }
   let(:instance) { described_class.new(options) }
   let(:applications) do

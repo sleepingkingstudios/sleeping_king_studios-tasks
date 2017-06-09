@@ -16,6 +16,7 @@
   - simple DSL for hash-access-with-default method definitions
     - also updates #to_h
   - delegate #to_s to #summary
+- configurable "base" namespace
 
 #### Apps
 

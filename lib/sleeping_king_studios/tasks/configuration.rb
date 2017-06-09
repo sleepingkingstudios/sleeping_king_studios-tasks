@@ -26,8 +26,8 @@ module SleepingKingStudios::Tasks
 
         option :simplecov, :default =>
           {
-            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov',
-            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCov',
+            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov_task',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCovTask',
             :title   => 'SimpleCov',
             :global  => true
           } # end rspec

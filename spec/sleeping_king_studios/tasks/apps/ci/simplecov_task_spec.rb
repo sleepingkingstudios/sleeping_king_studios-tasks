@@ -1,10 +1,10 @@
-# spec/sleeping_king_studios/tasks/apps/ci/simplecov_spec.rb
+# spec/sleeping_king_studios/tasks/apps/ci/simplecov_task_spec.rb
 
 require 'simplecov'
 
-require 'sleeping_king_studios/tasks/apps/ci/simplecov'
+require 'sleeping_king_studios/tasks/apps/ci/simplecov_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
+RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCovTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 
