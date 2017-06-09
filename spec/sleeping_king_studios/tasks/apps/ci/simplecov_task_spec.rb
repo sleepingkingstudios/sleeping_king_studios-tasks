@@ -1,15 +1,29 @@
-# spec/sleeping_king_studios/tasks/apps/ci/simplecov_spec.rb
+# spec/sleeping_king_studios/tasks/apps/ci/simplecov_task_spec.rb
 
 require 'simplecov'
 
-require 'sleeping_king_studios/tasks/apps/ci/simplecov'
+require 'sleeping_king_studios/tasks/apps/ci/simplecov_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCov do
+RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::SimpleCovTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(1).argument }
+  end # describe
+
+  describe '::description' do
+    let(:expected) { 'Aggregates the SimpleCov results for all applications.' }
+
+    it 'should define the class reader' do
+      expect(described_class).to have_reader(:description).with_value expected
+    end # it
+  end # describe
+
+  describe '::task_name' do
+    it 'should define the class reader' do
+      expect(described_class).to have_reader(:task_name).with_value 'simplecov'
+    end # it
   end # describe
 
   describe '::configure_simplecov!' do

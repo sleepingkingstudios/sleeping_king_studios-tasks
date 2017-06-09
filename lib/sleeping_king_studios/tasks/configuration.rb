@@ -26,8 +26,8 @@ module SleepingKingStudios::Tasks
 
         option :simplecov, :default =>
           {
-            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov',
-            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCov',
+            :require => 'sleeping_king_studios/tasks/apps/ci/simplecov_task',
+            :class   => 'SleepingKingStudios::Tasks::Apps::Ci::SimpleCovTask',
             :title   => 'SimpleCov',
             :global  => true
           } # end rspec
@@ -49,37 +49,37 @@ module SleepingKingStudios::Tasks
     namespace :ci do
       option :cucumber, :default =>
         {
-          :require       => 'sleeping_king_studios/tasks/ci/cucumber',
-          :class         => 'SleepingKingStudios::Tasks::Ci::Cucumber',
+          :require       => 'sleeping_king_studios/tasks/ci/cucumber_task',
+          :class         => 'SleepingKingStudios::Tasks::Ci::CucumberTask',
           :title         => 'Cucumber',
           :default_files => ['step_definitions', 'step_definitions.rb']
         } # end cucumber
 
       option :rspec, :default =>
         {
-          :require => 'sleeping_king_studios/tasks/ci/rspec',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
+          :require => 'sleeping_king_studios/tasks/ci/rspec_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecTask',
           :title   => 'RSpec'
         } # end rspec
 
       option :rspec_each, :default =>
         {
-          :require => 'sleeping_king_studios/tasks/ci/rspec_each',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEach',
+          :require => 'sleeping_king_studios/tasks/ci/rspec_each_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEachTask',
           :title   => 'RSpec (Each)'
         } # end rspec
 
       option :rubocop, :default =>
         {
-          :require => 'sleeping_king_studios/tasks/ci/rubocop',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop',
+          :require => 'sleeping_king_studios/tasks/ci/rubocop_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCopTask',
           :title   => 'RuboCop'
         } # end rspec
 
       option :simplecov, :default =>
         {
-          :require => 'sleeping_king_studios/tasks/ci/simplecov',
-          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov',
+          :require => 'sleeping_king_studios/tasks/ci/simplecov_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCovTask',
           :title   => 'SimpleCov'
         } # end rspec
 

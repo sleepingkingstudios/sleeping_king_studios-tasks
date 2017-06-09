@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/ci/rubocop_spec.rb
+# spec/sleeping_king_studios/tasks/ci/rubocop_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rubocop'
+require 'sleeping_king_studios/tasks/ci/rubocop_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
+RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 
@@ -16,7 +16,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value :rubocop
+      expect(described_class).to have_reader(:task_name).with_value 'rubocop'
     end # it
   end # describe
 

@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/ci/rspec.rb
+# lib/sleeping_king_studios/tasks/ci/rspec_task.rb
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/rspec_results'
@@ -6,13 +6,13 @@ require 'sleeping_king_studios/tasks/ci/rspec_runner'
 
 module SleepingKingStudios::Tasks::Ci
   # Defines a Thor task for running the full RSpec test suite.
-  class RSpec < SleepingKingStudios::Tasks::Task
+  class RSpecTask < SleepingKingStudios::Tasks::Task
     def self.description
       'Runs the RSpec test suite.'
     end # class method description
 
     def self.task_name
-      :rspec
+      'rspec'
     end # class method task_name
 
     option :coverage,

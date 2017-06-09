@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/ci/cucumber_spec.rb
+# spec/sleeping_king_studios/tasks/ci/cucumber_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/cucumber'
+require 'sleeping_king_studios/tasks/ci/cucumber_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::Cucumber do
+RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 

@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/apps/ci/steps.rb
+# lib/sleeping_king_studios/tasks/apps/ci/steps_task.rb
 
 require 'sleeping_king_studios/tasks/apps/applications_task'
 require 'sleeping_king_studios/tasks/apps/ci'
@@ -8,7 +8,7 @@ require 'sleeping_king_studios/tasks/apps/ci/steps_runner'
 module SleepingKingStudios::Tasks::Apps::Ci
   # Thor task for running each step in the CI suite for each application and
   # generating a report.
-  class Steps < SleepingKingStudios::Tasks::Task
+  class StepsTask < SleepingKingStudios::Tasks::Task
     include SleepingKingStudios::Tasks::Apps::ApplicationsTask
 
     def self.description

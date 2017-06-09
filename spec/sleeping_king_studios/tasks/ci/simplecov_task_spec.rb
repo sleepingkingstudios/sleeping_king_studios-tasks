@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/ci/simplecov_spec.rb
+# spec/sleeping_king_studios/tasks/ci/simplecov_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/simplecov'
+require 'sleeping_king_studios/tasks/ci/simplecov_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::SimpleCov do
+RSpec.describe SleepingKingStudios::Tasks::Ci::SimpleCovTask do
   let(:instance) { described_class.new({}) }
 
   describe '::new' do
@@ -19,7 +19,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::SimpleCov do
 
   describe '::task_name' do
     it 'should define the class reader' do
-      expect(described_class).to have_reader(:task_name).with_value :simplecov
+      expect(described_class).to have_reader(:task_name).with_value 'simplecov'
     end # it
   end # describe
 

@@ -13,7 +13,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Tasks do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::Apps::Ci::RSpec,
+      SleepingKingStudios::Tasks::Apps::Ci::RSpecTask,
       :namespace => 'apps:ci'
   end # describe
 
@@ -21,7 +21,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Tasks do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::Apps::Ci::RuboCop,
+      SleepingKingStudios::Tasks::Apps::Ci::RuboCopTask,
       :namespace => 'apps:ci'
   end # describe
 
@@ -29,7 +29,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::Tasks do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::Apps::Ci::Steps,
+      SleepingKingStudios::Tasks::Apps::Ci::StepsTask,
       :namespace => 'apps:ci'
   end # describe
 end # describe

@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/ci/rubocop.rb
+# lib/sleeping_king_studios/tasks/ci/rubocop_task.rb
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/rubocop_results'
@@ -6,13 +6,13 @@ require 'sleeping_king_studios/tasks/ci/rubocop_runner'
 
 module SleepingKingStudios::Tasks::Ci
   # Defines a Thor task for running the RuboCop linter.
-  class RuboCop < SleepingKingStudios::Tasks::Task
+  class RuboCopTask < SleepingKingStudios::Tasks::Task
     def self.description
       'Runs the RuboCop linter.'
     end # class method description
 
     def self.task_name
-      :rubocop
+      'rubocop'
     end # class method task_name
 
     option :quiet,

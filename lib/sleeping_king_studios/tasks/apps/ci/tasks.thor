@@ -1,10 +1,10 @@
 # lib/sleeping_king_studios/tasks/apps/ci/tasks.thor
 
 require 'sleeping_king_studios/tasks/apps/ci'
-require 'sleeping_king_studios/tasks/apps/ci/rspec'
-require 'sleeping_king_studios/tasks/apps/ci/rubocop'
-require 'sleeping_king_studios/tasks/apps/ci/simplecov'
-require 'sleeping_king_studios/tasks/apps/ci/steps'
+require 'sleeping_king_studios/tasks/apps/ci/rspec_task'
+require 'sleeping_king_studios/tasks/apps/ci/rubocop_task'
+require 'sleeping_king_studios/tasks/apps/ci/simplecov_task'
+require 'sleeping_king_studios/tasks/apps/ci/steps_task'
 
 module SleepingKingStudios::Tasks::Apps::Ci
   # Thor integration for continuous integration tasks in semi-distributed
@@ -12,9 +12,9 @@ module SleepingKingStudios::Tasks::Apps::Ci
   class Tasks < SleepingKingStudios::Tasks::TaskGroup
     namespace :"apps:ci"
 
-    task SleepingKingStudios::Tasks::Apps::Ci::RSpec
-    task SleepingKingStudios::Tasks::Apps::Ci::RuboCop
-    task SleepingKingStudios::Tasks::Apps::Ci::Steps
-    task SleepingKingStudios::Tasks::Apps::Ci::SimpleCov
+    task SleepingKingStudios::Tasks::Apps::Ci::RSpecTask
+    task SleepingKingStudios::Tasks::Apps::Ci::RuboCopTask
+    task SleepingKingStudios::Tasks::Apps::Ci::SimpleCovTask
+    task SleepingKingStudios::Tasks::Apps::Ci::StepsTask
   end # class
 end # module

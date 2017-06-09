@@ -91,6 +91,12 @@ RSpec.describe SleepingKingStudios::Tasks::Task do
         to have_reader(:task_name).
         with_value('walks')
     end # it
+
+    context 'when the task name ends with Task' do
+      let(:class_name) { 'Ministry::Silly::WalksTask' }
+
+      it { expect(described_class.task_name).to be == 'walks' }
+    end # context
   end # describe
 
   describe '#call' do

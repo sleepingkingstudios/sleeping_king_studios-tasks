@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/ci/cucumber.rb
+# lib/sleeping_king_studios/tasks/ci/cucumber_task.rb
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/cucumber_results'
@@ -6,7 +6,7 @@ require 'sleeping_king_studios/tasks/ci/cucumber_runner'
 
 module SleepingKingStudios::Tasks::Ci
   # Defines a Thor task for running the full RSpec test suite.
-  class Cucumber < SleepingKingStudios::Tasks::Task
+  class CucumberTask < SleepingKingStudios::Tasks::Task
     def self.description
       'Runs the Cucumber feature suite.'
     end # class method description

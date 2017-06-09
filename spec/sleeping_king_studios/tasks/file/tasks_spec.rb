@@ -13,7 +13,7 @@ RSpec.describe SleepingKingStudios::Tasks::File::Tasks do
     let(:args) { ['path/to/file'] }
 
     include_examples 'should define task',
-      SleepingKingStudios::Tasks::File::New,
+      SleepingKingStudios::Tasks::File::NewTask,
       :namespace => 'file'
   end # describe
 end # describe

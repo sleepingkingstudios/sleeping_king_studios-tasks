@@ -1,7 +1,7 @@
 # spec/sleeping_king_studios/tasks/apps/ci/step_wrapper_spec.rb
 
 require 'sleeping_king_studios/tasks/apps/ci/step_wrapper'
-require 'sleeping_king_studios/tasks/ci/rubocop'
+require 'sleeping_king_studios/tasks/ci/rubocop_task'
 
 RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
   let(:described_class) do

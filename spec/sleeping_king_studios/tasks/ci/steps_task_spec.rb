@@ -1,11 +1,11 @@
-# spec/sleeping_king_studios/tasks/ci/steps_spec.rb
+# spec/sleeping_king_studios/tasks/ci/steps_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rspec'
-require 'sleeping_king_studios/tasks/ci/rubocop'
-require 'sleeping_king_studios/tasks/ci/simplecov'
-require 'sleeping_king_studios/tasks/ci/steps'
+require 'sleeping_king_studios/tasks/ci/rspec_task'
+require 'sleeping_king_studios/tasks/ci/rubocop_task'
+require 'sleeping_king_studios/tasks/ci/simplecov_task'
+require 'sleeping_king_studios/tasks/ci/steps_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
+RSpec.describe SleepingKingStudios::Tasks::Ci::StepsTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 
@@ -84,18 +84,18 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::Steps do
     let(:expected_steps) do
       {
         'RSpec' => {
-          :require => 'sleeping_king_studios/tasks/ci/rspec',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
+          :require => 'sleeping_king_studios/tasks/ci/rspec_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecTask',
           :results => rspec_results
         }, # end rspec
         'RuboCop' => {
-          :require => 'sleeping_king_studios/tasks/ci/rubocop',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop',
+          :require => 'sleeping_king_studios/tasks/ci/rubocop_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCopTask',
           :results => rubocop_results
         }, # end rubocop
         'SimpleCov' => {
-          :require => 'sleeping_king_studios/tasks/ci/simplecov',
-          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov',
+          :require => 'sleeping_king_studios/tasks/ci/simplecov_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCovTask',
           :results => simplecov_results
         } # end simplecov
       } # end steps

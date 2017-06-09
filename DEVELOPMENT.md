@@ -1,8 +1,13 @@
 ## Tasks
 
-- add missing specs for full coverage
+### 0.1.0
+
 - task names should be strings, not symbols
 - formalize (public) task names as _Task, _task.rb ?
+- documentation pass
+
+### Future Tasks
+
 - integration testing for RSpec, RSpecEach tasks
   - sample spec files with known output(s)
 - extract common Results object superclass
@@ -11,10 +16,11 @@
   - simple DSL for hash-access-with-default method definitions
     - also updates #to_h
   - delegate #to_s to #summary
+- configurable "base" namespace
 
-### Apps
+#### Apps
 
-### CI
+#### CI
 
 - task ci:steps: |
 
@@ -35,6 +41,6 @@
 
   Alias as file:refactor?
 
-### Git
+#### Git
 
 - task git:delete-merged

@@ -1,11 +1,11 @@
-# lib/sleeping_king_studios/tasks/apps/ci/rspec.rb
+# lib/sleeping_king_studios/tasks/apps/ci/rspec_task.rb
 
 require 'sleeping_king_studios/tasks/apps/ci'
-require 'sleeping_king_studios/tasks/apps/ci/steps'
+require 'sleeping_king_studios/tasks/apps/ci/steps_task'
 
 module SleepingKingStudios::Tasks::Apps::Ci
   # Defines a Thor task for running the RSpec test suite for each application.
-  class RSpec < SleepingKingStudios::Tasks::Task
+  class RSpecTask < SleepingKingStudios::Tasks::Task
     def self.description
       'Runs the RSpec test suite for each application.'
     end # class method description
@@ -21,7 +21,7 @@ module SleepingKingStudios::Tasks::Apps::Ci
       :desc    => 'Do not write spec results to STDOUT.'
 
     def call *applications
-      SleepingKingStudios::Tasks::Apps::Ci::Steps.
+      SleepingKingStudios::Tasks::Apps::Ci::StepsTask.
         new(options.merge('only' => %w(rspec))).
         call(*applications)
     end # method call

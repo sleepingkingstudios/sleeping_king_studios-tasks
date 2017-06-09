@@ -1,20 +1,20 @@
 # lib/sleeping_king_studios/tasks/ci/tasks.thor
 
-require 'sleeping_king_studios/tasks/ci/cucumber'
-require 'sleeping_king_studios/tasks/ci/rspec'
-require 'sleeping_king_studios/tasks/ci/rspec_each'
-require 'sleeping_king_studios/tasks/ci/rubocop'
-require 'sleeping_king_studios/tasks/ci/steps'
+require 'sleeping_king_studios/tasks/ci/cucumber_task'
+require 'sleeping_king_studios/tasks/ci/rspec_task'
+require 'sleeping_king_studios/tasks/ci/rspec_each_task'
+require 'sleeping_king_studios/tasks/ci/rubocop_task'
+require 'sleeping_king_studios/tasks/ci/steps_task'
 
 module SleepingKingStudios::Tasks::Ci
   # Thor integration for continuous integration tasks.
   class Tasks < SleepingKingStudios::Tasks::TaskGroup
     namespace :ci
 
-    task SleepingKingStudios::Tasks::Ci::Cucumber
-    task SleepingKingStudios::Tasks::Ci::RSpec
-    task SleepingKingStudios::Tasks::Ci::RSpecEach
-    task SleepingKingStudios::Tasks::Ci::RuboCop
-    task SleepingKingStudios::Tasks::Ci::Steps
+    task SleepingKingStudios::Tasks::Ci::CucumberTask
+    task SleepingKingStudios::Tasks::Ci::RSpecTask
+    task SleepingKingStudios::Tasks::Ci::RSpecEachTask
+    task SleepingKingStudios::Tasks::Ci::RuboCopTask
+    task SleepingKingStudios::Tasks::Ci::StepsTask
   end # class
 end # module
