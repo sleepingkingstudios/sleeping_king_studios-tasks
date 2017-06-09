@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/ci/rubocop_spec.rb
+# spec/sleeping_king_studios/tasks/ci/rubocop_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rubocop'
+require 'sleeping_king_studios/tasks/ci/rubocop_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCop do
+RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopTask do
   let(:options)  { {} }
   let(:instance) { described_class.new(options) }
 

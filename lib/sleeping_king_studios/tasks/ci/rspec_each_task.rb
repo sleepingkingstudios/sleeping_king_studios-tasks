@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tasks/ci/rspec_each.rb
+# lib/sleeping_king_studios/tasks/ci/rspec_each_task.rb
 
 require 'sleeping_king_studios/tasks/ci'
 require 'sleeping_king_studios/tasks/ci/results_helpers'
@@ -10,7 +10,7 @@ module SleepingKingStudios::Tasks::Ci
   # rubocop:disable Metrics/ClassLength
 
   # Defines a Thor task for running the full RSpec test suite.
-  class RSpecEach < SleepingKingStudios::Tasks::Task
+  class RSpecEachTask < SleepingKingStudios::Tasks::Task
     include SleepingKingStudios::Tasks::Ci::ResultsHelpers
 
     def self.description

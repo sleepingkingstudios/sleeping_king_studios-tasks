@@ -112,8 +112,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
     describe '#cucumber' do
       let(:expected) do
         {
-          :require       => 'sleeping_king_studios/tasks/ci/cucumber',
-          :class         => 'SleepingKingStudios::Tasks::Ci::Cucumber',
+          :require       => 'sleeping_king_studios/tasks/ci/cucumber_task',
+          :class         => 'SleepingKingStudios::Tasks::Ci::CucumberTask',
           :title         => 'Cucumber',
           :default_files => ['step_definitions', 'step_definitions.rb']
         } # end rspec
@@ -129,8 +129,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
     describe '#rspec' do
       let(:expected) do
         {
-          :require => 'sleeping_king_studios/tasks/ci/rspec',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpec',
+          :require => 'sleeping_king_studios/tasks/ci/rspec_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecTask',
           :title   => 'RSpec'
         } # end rspec
       end # let
@@ -145,8 +145,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
     describe '#rspec_each' do
       let(:expected) do
         {
-          :require => 'sleeping_king_studios/tasks/ci/rspec_each',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEach',
+          :require => 'sleeping_king_studios/tasks/ci/rspec_each_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEachTask',
           :title   => 'RSpec (Each)'
         } # end rspec
       end # let
@@ -161,8 +161,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
     describe '#rubocop' do
       let(:expected) do
         {
-          :require => 'sleeping_king_studios/tasks/ci/rubocop',
-          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCop',
+          :require => 'sleeping_king_studios/tasks/ci/rubocop_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::RuboCopTask',
           :title   => 'RuboCop'
         } # end rubocop
       end # let
@@ -177,8 +177,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
     describe '#simplecov' do
       let(:expected) do
         {
-          :require => 'sleeping_king_studios/tasks/ci/simplecov',
-          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCov',
+          :require => 'sleeping_king_studios/tasks/ci/simplecov_task',
+          :class   => 'SleepingKingStudios::Tasks::Ci::SimpleCovTask',
           :title   => 'SimpleCov'
         } # end simplecov
       end # let

@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tasks/ci/rspec_each_spec.rb
+# spec/sleeping_king_studios/tasks/ci/rspec_each_task_spec.rb
 
-require 'sleeping_king_studios/tasks/ci/rspec_each'
+require 'sleeping_king_studios/tasks/ci/rspec_each_task'
 
-RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEach do
+RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachTask do
   let(:options)  { { :quiet => true } }
   let(:instance) { described_class.new(options) }
 
