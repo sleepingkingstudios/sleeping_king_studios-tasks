@@ -6,6 +6,10 @@
 /.ruby-version
 Gemfile.lock
 
+# Ignore compiled gem files.
+*.gem
+.bundle
+
 # Ignore local and generated documentation.
 /coverage
 /doc
