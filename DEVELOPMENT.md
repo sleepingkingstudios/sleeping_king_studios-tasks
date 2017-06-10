@@ -1,13 +1,8 @@
 ## Tasks
 
-### 0.1.0
-
-- task names should be strings, not symbols
-- formalize (public) task names as _Task, _task.rb ?
-- documentation pass
-
 ### Future Tasks
 
+- add documentation for "ci" option in applications.yml
 - integration testing for RSpec, RSpecEach tasks
   - sample spec files with known output(s)
 - extract common Results object superclass
