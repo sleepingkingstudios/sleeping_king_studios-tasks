@@ -17,6 +17,12 @@
 
 #### CI
 
+- configurable --format options for CI steps
+
+- task ci:rspec_each: |
+
+  Default to displaying --format=progress.
+
 - task ci:steps: |
 
   Add --diff option
