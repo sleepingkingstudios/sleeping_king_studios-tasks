@@ -131,7 +131,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         {
           :require => 'sleeping_king_studios/tasks/ci/rspec_task',
           :class   => 'SleepingKingStudios::Tasks::Ci::RSpecTask',
-          :title   => 'RSpec'
+          :title   => 'RSpec',
+          :format  => 'documentation'
         } # end rspec
       end # let
 

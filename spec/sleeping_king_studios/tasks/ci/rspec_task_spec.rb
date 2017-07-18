@@ -40,10 +40,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecTask do
       end # it
     end # shared_examples
 
-    let(:expected_files)   { [] }
-    let(:expected_env)     { {} }
-    let(:expected_options) { ['--color', '--tty', '--format=documentation'] }
-    let(:expected_class)   { SleepingKingStudios::Tasks::Ci::RSpecResults }
+    let(:expected_files)  { [] }
+    let(:expected_env)    { {} }
+    let(:expected_format) { instance.send(:default_format) }
+    let(:expected_options) do
+      ['--color', '--tty', "--format=#{expected_format}"]
+    end # let
+    let(:expected_class) { SleepingKingStudios::Tasks::Ci::RSpecResults }
     let(:expected) do
       {
         'duration'      => 1.0,
@@ -84,6 +87,13 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecTask do
     describe 'with --coverage=false' do
       let(:options)      { { 'coverage' => false } }
       let(:expected_env) { { :coverage => false } }
+
+      include_examples 'should call an RSpec runner'
+    end # describe
+
+    describe 'with --format=progress' do
+      let(:options)         { { 'format' => expected_format } }
+      let(:expected_format) { 'progress' }
 
       include_examples 'should call an RSpec runner'
     end # describe
@@ -133,5 +143,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecTask do
         include_examples 'should call an RSpec runner'
       end # describe
     end # context
+  end # describe
+
+  describe '#default_format' do
+    include_examples 'should have private reader',
+      :default_format,
+      ->() { be == SleepingKingStudios::Tasks.configuration.ci.rspec[:format] }
   end # describe
 end # describe

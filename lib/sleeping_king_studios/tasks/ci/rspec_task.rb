@@ -18,6 +18,9 @@ module SleepingKingStudios::Tasks::Ci
     option :coverage,
       :type    => :boolean,
       :desc    => 'Enable or disable coverage with SimpleCov, if available.'
+    option :format,
+      :type    => :string,
+      :desc    => 'The RSpec formatter to use. Defaults to the configuration.'
     option :gemfile,
       :type    => :string,
       :desc    => 'The Gemfile used to run the specs.',
@@ -41,6 +44,11 @@ module SleepingKingStudios::Tasks::Ci
 
     private
 
+    def default_format
+      SleepingKingStudios::Tasks.configuration.ci.rspec.
+        fetch(:format, :documentation)
+    end # method default_format
+
     def default_gemfile
       File.join(Dir.pwd, 'Gemfile')
     end # method default_gemfile
@@ -62,8 +70,10 @@ module SleepingKingStudios::Tasks::Ci
       env[:bundle_gemfile] = gemfile if gemfile
       env[:coverage]       = false unless coverage
 
+      format = options.fetch('format', default_format)
+
       opts = %w(--color --tty)
-      opts << '--format=documentation' unless quiet?
+      opts << "--format=#{format}" unless quiet?
 
       RSpecRunner.new(:env => env, :options => opts)
     end # method rspec_runner
