@@ -21,6 +21,9 @@ module SleepingKingStudios::Tasks::Ci
       'rspec_each'
     end # class method task_name
 
+    option :format,
+      :type    => :string,
+      :desc    => 'The RSpec formatter to use. Defaults to the configuration.'
     option :quiet,
       :aliases => '-q',
       :type    => :boolean,
@@ -72,6 +75,11 @@ module SleepingKingStudios::Tasks::Ci
         'file_count'    => 0
       } # end results
     end # method build_totals
+
+    def default_format
+      SleepingKingStudios::Tasks.configuration.ci.rspec_each.
+        fetch(:format, :documentation)
+    end # method default_format
 
     def files_list groups
       groups = %w(spec) if groups.empty?
@@ -132,7 +140,15 @@ module SleepingKingStudios::Tasks::Ci
     end # method rspec_runner
 
     def run_file file
-      results = rspec_runner.call(:files => [file])
+      opts   = []
+      format = options.fetch('format', default_format)
+
+      if format && !quiet?
+        opts = %w(--color --tty)
+        opts << "--format=#{format}"
+      end # if
+
+      results = rspec_runner.call(:files => [file], :options => opts)
       results = RSpecResults.new(results)
 
       say "#{set_color results_state(results), results_color(results)} #{file}"

@@ -148,7 +148,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         {
           :require => 'sleeping_king_studios/tasks/ci/rspec_each_task',
           :class   => 'SleepingKingStudios::Tasks::Ci::RSpecEachTask',
-          :title   => 'RSpec (Each)'
+          :title   => 'RSpec (Each)',
+          :format  => nil
         } # end rspec
       end # let
 
