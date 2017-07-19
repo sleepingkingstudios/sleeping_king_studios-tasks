@@ -169,9 +169,11 @@ In addition, the cucumber step has the additional option:
 
 - `default_files [Array]`: Files that are always loaded when running Cucumber, such as step definitions or support files. By default, this includes 'step_definitions.rb' and the 'step_definitions' directory inside 'features'.
 
-`config.ci.rspec [Hash]`: Step configuration for the RSpec step. Has the same options as `config.ci.cucumber`, above, except for the aforementioned `default_files` option.
+`config.ci.rspec [Hash]`: Step configuration for the RSpec step. Has the same options as `config.ci.cucumber`, above, except for the aforementioned `default_files` option. In addition, the RSpec task has the following option:
 
-`config.ci.rspec_each [Hash]`: Step configuration for the RSpec Each step.
+- `format [String]`: The RSpec formatter used to format the spec results. Defaults to 'documentation'.
+
+`config.ci.rspec_each [Hash]`: Step configuration for the RSpec Each step. Has the same configuration options as the RSpec step.
 
 `config.ci.rubocop [Hash]`: Step configuration for the RuboCop step.
 
