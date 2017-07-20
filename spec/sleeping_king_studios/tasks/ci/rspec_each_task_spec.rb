@@ -39,7 +39,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachTask do
           expected_files.each.with_index do |expected_file, index|
             expect(runner).
               to receive(:call).
-              with(:files => [expected_file]).
+              with(:files => [expected_file], :options => expected_options).
               and_return(expected_results[index])
           end # each
         end # before example
@@ -103,6 +103,14 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachTask do
     end # let
     let(:expected_env)    { { :coverage => false } }
     let(:expected_class)  { SleepingKingStudios::Tasks::Ci::RSpecEachResults }
+    let(:expected_format) { nil }
+    let(:expected_options) do
+      if expected_format
+        ['--color', '--tty', "--format=#{expected_format}"]
+      else
+        []
+      end # if-else
+    end # let
     let(:expected) do
       hsh = {
         'failing_files' => [],
@@ -198,12 +206,27 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachTask do
       include_examples 'should run each RSpec file'
     end # describe
 
+    describe 'with --format=progress' do
+      let(:expected_format) { 'progress' }
+      let(:options)         { { 'format' => expected_format } }
+
+      include_examples 'should run each RSpec file'
+    end # describe
+
     describe 'with --raw=true' do
       let(:options)        { { 'raw' => true } }
       let(:expected_class) { Hash }
 
       include_examples 'should run each RSpec file'
     end # describe
+  end # describe
+
+  describe '#default_format' do
+    include_examples 'should have private reader',
+      :default_format,
+      lambda {
+        be == SleepingKingStudios::Tasks.configuration.ci.rspec_each[:format]
+      } # end lambda
   end # describe
 
   describe '#files_list' do

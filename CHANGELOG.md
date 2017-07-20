@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Ci
+
+- Add --format option, configuration value for RSpec, RSpec (Each) tasks.
+
 ## 0.1.0
 
 Initial commit.
