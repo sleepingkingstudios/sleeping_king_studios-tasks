@@ -11,6 +11,8 @@ module SleepingKingStudios::Tasks::File
 
   # Thor task for generating a new Ruby source file.
   class NewTask < SleepingKingStudios::Tasks::Task
+    class MissingTemplateError < StandardError; end
+
     def self.description
       'Creates a Ruby source file and corresponding spec file.'
     end # class method description
@@ -56,8 +58,8 @@ module SleepingKingStudios::Tasks::File
 
       return unless prompt_confirmation
 
-      create_source_file
-      create_spec_file
+      create_source_file unless dry_run?
+      create_spec_file   unless dry_run?
 
       say 'Complete!', :green
     end # method file_name
@@ -78,10 +80,16 @@ module SleepingKingStudios::Tasks::File
       raise "file already exists at #{file_path}" unless force?
     end # method check_for_existing_file
 
+    def create_directories *directory_names
+      directory_path = directory_names.compact.join(File::SEPARATOR)
+
+      FileUtils.mkdir_p directory_path unless directory_path.empty?
+    end # method create_directories
+
     def create_source_file
       create_directories directory, *relative_path
 
-      File.write file_path, rendered_source unless dry_run?
+      File.write file_path, rendered_source
     end # method create_file
 
     def create_spec_file
@@ -91,14 +99,8 @@ module SleepingKingStudios::Tasks::File
 
       create_directories 'spec', *relative_path
 
-      File.write spec_path, rendered_spec unless dry_run?
+      File.write spec_path, rendered_spec
     end # method create_spec_file
-
-    def create_directories *directory_names
-      return if dry_run?
-
-      FileUtils.mkdir_p directory_names.compact.join(File::SEPARATOR)
-    end # method create_directories
 
     def find_template name
       template_paths.each do |template_dir|
@@ -109,7 +111,7 @@ module SleepingKingStudios::Tasks::File
         return File.read(template_path)
       end # each
 
-      nil
+      raise MissingTemplateError, "No template found for \"#{name}\""
     end # method find_template
 
     def preview
