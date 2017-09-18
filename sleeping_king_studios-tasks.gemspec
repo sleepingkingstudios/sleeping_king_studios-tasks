@@ -21,7 +21,8 @@ Gem::Specification.new do |gem|
   gem.license     = 'MIT'
 
   gem.require_path = 'lib'
-  gem.files        = Dir['lib/**/*.rb', 'lib/**/*.thor', 'LICENSE', '*.md']
+  gem.files        =
+    Dir['lib/**/*.erb', 'lib/**/*.rb', 'lib/**/*.thor', 'LICENSE', '*.md']
 
   gem.add_runtime_dependency 'rake', '~> 12.0'
   gem.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.4'
