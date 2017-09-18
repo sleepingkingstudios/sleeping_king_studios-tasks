@@ -6,6 +6,17 @@ RSpec.describe SleepingKingStudios::Tasks::File::NewTask do
   let(:options)  { { 'quiet' => true } }
   let(:instance) { described_class.new options }
 
+  describe 'MissingTemplateError' do
+    it { expect(described_class).to have_constant :MissingTemplateError }
+
+    it 'should be an error class' do
+      error_class = described_class::MissingTemplateError
+
+      expect(error_class).to be_a Class
+      expect(error_class).to be < StandardError
+    end # it
+  end # describe
+
   describe '#call' do
     shared_examples 'should render the source file' do
       it 'should render the source file' do
@@ -328,7 +339,7 @@ RSpec.describe SleepingKingStudios::Tasks::File::NewTask do
         with(1..2).arguments
     end # it
 
-    context 'with a template directory' do
+    context 'when there is one template directory' do
       let(:template_paths) { ['path/to/templates'] }
 
       before(:example) do
@@ -347,9 +358,21 @@ RSpec.describe SleepingKingStudios::Tasks::File::NewTask do
 
         expect(instance.send :render_template, name, locals).to be == expected
       end # it
+
+      context 'when the template does not exist' do
+        it 'should raise an error' do
+          expanded = ::File.expand_path(File.join template_paths[0], name)
+
+          expect(File).to receive(:exist?).with(expanded).and_return(false)
+
+          expect { instance.send :render_template, name, locals }.
+            to raise_error described_class::MissingTemplateError,
+              "No template found for \"#{name}\""
+        end # it
+      end # context
     end # context
 
-    context 'with many template directories' do
+    context 'when there are many template directories' do
       let(:template_paths) do
         [
           'path/to/templates',
