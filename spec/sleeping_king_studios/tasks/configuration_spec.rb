@@ -126,6 +126,22 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
       end # it
     end # describe
 
+    describe '#jest' do
+      let(:expected) do
+        {
+          :require       => 'sleeping_king_studios/tasks/ci/jest_task',
+          :class         => 'SleepingKingStudios::Tasks::Ci::JestTask',
+          :title         => 'Jest'
+        }
+      end
+
+      it 'should define the option' do
+        expect(instance.ci).
+          to have_reader(:jest).
+          with_value(be == expected)
+      end
+    end
+
     describe '#rspec' do
       let(:expected) do
         {

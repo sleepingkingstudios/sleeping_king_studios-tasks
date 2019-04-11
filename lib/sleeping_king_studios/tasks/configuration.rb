@@ -55,6 +55,13 @@ module SleepingKingStudios::Tasks
           :default_files => ['step_definitions', 'step_definitions.rb']
         } # end cucumber
 
+      option :jest, :default =>
+        {
+          :class   => 'SleepingKingStudios::Tasks::Ci::JestTask',
+          :require => 'sleeping_king_studios/tasks/ci/jest_task',
+          :title   => 'Jest'
+        }
+
       option :rspec, :default =>
         {
           :require => 'sleeping_king_studios/tasks/ci/rspec_task',
