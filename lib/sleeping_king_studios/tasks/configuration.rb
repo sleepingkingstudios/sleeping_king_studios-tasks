@@ -55,6 +55,14 @@ module SleepingKingStudios::Tasks
           :default_files => ['step_definitions', 'step_definitions.rb']
         } # end cucumber
 
+      option :eslint, :default =>
+        {
+          :class         => 'SleepingKingStudios::Tasks::Ci::EslintTask',
+          :default_files => '"**/*.js"',
+          :require       => 'sleeping_king_studios/tasks/ci/eslint_task',
+          :title         => 'ESLint'
+        }
+
       option :jest, :default =>
         {
           :class   => 'SleepingKingStudios::Tasks::Ci::JestTask',

@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tasks/ci/tasks.thor
 
 require 'sleeping_king_studios/tasks/ci/cucumber_task'
+require 'sleeping_king_studios/tasks/ci/eslint_task'
 require 'sleeping_king_studios/tasks/ci/jest_task'
 require 'sleeping_king_studios/tasks/ci/rspec_task'
 require 'sleeping_king_studios/tasks/ci/rspec_each_task'
@@ -13,6 +14,7 @@ module SleepingKingStudios::Tasks::Ci
     namespace :ci
 
     task SleepingKingStudios::Tasks::Ci::CucumberTask
+    task SleepingKingStudios::Tasks::Ci::EslintTask
     task SleepingKingStudios::Tasks::Ci::JestTask
     task SleepingKingStudios::Tasks::Ci::RSpecTask
     task SleepingKingStudios::Tasks::Ci::RSpecEachTask
