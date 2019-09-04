@@ -5,6 +5,8 @@ require 'sleeping_king_studios/tools/toolbox/configuration'
 require 'sleeping_king_studios/tasks'
 
 module SleepingKingStudios::Tasks
+  # rubocop:disable Metrics/ClassLength
+
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
     # rubocop:disable Metrics/BlockLength
@@ -67,7 +69,8 @@ module SleepingKingStudios::Tasks
         {
           :class   => 'SleepingKingStudios::Tasks::Ci::JestTask',
           :require => 'sleeping_king_studios/tasks/ci/jest_task',
-          :title   => 'Jest'
+          :title   => 'Jest',
+          :verbose => false
         }
 
       option :rspec, :default =>
@@ -128,4 +131,5 @@ module SleepingKingStudios::Tasks
       option :template_paths, :default => [default_template_path]
     end # namespace
   end # class
+  # rubocop:enable Metrics/ClassLength
 end # module

@@ -148,7 +148,8 @@ RSpec.describe SleepingKingStudios::Tasks::Configuration do
         {
           :require => 'sleeping_king_studios/tasks/ci/jest_task',
           :class   => 'SleepingKingStudios::Tasks::Ci::JestTask',
-          :title   => 'Jest'
+          :title   => 'Jest',
+          :verbose => false
         }
       end
 

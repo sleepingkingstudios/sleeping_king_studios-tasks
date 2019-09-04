@@ -15,6 +15,10 @@ module SleepingKingStudios::Tasks::Ci
       'jest'
     end
 
+    option :verbose,
+      :type => :boolean,
+      :desc => 'Output individual test results.'
+
     def call *files
       results = jest_runner.call(:files => files)
 
@@ -23,9 +27,15 @@ module SleepingKingStudios::Tasks::Ci
 
     private
 
+    def default_verbose
+      SleepingKingStudios::Tasks.configuration.ci.jest.
+        fetch(:verbose, false)
+    end
+
     def jest_runner
       env  = options.fetch('__env__', {})
       opts = %w(--color)
+      opts << "--verbose=#{options.fetch('verbose', default_verbose)}"
 
       JestRunner.new(:env => env, :options => opts)
     end

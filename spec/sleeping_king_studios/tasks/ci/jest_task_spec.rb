@@ -43,7 +43,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::JestTask do
     let(:expected_files)  { [] }
     let(:expected_env)    { {} }
     let(:expected_options) do
-      %w(--color)
+      %w(--color) << "--verbose=#{!!options['verbose']}"
     end
     let(:expected_class) { SleepingKingStudios::Tasks::Ci::JestResults }
     let(:expected) do
@@ -79,5 +79,17 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::JestTask do
 
       include_examples 'should call a Jest runner'
     end
+
+    describe 'with --verbose=true' do
+      let(:options) { { 'verbose' => true } }
+
+      include_examples 'should call a Jest runner'
+    end
+  end
+
+  describe '#default_verbose' do
+    include_examples 'should have private reader',
+      :default_verbose,
+      ->() { be == SleepingKingStudios::Tasks.configuration.ci.jest[:verbose] }
   end
 end
