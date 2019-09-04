@@ -7,7 +7,7 @@ group :doc do
 end # group
 
 group :test do
-  gem 'byebug', '~> 9.0', '~> 9.0.5'
-end # group
+  gem 'byebug', '~> 11.0', '>= 11.0.1'
+end
 
 gemspec

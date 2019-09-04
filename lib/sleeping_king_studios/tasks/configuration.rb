@@ -5,6 +5,8 @@ require 'sleeping_king_studios/tools/toolbox/configuration'
 require 'sleeping_king_studios/tasks'
 
 module SleepingKingStudios::Tasks
+  # rubocop:disable Metrics/ClassLength
+
   # Task configuration options, grouped by namespace.
   class Configuration < SleepingKingStudios::Tools::Toolbox::Configuration
     # rubocop:disable Metrics/BlockLength
@@ -54,6 +56,22 @@ module SleepingKingStudios::Tasks
           :title         => 'Cucumber',
           :default_files => ['step_definitions', 'step_definitions.rb']
         } # end cucumber
+
+      option :eslint, :default =>
+        {
+          :class         => 'SleepingKingStudios::Tasks::Ci::EslintTask',
+          :default_files => '"**/*.js"',
+          :require       => 'sleeping_king_studios/tasks/ci/eslint_task',
+          :title         => 'ESLint'
+        }
+
+      option :jest, :default =>
+        {
+          :class   => 'SleepingKingStudios::Tasks::Ci::JestTask',
+          :require => 'sleeping_king_studios/tasks/ci/jest_task',
+          :title   => 'Jest',
+          :verbose => false
+        }
 
       option :rspec, :default =>
         {
@@ -113,4 +131,5 @@ module SleepingKingStudios::Tasks
       option :template_paths, :default => [default_template_path]
     end # namespace
   end # class
+  # rubocop:enable Metrics/ClassLength
 end # module
