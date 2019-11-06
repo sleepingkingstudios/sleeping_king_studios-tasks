@@ -20,6 +20,7 @@ Layout/EmptyLineBetweenDefs:
 
 Metrics/BlockLength:
   Exclude:
+    - '*.gemspec'
     - 'spec/**/*.rb'
 
 Metrics/ModuleLength:
@@ -48,6 +49,7 @@ Style/FileName:
   Exclude:
     - Gemfile
     - '*.gemspec'
+    - 'sleeping_king_studios-tasks.thor'
 
 Style/FrozenStringLiteralComment:
   # Incompatible with file location comments.

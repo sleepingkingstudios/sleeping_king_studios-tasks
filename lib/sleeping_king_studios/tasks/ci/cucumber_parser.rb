@@ -65,11 +65,12 @@ module SleepingKingStudios::Tasks::Ci
 
         status = step_status(step) || 'failed'
 
-        if status == 'failed'
+        case status
+        when 'failed'
           report['failing_step_count'] += 1
-        elsif status == 'pending' || status == 'skipped'
+        when 'pending', 'skipped'
           report['pending_step_count'] += 1
-        end # if
+        end
 
         status
       end # method parse_step

@@ -2,7 +2,7 @@
 
 begin
   require 'byebug'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/HandleExceptions
   # Probably don't need this.
 end # begin-rescue
 

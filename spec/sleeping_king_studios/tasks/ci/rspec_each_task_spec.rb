@@ -60,11 +60,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecEachTask do
                 'Passing'
               end # if-elsif-else
 
-            expect(captured.each_line).to satisfy { |enum|
+            expect(captured.each_line).to(satisfy do |enum|
               enum.any? do |line|
                 line.include?(file) && line.include?(badge)
               end # any?
-            } # end satisfy
+            end) # end satisfy
           end # each
         end # it
 

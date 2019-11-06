@@ -55,7 +55,7 @@ module Spec::Common
         it 'should add the task to `thor list`' do
           captured = capture_stdout { run_thor_command :list }
 
-          expect(captured).to satisfy {
+          expect(captured).to(satisfy do
             captured.each_line.any? do |line|
               next false unless line.start_with? "#{basename} #{task_name}"
 
@@ -64,7 +64,7 @@ module Spec::Common
 
               definition.description.start_with?(desc)
             end # any?
-          } # end satisfy
+          end) # end satisfy
         end # it
 
         it 'should add the full task to `thor help`' do
