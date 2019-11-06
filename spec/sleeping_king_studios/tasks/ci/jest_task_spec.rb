@@ -43,7 +43,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::JestTask do
     let(:expected_files)  { [] }
     let(:expected_env)    { {} }
     let(:expected_options) do
-      %w(--color) << "--verbose=#{!!options['verbose']}"
+      %w[--color] << "--verbose=#{!!options['verbose']}"
     end
     let(:expected_class) { SleepingKingStudios::Tasks::Ci::JestResults }
     let(:expected) do

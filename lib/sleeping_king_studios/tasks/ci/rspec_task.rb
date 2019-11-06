@@ -72,7 +72,7 @@ module SleepingKingStudios::Tasks::Ci
 
       format = options.fetch('format', default_format)
 
-      opts = %w(--color --tty)
+      opts = %w[--color --tty]
       opts << "--format=#{format}" unless quiet?
 
       RSpecRunner.new(:env => env, :options => opts)

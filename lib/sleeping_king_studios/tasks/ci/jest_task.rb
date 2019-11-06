@@ -34,7 +34,7 @@ module SleepingKingStudios::Tasks::Ci
 
     def jest_runner
       env  = options.fetch('__env__', {})
-      opts = %w(--color)
+      opts = %w[--color]
       opts << "--verbose=#{options.fetch('verbose', default_verbose)}"
 
       JestRunner.new(:env => env, :options => opts)

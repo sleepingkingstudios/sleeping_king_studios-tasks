@@ -90,7 +90,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepWrapper do
 
   describe '#run_step' do
     let(:step_instance) { double('step', :call => true) }
-    let(:step_args)     { %w(ichi ni san) }
+    let(:step_args)     { %w[ichi ni san] }
     let(:step_kwargs)   { { :yon => 'go' } }
     let(:results)       { double('results') }
 

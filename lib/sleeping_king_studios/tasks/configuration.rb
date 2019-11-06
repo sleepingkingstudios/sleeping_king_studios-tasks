@@ -34,7 +34,7 @@ module SleepingKingStudios::Tasks
             :global  => true
           } # end rspec
 
-        option :steps, :default => %i(rspec rubocop simplecov)
+        option :steps, :default => %i[rspec rubocop simplecov]
 
         define_method :steps_with_options do
           steps.each.with_object({}) do |step, hsh|
@@ -103,7 +103,7 @@ module SleepingKingStudios::Tasks
           :title   => 'SimpleCov'
         } # end rspec
 
-      option :steps, :default => %i(rspec rubocop simplecov)
+      option :steps, :default => %i[rspec rubocop simplecov]
 
       define_method :steps_with_options do
         steps.each.with_object({}) do |step, hsh|

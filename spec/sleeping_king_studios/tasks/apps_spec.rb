@@ -78,9 +78,9 @@ RSpec.describe SleepingKingStudios::Tasks::Apps do
       SleepingKingStudios::Tasks.configuration.apps.config_file
     end # let
     let(:raw) do
-      <<-YAML
-config:
-  key: 'value'
+      <<~YAML
+        config:
+          key: 'value'
       YAML
     end # let
     let(:expected) { YAML.safe_load(raw) }

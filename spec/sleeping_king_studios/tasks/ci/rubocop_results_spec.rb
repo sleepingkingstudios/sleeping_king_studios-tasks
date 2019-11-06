@@ -148,7 +148,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RuboCopResults do
 
       expect(totals).to be_a described_class
 
-      %w(inspected_file_count offense_count).each do |prop|
+      %w[inspected_file_count offense_count].each do |prop|
         expect(totals.send prop).to be == instance.send(prop) + other.send(prop)
       end # each
     end # it

@@ -32,7 +32,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::SimpleCovTask do
 
         expect(results).to be_a expected_class
 
-        %i(covered_percent covered_lines missed_lines total_lines).
+        %i[covered_percent covered_lines missed_lines total_lines].
           each do |method|
             expect(results.send method).to be == expected.send(method)
           end # each
