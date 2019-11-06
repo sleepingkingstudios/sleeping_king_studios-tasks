@@ -1,5 +1,9 @@
 ## Tasks
 
+### Version 0.3.0
+
+- add --retry option to Cucumber task.
+
 ### Future Tasks
 
 - add documentation for "ci" option in applications.yml
