@@ -2,11 +2,11 @@
 
 begin
   require 'byebug'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/HandleExceptions
   # Probably don't need this.
 end # begin-rescue
 
-$: << 'lib'
+$LOAD_PATH << 'lib'
 
 require 'sleeping_king_studios/tasks'
 
@@ -14,9 +14,9 @@ SleepingKingStudios::Tasks.configure do |config|
   config.ci do |ci|
     ci.steps =
       if ENV['CI']
-        %i(rspec rspec_each rubocop simplecov)
+        %i[rspec rspec_each rubocop simplecov]
       else
-        %i(rspec rubocop simplecov)
+        %i[rspec rubocop simplecov]
       end # if-else
   end # ci
 

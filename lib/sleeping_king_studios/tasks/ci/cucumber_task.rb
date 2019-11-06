@@ -33,7 +33,7 @@ module SleepingKingStudios::Tasks::Ci
     private
 
     def cucumber_runner
-      opts = %w(--color)
+      opts = %w[--color]
       opts << '--format=pretty' unless quiet?
 
       CucumberRunner.new(:options => opts)

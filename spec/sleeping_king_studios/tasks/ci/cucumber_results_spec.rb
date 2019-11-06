@@ -286,7 +286,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
 
       expect(totals).to be_a described_class
 
-      %w(
+      %w[
         duration
         scenario_count
         failing_scenarios
@@ -294,7 +294,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::CucumberResults do
         step_count
         failing_step_count
         pending_step_count
-      ).each do |prop|
+      ].each do |prop|
         expect(totals.send prop).to be == instance.send(prop) + other.send(prop)
       end # each
     end # it

@@ -178,7 +178,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::StepsTask do
     include_examples 'should run each step for each application'
 
     describe 'with applications' do
-      let(:only) { %w(public) }
+      let(:only) { %w[public] }
 
       include_examples 'should run each step for each application'
     end # describe

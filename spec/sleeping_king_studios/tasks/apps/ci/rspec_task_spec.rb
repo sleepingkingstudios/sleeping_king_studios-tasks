@@ -23,7 +23,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecTask do
   describe '#call' do
     shared_examples 'should call the step runner with only => "rspec"' do
       describe 'should call the step runner with only => "rspec"' do
-        let(:expected_options) { options.merge 'only' => %w(rspec) }
+        let(:expected_options) { options.merge 'only' => %w[rspec] }
         let(:expected_results) { double('results') }
         let(:step_runner) do
           SleepingKingStudios::Tasks::Apps::Ci::StepsTask.new(expected_options)
@@ -52,7 +52,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::RSpecTask do
     include_examples 'should call the step runner with only => "rspec"'
 
     describe 'with applications' do
-      let(:only) { %w(public) }
+      let(:only) { %w[public] }
 
       include_examples 'should call the step runner with only => "rspec"'
     end # describe

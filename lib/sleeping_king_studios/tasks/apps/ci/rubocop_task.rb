@@ -22,7 +22,7 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
     def call *applications
       SleepingKingStudios::Tasks::Apps::Ci::StepsTask.
-        new(options.merge('only' => %w(rubocop))).
+        new(options.merge('only' => %w[rubocop])).
         call(*applications)
     end # method call
   end # class

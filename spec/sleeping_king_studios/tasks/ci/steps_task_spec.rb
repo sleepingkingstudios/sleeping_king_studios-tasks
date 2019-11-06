@@ -29,11 +29,11 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsTask do
         captured, _ = capture_task
 
         expected_steps.each do |name, config|
-          expect(captured.each_line).to satisfy { |enum|
+          expect(captured.each_line).to(satisfy do |enum|
             enum.any? do |line|
               line.include?(name) && line.include?(config[:results].to_s)
             end # any?
-          } # end satisfy
+          end) # end satisfy
         end # each
       end # it
     end # shared_examples
@@ -42,12 +42,12 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsTask do
       it 'should report on the failing steps' do
         captured, raised = capture_task
 
-        expect(captured.each_line).to satisfy { |enum|
+        expect(captured.each_line).to(satisfy do |enum|
           enum.any? do |line|
             line.include?('The following steps failed:') &&
               failing_steps.all? { |step| line.include?(step) }
           end # any?
-        } # end satisfy
+        end) # end satisfy
 
         expect(raised).to be_a Thor::Error
         expect(raised.message).to be == 'The CI suite failed.'

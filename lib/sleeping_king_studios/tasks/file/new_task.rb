@@ -220,7 +220,7 @@ module SleepingKingStudios::Tasks::File
     end # method split_file_path
 
     def split_relative_path fragments
-      if %w(app apps lib spec tmp vendor).include?(fragments.first)
+      if %w[app apps lib spec tmp vendor].include?(fragments.first)
         @directory = fragments.shift
       end # if
 

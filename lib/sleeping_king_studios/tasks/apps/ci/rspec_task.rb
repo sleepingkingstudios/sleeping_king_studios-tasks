@@ -22,7 +22,7 @@ module SleepingKingStudios::Tasks::Apps::Ci
 
     def call *applications
       SleepingKingStudios::Tasks::Apps::Ci::StepsTask.
-        new(options.merge('only' => %w(rspec))).
+        new(options.merge('only' => %w[rspec])).
         call(*applications)
     end # method call
   end # class

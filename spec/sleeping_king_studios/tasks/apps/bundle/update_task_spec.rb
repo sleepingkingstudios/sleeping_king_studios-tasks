@@ -80,7 +80,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::UpdateTask do
     include_examples 'should call an update runner'
 
     describe 'with applications' do
-      let(:only) { %w(public) }
+      let(:only) { %w[public] }
 
       include_examples 'should call an update runner'
     end # describe

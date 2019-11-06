@@ -35,7 +35,7 @@ module SleepingKingStudios::Tasks::Ci
     private
 
     def rubocop_runner
-      opts = %w(--color)
+      opts = %w[--color]
       opts << '--format=progress' unless quiet?
 
       RuboCopRunner.new(:options => opts)

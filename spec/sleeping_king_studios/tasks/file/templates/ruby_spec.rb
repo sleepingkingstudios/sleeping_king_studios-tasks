@@ -56,7 +56,7 @@ RSpec.describe 'file/templates/ruby.erb' do
       super().merge(
         :file_path     => 'lib/ichi/ni/san.rb',
         :file_name     => 'san',
-        :relative_path => %w(ichi ni)
+        :relative_path => %w[ichi ni]
       ) # end locals
     end # let
     let(:raw) do

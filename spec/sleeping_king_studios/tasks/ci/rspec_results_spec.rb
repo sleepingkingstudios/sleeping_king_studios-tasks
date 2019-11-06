@@ -213,7 +213,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::RSpecResults do
 
       expect(totals).to be_a described_class
 
-      %w(duration example_count failure_count pending_count).each do |prop|
+      %w[duration example_count failure_count pending_count].each do |prop|
         expect(totals.send prop).to be == instance.send(prop) + other.send(prop)
       end # each
     end # it

@@ -46,7 +46,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsRunner do
       end # describe
     end # shared_examples
 
-    let(:expected_args) { %w(first second third) }
+    let(:expected_args) { %w[first second third] }
     let(:expected_steps) do
       {
         '1st' => {
@@ -120,7 +120,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsRunner do
     it { expect(instance.send :filtered_steps).to be == ci_steps }
 
     context 'when options["except"] is set' do
-      let(:options) { super().merge 'except' => %w(second) }
+      let(:options) { super().merge 'except' => %w[second] }
       let(:expected) do
         ci_steps.reject { |key, _| key == 'second' }
       end # let
@@ -129,7 +129,7 @@ RSpec.describe SleepingKingStudios::Tasks::Ci::StepsRunner do
     end # context
 
     context 'when options["only"] is set' do
-      let(:options) { super().merge 'only' => %w(second) }
+      let(:options) { super().merge 'only' => %w[second] }
       let(:expected) do
         ci_steps.select { |key, _| key == 'second' }
       end # let

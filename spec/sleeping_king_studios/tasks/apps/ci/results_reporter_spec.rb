@@ -118,9 +118,9 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Ci::ResultsReporter do
     end # method capture_stdout
 
     def expect_to_have_matching_line str
-      expect(str.each_line).to satisfy { |enum|
+      expect(str.each_line).to(satisfy do |enum|
         enum.any? { |line| yield line }
-      } # end satisfy
+      end) # end satisfy
     end # method expect_to_have_matching_line
 
     it { expect(instance).to respond_to(:call).with(1).argument }

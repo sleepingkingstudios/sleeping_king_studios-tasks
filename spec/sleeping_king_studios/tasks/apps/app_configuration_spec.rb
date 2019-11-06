@@ -36,7 +36,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::AppConfiguration do
       it 'should define the option' do
         expect(instance.ci).
           to have_reader(:steps).
-          with_value(%i(rspec rubocop simplecov))
+          with_value(%i[rspec rubocop simplecov])
       end # it
 
       context 'when the value is configured' do

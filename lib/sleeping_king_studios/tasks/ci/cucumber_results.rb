@@ -167,7 +167,7 @@ module SleepingKingStudios::Tasks::Ci
     end # method build_summary_details
 
     def keys
-      %w(
+      %w[
         duration
         step_count
         pending_step_count
@@ -175,7 +175,7 @@ module SleepingKingStudios::Tasks::Ci
         scenario_count
         pending_scenarios
         failing_scenarios
-      ) # end keys
+      ] # end keys
     end # method keys
 
     def pluralize count, singular, plural = nil

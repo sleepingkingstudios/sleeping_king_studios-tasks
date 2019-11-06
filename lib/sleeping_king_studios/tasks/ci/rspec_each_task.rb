@@ -82,7 +82,7 @@ module SleepingKingStudios::Tasks::Ci
     end # method default_format
 
     def files_list groups
-      groups = %w(spec) if groups.empty?
+      groups = %w[spec] if groups.empty?
 
       groups.map do |group_or_file|
         if File.extname(group_or_file).empty?
@@ -144,7 +144,7 @@ module SleepingKingStudios::Tasks::Ci
       format = options.fetch('format', default_format)
 
       if format && !quiet?
-        opts = %w(--color --tty)
+        opts = %w[--color --tty]
         opts << "--format=#{format}"
       end # if
 

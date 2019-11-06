@@ -58,7 +58,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::ApplicationsTask do
     end # it
 
     describe 'with :only => applications' do
-      let(:only) { %w(admin reports) }
+      let(:only) { %w[admin reports] }
       let(:expected) do
         {
           'admin'   => config['admin'],

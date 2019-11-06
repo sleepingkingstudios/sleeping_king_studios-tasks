@@ -37,7 +37,7 @@ RSpec.describe SleepingKingStudios::Tasks::TaskGroup do
   it { expect(described_class).to be < ::Thor }
 
   describe '::task' do
-    let(:args)    { [:a, :b] }
+    let(:args)    { %i[a b] }
     let(:options) { { :silliness => 11 } }
 
     it { expect(described_class).to respond_to(:task).with(1..2).arguments }

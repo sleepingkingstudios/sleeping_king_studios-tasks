@@ -24,7 +24,7 @@ module SleepingKingStudios::Tasks::Ci
     private
 
     def eslint_runner
-      opts = %w(--color)
+      opts = %w[--color]
 
       EslintRunner.new(:options => opts)
     end
