@@ -8,6 +8,16 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/**/*'
 
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+  IndentationWidth: ~
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
@@ -24,10 +34,6 @@ Performance/RedundantBlockCall:
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
-Style/AlignParameters:
-  EnforcedStyle: with_fixed_indentation
-  IndentationWidth: ~
-
 Style/ClassAndModuleChildren:
   # Checks the style of children definitions at classes and modules.
   #
@@ -35,14 +41,8 @@ Style/ClassAndModuleChildren:
   # existing styles, so we disable this cop.
   Enabled: false
 
-Style/DotPosition:
-  EnforcedStyle: trailing
-
 Style/DoubleNegation:
   Enabled: false
-
-Style/EmptyLineBetweenDefs:
-  AllowAdjacentOneLineDefs: true
 
 Style/FileName:
   Exclude:
