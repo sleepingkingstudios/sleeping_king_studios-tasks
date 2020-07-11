@@ -3,6 +3,7 @@
 require 'sleeping_king_studios/tools/core_tools'
 require 'sleeping_king_studios/tools/toolbox'
 
+# :nocov:
 module SleepingKingStudios::Tools::Toolbox
   # Abstract base class for defining configuration objects.
   class Configuration # rubocop:disable Metrics/ClassLength
@@ -276,3 +277,4 @@ module SleepingKingStudios::Tools::Toolbox
     end
   end
 end
+# :nocov:
