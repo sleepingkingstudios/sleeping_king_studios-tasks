@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.files        =
     Dir['lib/**/*.erb', 'lib/**/*.rb', 'lib/**/*.thor', 'LICENSE', '*.md']
 
-  gem.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.4'
+  gem.add_runtime_dependency 'thor', '>= 0.19.4', '< 2.0'
   gem.add_runtime_dependency 'sleeping_king_studios-tools', '~> 0.7', '>= 0.7.1'
   gem.add_runtime_dependency 'erubi', '~> 1.6'
 
