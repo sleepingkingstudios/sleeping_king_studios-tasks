@@ -11,7 +11,7 @@ module SleepingKingStudios
       # Major version.
       MAJOR = 0
       # Minor version.
-      MINOR = 2
+      MINOR = 3
       # Patch version.
       PATCH = 0
       # Prerelease version.

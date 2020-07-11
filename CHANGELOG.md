@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- Fix deprecation warnings in Ruby 2.7.
+- Add support for Thor 1.0.
+
 ## 0.2.0
 
 ### Ci
