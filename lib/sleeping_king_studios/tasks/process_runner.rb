@@ -29,8 +29,8 @@ module SleepingKingStudios::Tasks
     end # method base_command
 
     def build_command **kwargs
-      env  = build_environment(kwargs)
-      opts = build_options(kwargs)
+      env  = build_environment(**kwargs)
+      opts = build_options(**kwargs)
 
       "#{env} #{base_command} #{opts}".strip
     end # method build_command
@@ -52,7 +52,7 @@ module SleepingKingStudios::Tasks
     end # method build_options
 
     def stream_process command
-      Bundler.with_clean_env do
+      unbundled_env do
         IO.popen(command) do |io|
           loop do
             char = io.getc
@@ -60,11 +60,21 @@ module SleepingKingStudios::Tasks
             char ? print(char) : break
           end # loop
         end # popen
-      end # with_clean_env
+      end # with_unbundled_env
     end # method stream_process
 
     def tools
       SleepingKingStudios::Tools::Toolbelt.new
     end # method tools
+
+    def unbundled_env
+      # :nocov:
+      if Bundler.respond_to?(:with_unbundled_env)
+        Bundler.with_unbundled_env { yield }
+      else
+        Bundler.with_clean_env { yield }
+      end
+      # :nocov:
+    end
   end # class
 end # module
