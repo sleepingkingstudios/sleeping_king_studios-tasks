@@ -1,4 +1,4 @@
-# sleeping_king_studios-tasks.gemfile
+# frozen_string_literal: true
 
 $LOAD_PATH << './lib'
 
@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
     Dir['lib/**/*.erb', 'lib/**/*.rb', 'lib/**/*.thor', 'LICENSE', '*.md']
 
   gem.add_runtime_dependency 'thor', '>= 0.19.4', '< 2.0'
-  gem.add_runtime_dependency 'sleeping_king_studios-tools', '~> 0.7', '>= 0.7.1'
+  gem.add_runtime_dependency 'sleeping_king_studios-tools', '~> 0.8'
   gem.add_runtime_dependency 'erubi', '~> 1.6'
 
   gem.add_development_dependency 'byebug',    '~> 9.0', '>= 9.0.6'
@@ -36,4 +36,4 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'cucumber',  '~> 2.4'
   gem.add_development_dependency 'simplecov', '~> 0.14', '>= 0.14.1'
   gem.add_development_dependency 'simplecov-json', '~> 0.2'
-end # gemspec
+end

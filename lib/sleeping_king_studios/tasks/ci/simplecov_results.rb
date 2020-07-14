@@ -1,25 +1,24 @@
 # lib/sleeping_king_studios/tasks/ci/simplecov_results.rb
 
-require 'sleeping_king_studios/tools/toolbox/delegator'
+require 'forwardable'
 
 require 'sleeping_king_studios/tasks/ci'
 
 module SleepingKingStudios::Tasks::Ci
   # Encapsulates the results of aggregated SimpleCov data.
   class SimpleCovResults
-    extend SleepingKingStudios::Tools::Toolbox::Delegator
+    extend Forwardable
 
     # @param results [SimpleCov::Result] The raw results of the SimpleCov call.
     def initialize results
       @results = results
     end # constructor
 
-    delegate \
+    def_delegators :@results,
       :covered_lines,
       :covered_percent,
       :missed_lines,
-      :total_lines,
-      :to => :@results
+      :total_lines
 
     # @return [Boolean] True if there are no covered lines, otherwise false.
     def empty?

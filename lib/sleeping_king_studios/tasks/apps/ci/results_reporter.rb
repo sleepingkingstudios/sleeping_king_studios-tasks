@@ -1,6 +1,6 @@
 # lib/sleeping_king_studios/tasks/apps/ci/results_reporter.rb
 
-require 'sleeping_king_studios/tools/toolbox/delegator'
+require 'forwardable'
 
 require 'sleeping_king_studios/tasks/apps/ci'
 require 'sleeping_king_studios/tasks/ci/results_helpers'
@@ -9,20 +9,22 @@ module SleepingKingStudios::Tasks::Apps::Ci
   # Reports on the results of a multi-application continuous integration
   # process, printing the step results grouped by application.
   class ResultsReporter
-    extend SleepingKingStudios::Tools::Toolbox::Delegator
+    extend Forwardable
 
     include SleepingKingStudios::Tasks::Ci::ResultsHelpers
 
-    delegate \
-      :applications,
+    def_delegators :@context,
       :print_table,
       :say,
-      :set_color,
-      :to => :@context
+      :set_color
 
     def initialize context
       @context = context
     end # method initialize
+
+    def applications
+      @context.send(:applications)
+    end
 
     def call results
       width = 1 + heading_width(results)

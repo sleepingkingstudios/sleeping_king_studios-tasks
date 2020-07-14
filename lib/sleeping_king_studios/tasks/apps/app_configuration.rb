@@ -49,7 +49,7 @@ module SleepingKingStudios::Tasks::Apps
 
     define_method :short_name do
       # rubocop:disable Style/RedundantSelf
-      tools.string.underscore(self.name.gsub(/\s+/, '_'))
+      tools.str.underscore(self.name.gsub(/\s+/, '_'))
       # rubocop:enable Style/RedundantSelf
     end # define_method
 

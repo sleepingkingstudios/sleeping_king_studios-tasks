@@ -15,7 +15,7 @@ RSpec.describe SleepingKingStudios::Tasks::Apps::Bundle::InstallTask do
   let(:config) do
     applications.each.with_object({}) do |(name, data), hsh|
       tools = SleepingKingStudios::Tools::Toolbelt.instance
-      data  = tools.hash.convert_keys_to_symbols(data)
+      data  = tools.hsh.convert_keys_to_symbols(data)
 
       hsh[name] = SleepingKingStudios::Tasks::Apps::AppConfiguration.new(data)
     end # each

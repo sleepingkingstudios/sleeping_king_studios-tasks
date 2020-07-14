@@ -58,7 +58,7 @@ module SleepingKingStudios::Tasks::Ci
     def require_path class_name
       class_name.
         split('::').
-        map { |str| tools.string.underscore(str) }.
+        map { |str| tools.str.underscore(str) }.
         join '/'
     end # method require_path
 

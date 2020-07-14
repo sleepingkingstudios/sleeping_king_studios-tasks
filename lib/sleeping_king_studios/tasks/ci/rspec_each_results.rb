@@ -84,7 +84,7 @@ module SleepingKingStudios::Tasks::Ci
     end # method pending_files
 
     def pluralize count, singular, plural = nil
-      "#{count} #{tools.integer.pluralize count, singular, plural}"
+      "#{count} #{tools.int.pluralize count, singular, plural}"
     end # method pluralize
 
     # @return [Hash] The hash representation of the results.

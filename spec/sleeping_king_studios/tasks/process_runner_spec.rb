@@ -66,7 +66,7 @@ RSpec.describe SleepingKingStudios::Tasks::ProcessRunner do
       expected_env  =
         expected_env.
         map do |key, value|
-          key   = tools.string.underscore(key).upcase
+          key   = tools.str.underscore(key).upcase
           value = %("#{value}") if value.is_a?(String)
 
           "#{key}=#{value}"
