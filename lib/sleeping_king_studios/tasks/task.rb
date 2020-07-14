@@ -36,14 +36,14 @@ module SleepingKingStudios::Tasks
       def task_name
         tools = SleepingKingStudios::Tools::Toolbelt.instance
 
-        tools.string.underscore(name.split('::').last).sub(/_task$/, '')
+        tools.str.underscore(name.split('::').last).sub(/_task$/, '')
       end # method task_name
 
       private
 
       def define_helpers option_name, option_params
         tools = SleepingKingStudios::Tools::Toolbelt.instance
-        name  = tools.string.underscore option_name
+        name  = tools.str.underscore option_name
 
         define_method(name) { options[option_name.to_s] }
 

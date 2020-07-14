@@ -52,7 +52,7 @@ module SleepingKingStudios::Tasks::Ci
     end # method failing?
 
     def format_failures failing_steps
-      tools.array.humanize_list(failing_steps) do |name|
+      tools.ary.humanize_list(failing_steps) do |name|
         set_color(name, :red)
       end # humanize list
     end # method format_failures

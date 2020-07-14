@@ -23,7 +23,7 @@ module SleepingKingStudios::Tasks
 
           apps.each do |key, data|
             name = key.to_s
-            data = tools.hash.convert_keys_to_symbols(data)
+            data = tools.hsh.convert_keys_to_symbols(data)
 
             data[:name] ||= name
 

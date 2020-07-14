@@ -142,13 +142,13 @@ module SleepingKingStudios::Tasks::File
       template = spec_file? ? 'rspec.erb' : 'ruby.erb'
 
       preview_file file_path, :max => max, :template => template do
-        tools.string.indent(rendered_source, 4)
+        tools.str.indent(rendered_source, 4)
       end # preview_file
 
       return unless spec? && !spec_file?
 
       preview_file spec_path, :max => max, :template => 'rspec.erb' do
-        tools.string.indent(rendered_spec, 4)
+        tools.str.indent(rendered_spec, 4)
       end # preview_file
     end # method preview_files
     # rubocop:enable Metrics/AbcSize

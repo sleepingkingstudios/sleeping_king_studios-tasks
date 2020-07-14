@@ -15,7 +15,7 @@ RSpec.describe 'file/templates/ruby.erb' do
   end # let
   let(:rendered) do
     source  = Erubi::Engine.new(template).src
-    binding = tools.hash.generate_binding(locals)
+    binding = tools.hsh.generate_binding(locals)
 
     binding.eval(source)
   end # let
@@ -29,7 +29,7 @@ RSpec.describe 'file/templates/ruby.erb' do
   let(:expected) do
     offset = raw.match(/\A( +)/)[1].length
 
-    tools.string.map_lines(raw) { |line| line[offset..-1] || "\n" }
+    tools.str.map_lines(raw) { |line| line[offset..-1] || "\n" }
   end # let
 
   def tools

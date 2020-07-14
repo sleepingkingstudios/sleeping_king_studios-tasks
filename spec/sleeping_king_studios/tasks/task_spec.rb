@@ -62,7 +62,7 @@ RSpec.describe SleepingKingStudios::Tasks::Task do
       let(:options)       { { 'extra-silly' => true } }
 
       it 'should define the predicate' do
-        expected_name = tools.string.underscore(option_name)
+        expected_name = tools.str.underscore(option_name)
 
         described_class.option option_name, option_params
 
