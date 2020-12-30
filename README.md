@@ -1,5 +1,7 @@
 # SleepingKingStudios::Tasks [![Build Status](https://travis-ci.org/sleepingkingstudios/sleeping_king_studios-tasks.svg?branch=master)](https://travis-ci.org/sleepingkingstudios/sleeping_king_studios-tasks)
 
+**Note:** This project is deprecated, and will not receive further feature updates.
+
 A toolkit providing an encapsulation layer around the Thor CLI library, with predefined tasks for development and continuous integration.
 
 See also [https://github.com/erikhuda/thor](https://github.com/erikhuda/thor).
@@ -9,10 +11,6 @@ See also [https://github.com/erikhuda/thor](https://github.com/erikhuda/thor).
 ### GitHub
 
 The canonical repository for this gem is on [GitHub](https://github.com/sleepingkingstudios/sleeping_king_studios-tasks).
-
-### A Note From The Developer
-
-Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use these tools every day, but they're not just written for me. If you find this project helpful in your own work, or if you have any questions, suggestions or critiques, please feel free to get in touch! I can be reached on GitHub (see above, and feel encouraged to submit bug reports or merge requests there) or via email at `merlin@sleepingkingstudios.com`. I look forward to hearing from you!
 
 ## Task Classes
 
