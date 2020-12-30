@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+- Fix deprecations from SleepingKingStudios::Tools.
+- Add support for Ruby 3.0.
+
 ## 0.3.0
 
 - Fix deprecation warnings in Ruby 2.7.
