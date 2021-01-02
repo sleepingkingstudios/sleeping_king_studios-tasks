@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
     Dir['lib/**/*.erb', 'lib/**/*.rb', 'lib/**/*.thor', 'LICENSE', '*.md']
 
   gem.add_runtime_dependency 'thor', '>= 0.19.4', '< 2.0'
-  gem.add_runtime_dependency 'sleeping_king_studios-tools', '~> 0.8'
+  gem.add_runtime_dependency 'sleeping_king_studios-tools', '>= 0.8.0', '< 2'
   gem.add_runtime_dependency 'erubi', '~> 1.6'
 
   gem.add_development_dependency 'byebug',    '~> 9.0', '>= 9.0.6'
