@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- Add gem compatibility with SleepingKingStudios::Tools 1.0 release.
+
 ## 0.4.0
 
 - Fix deprecations from SleepingKingStudios::Tools.
